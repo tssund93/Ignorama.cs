@@ -15,5 +15,6 @@ namespace Ignorama.Models
         public DbSet<Thread> Threads { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Tag> Tags { get; set; }
     }
 }

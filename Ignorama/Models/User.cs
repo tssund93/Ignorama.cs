@@ -8,7 +8,6 @@ namespace Ignorama.Models
 {
     public class User
     {
-        [Required]
         public int ID { get; set; }
 
         [Required]

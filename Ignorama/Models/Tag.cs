@@ -6,21 +6,15 @@ using System.Threading.Tasks;
 
 namespace Ignorama.Models
 {
-    public class Post
+    public class Tag
     {
         public int ID { get; set; }
 
         [Required]
-        public Thread Thread { get; set; }
-
+        public string Name { get; set; }
+        
         [Required]
-        public User User { get; set; }
-
-        [Required]
-        public string Text { get; set; }
-
-        [Required]
-        public DateTime Time { get; set; }
+        public int RequiredPermissionLevel { get; set; }
 
         [Required]
         public bool Deleted { get; set; }

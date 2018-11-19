@@ -8,7 +8,6 @@ namespace Ignorama.Models
 {
     public class Thread
     {
-        [Required]
         public int ID { get; set; }
 
         [Required]
@@ -22,6 +21,9 @@ namespace Ignorama.Models
 
         [Required]
         public bool Deleted { get; set; }
+
+        [Required]
+        public Tag Tag { get; set; }
 
         public IEnumerable<Post> Posts { get; set; }
     }
