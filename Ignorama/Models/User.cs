@@ -13,6 +13,9 @@ namespace Ignorama.Models
         [Required]
         public string Name { get; set; }
 
+        [Required]
+        public PermissionLevel PermissionLevel { get; set; }
+
         public ICollection<Thread> Threads { get; set; }
     }
 }
