@@ -23,9 +23,6 @@ namespace Ignorama.Models
         [Required]
         public bool Deleted { get; set; }
 
-        [Required]
-        public User User { get; set; }
-
         public IEnumerable<Post> Posts { get; set; }
     }
 }
