@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<Ignorama.Models.Tag>
+@{
     ViewData["Title"] = "New Thread";
 }
 
@@ -17,11 +18,13 @@
             Tag:
             <select id=tagdropdown name=tag required>
                 <option value="">- Select a tag -</option>
-                <option value=1>Anime &amp; Manga</option>
-                <option value=52>Music</option>
-                <option value=22>Off-Topic</option>
-                <option value=10>Technology</option>
-                <option value=2>Video Games</option>
+                @if (Model != null)
+                {
+                    foreach (var tag in Model)
+                    {
+                        <option value="@tag.ID">@tag.Name</option>
+                    }
+                }
             </select>
         </div>
         <div class="rightbuttons bottom">
@@ -32,9 +35,9 @@
 </form>
 <div class=row>
     <form class=col-xs-12 id=uploadForm><input id=upload onchange=updateFilename(); type=file name=upload><input class=invisiblebutton id=uploadsubmit type=submit value=Upload> <input id=filename type=hidden name=filename value=none> </form>
-    @*<script src=/uploadfile.js></script>*@
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src=/js/uploadfile.js></script>
 }
