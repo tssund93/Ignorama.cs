@@ -20,7 +20,8 @@ namespace Ignorama.Controllers
 
         public IActionResult New()
         {
-            return View();
+            var tagsModel = _context.Tags.OrderBy(t => t.Name);
+            return View(tagsModel);
         }
 
         [HttpGet]

@@ -1,11 +1,20 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+$(function(){
+    $(".time").each(function(){
+        var date = new Date($(this).html());
+        $(this).text(date.toLocaleString());
+    });
 
-new Vue({
-    el: 'main',
-    data: { threads: [] },
-    created: function() {
-            axios.get('/Threads/GetThreads')
-                .then(response => this.threads = response.data);
-    },
+    $(".spoiler").mouseover(function(){
+        $(this).css('background-color', 'none');
+    });
+    $(".spoiler").mouseleave(function(){
+        $(this).css('background-color', '#333');
+    });
 });
+
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
