@@ -3,24 +3,9 @@
 
 new Vue({
     el: 'main',
-    computed: {
-        threads: function () {
-            return [
-                {
-                    id: 1,
-                    title: "test thread",
-                    stickied: false,
-                    locked: true,
-                    deleted: false
-                },
-                {
-                    id: 2,
-                    title: "another test thread",
-                    stickied: true,
-                    locked: true,
-                    deleted: false
-                }
-            ]
-        }
+    data: { threads: [] },
+    created: function() {
+            axios.get('/Threads/GetThreads')
+                .then(response => this.threads = response.data);
     },
 });
