@@ -6,17 +6,14 @@ using System.Threading.Tasks;
 
 namespace Ignorama.Models
 {
-    public class Tag
+    public class PermissionLevel
     {
         public int ID { get; set; }
-
-        [Required]
-        public string Name { get; set; }
         
         [Required]
-        public PermissionLevel RequiredPermissionLevel { get; set; }
+        public string Name { get; set; }
 
         [Required]
-        public bool Deleted { get; set; }
+        public int Level { get; set; }
     }
 }
