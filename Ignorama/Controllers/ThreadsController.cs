@@ -26,7 +26,10 @@ namespace Ignorama.Controllers
         [HttpGet]
         public IActionResult GetThreads()
         {
-            return new OkObjectResult(_context.Threads.ToList());
+            return new OkObjectResult(
+                _context.Threads
+                    .Include(thread => thread.Posts)
+                    .ToList());
         }
     }
 }
