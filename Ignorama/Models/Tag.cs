@@ -13,7 +13,6 @@ namespace Ignorama.Models
         [Required]
         public string Name { get; set; }
         
-        [Required]
         public PermissionLevel RequiredPermissionLevel { get; set; }
 
         [Required]
