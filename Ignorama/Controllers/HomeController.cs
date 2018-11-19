@@ -10,6 +10,13 @@ namespace Ignorama.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ForumContext _context;
+
+        public HomeController(ForumContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
             return View();

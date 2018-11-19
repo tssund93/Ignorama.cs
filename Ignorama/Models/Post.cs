@@ -6,26 +6,27 @@ using System.Threading.Tasks;
 
 namespace Ignorama.Models
 {
-    public class Thread
+    public class Post
     {
         [Required]
         public int ID { get; set; }
 
         [Required]
-        public string Title { get; set; }
+        public Thread Thread { get; set; }
 
         [Required]
-        public bool Stickied { get; set; }
+        public User User { get; set; }
 
         [Required]
-        public bool Locked { get; set; }
+        public string Text { get; set; }
+
+        [Required]
+        public DateTime Time { get; set; }
 
         [Required]
         public bool Deleted { get; set; }
 
         [Required]
-        public User User { get; set; }
-
-        public IEnumerable<Post> Posts { get; set; }
+        public bool DeletedTime { get; set; }
     }
 }
