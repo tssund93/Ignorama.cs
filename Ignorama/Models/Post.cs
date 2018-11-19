@@ -25,8 +25,5 @@ namespace Ignorama.Models
 
         [Required]
         public bool Deleted { get; set; }
-
-        [Required]
-        public bool DeletedTime { get; set; }
     }
 }
