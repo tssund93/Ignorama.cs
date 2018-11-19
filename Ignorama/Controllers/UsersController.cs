@@ -9,24 +9,13 @@ using System.Threading.Tasks;
 
 namespace Ignorama.Controllers
 {
-    public class ThreadsController : Controller
+    public class UsersController : Controller
     {
         private readonly ForumContext _context;
 
-        public ThreadsController(ForumContext context)
+        public UsersController(ForumContext context)
         {
             _context = context;
-        }
-
-        public IActionResult New()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult GetThreads()
-        {
-            return new OkObjectResult(_context.Threads.ToList());
         }
     }
 }

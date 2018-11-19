@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "New Thread";
+}
+
+<h2 class="page-title">New Thread</h2>
+
+<form action=b/submit-thread method=post>
+    <div class=row>
+        <div class="col-xs-3 col-sm-2 col-md-1 subject-label">Subject:</div>
+        <input class="col-xs-9 col-sm-10 col-md-11" name=subject type=text id=subjectfield required>
+    </div>
+    <div class=row><textarea class=col-xs-12 id=postfield name=body rows=7 cols=50 required></textarea></div>
+    <div class=row>
+        <div class=tagsdropdown>
+            Tag:
+            <select id=tagdropdown name=tag required>
+                <option value="">- Select a tag -</option>
+                <option value=1>Anime &amp; Manga</option>
+                <option value=52>Music</option>
+                <option value=22>Off-Topic</option>
+                <option value=10>Technology</option>
+                <option value=2>Video Games</option>
+            </select>
+        </div>
+        <div class="rightbuttons bottom"><input class="btn btn-default btn-sm" id=submitbutton name=Submit type=submit value=Submit><input class="btn btn-default btn-sm" onclick="window.location='/'" type=button value=Back> </div>
+    </div>
+</form>
+<div class=row>
+    <form class=col-xs-12 id=uploadForm><input id=upload onchange=updateFilename(); type=file name=upload><input class=invisiblebutton id=uploadsubmit type=submit value=Upload> <input id=filename type=hidden name=filename value=none> </form>
+    <script src=/uploadfile.js></script>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
