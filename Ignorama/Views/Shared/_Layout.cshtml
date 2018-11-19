@@ -17,40 +17,126 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">Ignorama</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
     <partial name="_CookieConsentPartial" />
 
+    <div class="row header">
+        <div class=col-xs-12>
+            <div class=container>
+                <div class=row>
+                    <span class=hidden-xs>
+                        <div class=col-xs-6 style="padding-top: 4px;">
+                            <a href="/">
+                                <img src=/ignorama.png>
+                            </a>
+                            <b class=slogan style="position: absolute; top: 15px;">I should've made it blue </b>
+                        </div>
+                    </span>
+                    <span class=visible-xs-inline>
+                        <div class=col-xs-3 style="padding-top: 15px;">
+                            <a href="/">
+                                <img src=/ignoramasmall.png>
+                            </a>
+                        </div>
+                    </span>
+                    <span class="col-xs-9 col-sm-6">
+                        <div class=row>
+                            <div class=col-xs-12>
+                                <span class=hidden-xs>
+                                    <span class=hidden-xs>
+                                        <div style="float: right;">
+                                            <span style="padding: 3px;">
+                                                <a href=https://twitter.com/IgnoramaDotNet target=_blank title=Twitter>
+                                                    <span class="fa fa-twitter">
+                                                    </span>
+                                                </a>
+                                            </span>
+                                            <span style="padding: 3px;">
+                                                <a href=https://github.com/tssund93/lispy-ignorama target=_blank title=GitHub>
+                                                    <span class="fa fa-github">
+                                                    </span>
+                                                </a>
+                                            </span>
+                                            <span class=header-link>
+                                                <a href=/following>Following</a>
+                                            </span>
+                                            <span class=header-link>
+                                                <a href=/hidden>Hidden</a>
+                                            </span>
+                                            <span class=header-link>
+                                                <a href=/bans>Bans</a>
+                                            </span>
+                                        </div>
+                                    </span>
+                                </span>
+                                <span class=visible-xs-inline>
+                                    <div class=row>
+                                        <div class=col-xs-12>
+                                            <div class=btn-group style="float: right;">
+                                                <a class="btn btn-default btn-sm dropdown-toggle" style="margin: 5px;" data-toggle=dropdown>
+                                                    Menu <span class=caret>
+                                                    </span>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right">
+                                                    <div>
+                                                        <a class=dropdown-item href=/following>Following</a>
+                                                    </div>
+                                                    <div>
+                                                        <a class=dropdown-item href=/hidden>Hidden</a>
+                                                    </div>
+                                                    <div>
+                                                        <a class=dropdown-item href=/bans>Bans</a>
+                                                    </div>
+                                                    <div>
+                                                        <a class=dropdown-item target=_blank href=https://twitter.com/IgnoramaDotNet>Twitter</a>
+                                                    </div>
+                                                    <div>
+                                                        <a class=dropdown-item target=_blank href=https://github.com/tssund93/lispy-ignorama>GitHub</a>
+                                                    </div>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class=row>
+                            <div class=col-xs-12>
+                                <div style="float: right;">
+                                    <div>
+                                        <a class=header-link href=/create-account>Sign up</a>
+                                        <span class=header-link style="color: white;">/</span>
+                                        <a class=header-link href=/login>Log in</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - Ignorama</p>
+        <main>
+            @RenderBody()
+        </main>
+
+        <footer style="padding-top: 15px;">
+            <div style='text-align:center;font-size:9pt;'>
+                <p>
+                    All trademarks and copyrights are owned by their respective parties.
+                    Comments and uploaded images are the responsibility of the poster.
+                </p>
+                <p>Copyright © 2016 Ignorama. All rights reserved.</p>
+            </div>
+            <br />
         </footer>
     </div>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment exclude="Development">
@@ -66,6 +152,7 @@
                 crossorigin="anonymous"
                 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js"></script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
