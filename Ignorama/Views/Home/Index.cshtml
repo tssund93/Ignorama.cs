@@ -34,6 +34,15 @@
                     </label>
             </ul>
         </form>
+        <a v-on:click="view = ''" href="#">
+            All
+        </a>
+        <a v-on:click="view = 'following'" href="#">
+            Following
+        </a>
+        <a v-on:click="view = 'hidden'" href="#">
+            Hidden
+        </a>
         <span style="float: right; margin: 3px;">
             <span class=hidden-xs>
                 <form class=searchform action="/" method=get>
@@ -57,13 +66,20 @@
             </a>
             <ul class="dropdown-menu pull-right">
                 <li>
-                    <a href="#" v-on:click="hideThread(thread)">Hide thread</a>
+                    <a v-if="thread.hidden" href="#" v-on:click="unhideThread(thread)">
+                        Unhide thread
+                    </a>
+                    <a v-else href="#" v-on:click="hideThread(thread)">
+                        Hide thread
+                    </a>
             </ul>
         </div>
         <span v-if="thread.stickied" class="thread-icon glyphicon glyphicon-bookmark"></span>
         <span v-if="thread.locked" class="thread-icon glyphicon glyphicon-lock"></span>
-        <a :title="thread.posts[0].text" href="#">{{ thread.title }}</a>
-        <a href="#" title="Unfollow thread" style="padding-right: 5px;">
+        <a :title="thread.posts[0].text" href="#" v-on:click="thread.following = true">
+            {{ thread.title }}
+        </a>
+        <a v-if="thread.following" v-on:click="thread.following = false" href="#" title="Unfollow thread" style="padding-right: 5px;">
             <b class="unfollow-link glyphicon glyphicon-eye-close">
             </b>
         </a>
