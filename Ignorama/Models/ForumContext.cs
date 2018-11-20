@@ -18,5 +18,6 @@ namespace Ignorama.Models
         public DbSet<Post> Posts { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<PermissionLevel> PermissionLevels { get; set; }
+        public DbSet<HiddenThread> HiddenThreads { get; set; }
     }
 }
