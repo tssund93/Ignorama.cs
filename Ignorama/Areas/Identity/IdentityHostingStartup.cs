@@ -19,7 +19,7 @@ namespace Ignorama.Areas.Identity
             {
                 services.AddDbContext<ForumContext>(options =>
                     options.UseSqlServer(
-                        context.Configuration.GetConnectionString("IgnoramaContextConnection")));
+                        context.Configuration.GetConnectionString("ForumContextConnection")));
 
                 services.AddDefaultIdentity<User>()
                     .AddEntityFrameworkStores<ForumContext>()
