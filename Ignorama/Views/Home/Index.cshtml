@@ -48,7 +48,7 @@
         </span>
     </div>
 </div>
-<div class=row v-for="thread in threads">
+<div class=row v-for="thread in visibleThreads">
     <div class="col-xs-12 thread">
         <div class=btn-group style="float: right;">
             <a class="btn btn-default btn-xs dropdown-toggle" data-toggle=dropdown>
@@ -57,7 +57,7 @@
             </a>
             <ul class="dropdown-menu pull-right">
                 <li>
-                    <a href="#">Hide thread</a>
+                    <a href="#" v-on:click="hideThread(thread)">Hide thread</a>
             </ul>
         </div>
         <span v-if="thread.stickied" class="thread-icon glyphicon glyphicon-bookmark"></span>
