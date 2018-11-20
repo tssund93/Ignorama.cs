@@ -20,8 +20,43 @@ namespace Ignorama.Controllers
 
         public IActionResult New()
         {
-            var tagsModel = _context.Tags.OrderBy(t => t.Name);
-            return View(tagsModel);
+            var newThreadModel = new NewThreadViewModel
+            {
+                Tags = _context.Tags.OrderBy(t => t.Name)
+            };
+            return View(newThreadModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> New(NewThreadViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var thread = new Thread
+                {
+                    Title = model.Title,
+                    Stickied = false,
+                    Locked = false,
+                    Deleted = false,
+                    Tag = _context.Tags.Find(model.TagID)
+                };
+
+                var post = new Post
+                {
+                    Thread = thread,
+                    User = _context.Users.First(), // FIXME
+                    Text = model.Text,
+                    Time = DateTime.UtcNow,
+                    Deleted = false
+                };
+
+                _context.Threads.Add(thread);
+                _context.Posts.Add(post);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -30,6 +65,8 @@ namespace Ignorama.Controllers
             return new OkObjectResult(
                 _context.Threads
                     .Include(thread => thread.Posts)
+                    .ThenInclude(post => post.User)
+                    .Include(thread => thread.Tag)
                     .ToList());
         }
     }

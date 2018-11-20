@@ -62,15 +62,17 @@
         </div>
         <span v-if="thread.stickied" class="thread-icon glyphicon glyphicon-bookmark"></span>
         <span v-if="thread.locked" class="thread-icon glyphicon glyphicon-lock"></span>
-        <a title="FIXME" href="#">{{ thread.title }}</a>
-        @*<a href="#" title="Unfollow thread" style="padding-right: 5px;">
-                <b class="unfollow-link glyphicon glyphicon-eye-close">
-                </b>
-            </a>*@
+        <a :title="thread.posts[0].text" href="#">{{ thread.title }}</a>
+        <a href="#" title="Unfollow thread" style="padding-right: 5px;">
+            <b class="unfollow-link glyphicon glyphicon-eye-close">
+            </b>
+        </a>
         <br>
-        @*<span style="font-size: 12px; color: gray;">
-                h <br>  Board: Music | Replies: 5 | Last reply: <span class=time>2017-05-19T15:13:44.135072Z</span>
-            </span>*@
+        <span style="font-size: 12px; color: gray;">
+            {{ thread.posts[0].user.name }}
+            <br>
+            Board: {{ thread.tag.name }} | Replies: {{ thread.posts.length }} | Last reply: <span class=time>{{ thread.posts[thread.posts.length - 1].time | date }}</span>
+        </span>
     </div>
 </div>
 
