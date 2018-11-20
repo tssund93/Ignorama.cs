@@ -44,7 +44,7 @@ namespace Ignorama
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
-            var connection = Configuration.GetConnectionString("IgnoramaContextConnection");
+            var connection = Configuration.GetConnectionString("ForumContextConnection");
             services.AddDbContext<ForumContext>
                 (options => options.UseSqlServer(connection));
 
