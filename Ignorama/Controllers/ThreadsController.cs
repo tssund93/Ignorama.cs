@@ -66,15 +66,58 @@ namespace Ignorama.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
         public IActionResult GetThreads()
         {
+            var user = _userManager.GetUserAsync(HttpContext.User);
+            var hiddenThreads = _context.HiddenThreads
+                .Where(hiddenThread => hiddenThread.User == user.Result)
+                .Select(hiddenThread => hiddenThread.Thread)
+                .ToList();
             return new OkObjectResult(
                 _context.Threads
-                    .Include(thread => thread.Posts)
-                    .ThenInclude(post => post.User)
-                    .Include(thread => thread.Tag)
-                    .ToList());
+                    .OrderByDescending(thread => thread.Posts.OrderBy(post => post.Time).FirstOrDefault().Time)
+                    .Where(thread => thread.Deleted == false)
+                    .Select(thread => new
+                    {
+                        thread.Title,
+                        thread.ID,
+                        thread.Locked,
+                        thread.Stickied,
+                        TagName = thread.Tag.Name,
+                        FirstPost = thread.Posts.First(),
+                        LastPost = thread.Posts.Last(),
+                        PostCount = thread.Posts.Count(),
+                        OP = thread.Posts.First().User,
+                        Hidden = hiddenThreads.Contains(thread)
+                    }));
+        }
+
+        public class ThreadIDModel
+        {
+            public int ThreadID { get; set; }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Hide([FromBody] ThreadIDModel t)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null) return new BadRequestObjectResult(user);
+
+            var thread = _context.Threads.Find(t.ThreadID);
+
+            if (thread != null)
+            {
+                var hiddenThread = new HiddenThread
+                {
+                    Thread = thread,
+                    User = user
+                };
+
+                await _context.AddAsync(hiddenThread);
+                await _context.SaveChangesAsync();
+                return new OkObjectResult(t.ThreadID);
+            }
+            else return new BadRequestObjectResult(thread);
         }
     }
 }

@@ -11,5 +11,6 @@ namespace Ignorama.Models
     {
         public ICollection<Thread> Threads { get; set; }
         public ICollection<Post> Posts { get; set; }
+        public ICollection<HiddenThread> HiddenThreads { get; set; }
     }
 }

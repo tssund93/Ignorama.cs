@@ -40,7 +40,7 @@ namespace Ignorama
 
             services.AddMvc().AddJsonOptions(options =>
             {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 

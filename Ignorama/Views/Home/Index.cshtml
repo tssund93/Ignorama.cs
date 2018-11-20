@@ -66,7 +66,7 @@
             </a>
             <ul class="dropdown-menu pull-right">
                 <li>
-                    <a v-if="thread.hidden" href="#" v-on:click="unhideThread(thread)">
+                    <a v-if="thread.Hidden" href="#" v-on:click="unhideThread(thread)">
                         Unhide thread
                     </a>
                     <a v-else href="#" v-on:click="hideThread(thread)">
@@ -74,19 +74,19 @@
                     </a>
             </ul>
         </div>
-        <span v-if="thread.stickied" class="thread-icon glyphicon glyphicon-bookmark"></span>
-        <span v-if="thread.locked" class="thread-icon glyphicon glyphicon-lock"></span>
-        <a :title="thread.posts[0].text" href="#" v-on:click="thread.following = true">
-            {{ thread.title }}
+        <span v-if="thread.Stickied" class="thread-icon glyphicon glyphicon-bookmark"></span>
+        <span v-if="thread.Locked" class="thread-icon glyphicon glyphicon-lock"></span>
+        <a :title="thread.FirstPost.Text" href="#" v-on:click="thread.Following = true">
+            {{ thread.Title }}
         </a>
-        <a v-if="thread.following" v-on:click="thread.following = false" href="#" title="Unfollow thread" style="padding-right: 5px;">
+        <a v-if="thread.following" v-on:click="thread.Following = false" href="#" title="Unfollow thread" style="padding-right: 5px;">
             <b class="unfollow-link glyphicon glyphicon-eye-close"></b>
         </a>
         <br>
         <span style="font-size: 12px; color: gray;">
-            {{ thread.posts[0].user.userName }}
+            {{ thread.OP.UserName }}
             <br>
-            Board: {{ thread.tag.name }} | Replies: {{ thread.posts.length }} | Last reply: <span class=time>{{ thread.posts[thread.posts.length - 1].time | date }}</span>
+            Board: {{ thread.TagName }} | Replies: {{ thread.PostCount }} | Last reply: <span class=time>{{ thread.LastPost.Time | date }}</span>
         </span>
     </div>
 </div>
