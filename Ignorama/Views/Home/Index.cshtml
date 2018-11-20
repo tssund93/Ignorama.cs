@@ -85,7 +85,7 @@
         </a>
         <br>
         <span style="font-size: 12px; color: gray;">
-            {{ thread.posts[0].user.name }}
+            {{ thread.posts[0].user.userName }}
             <br>
             Board: {{ thread.tag.name }} | Replies: {{ thread.posts.length }} | Last reply: <span class=time>{{ thread.posts[thread.posts.length - 1].time | date }}</span>
         </span>

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -43,9 +44,13 @@ namespace Ignorama
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
 
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=Ignorama;Trusted_Connection=True;ConnectRetryCount=0";
+            var connection = Configuration.GetConnectionString("IgnoramaContextConnection");
             services.AddDbContext<ForumContext>
                 (options => options.UseSqlServer(connection));
+
+            services.AddIdentityCore<User>()
+                    .AddEntityFrameworkStores<ForumContext>()
+                    .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,6 +69,8 @@ namespace Ignorama
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

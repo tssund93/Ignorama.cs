@@ -4,14 +4,16 @@ using Ignorama.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ignorama.Migrations
 {
     [DbContext(typeof(ForumContext))]
-    partial class ForumContextModelSnapshot : ModelSnapshot
+    [Migration("20181120045048_CreateIdentityUser")]
+    partial class CreateIdentityUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -137,6 +139,8 @@ namespace Ignorama.Migrations
 
                     b.Property<string>("PasswordHash");
 
+                    b.Property<int>("PermissionLevelID");
+
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
@@ -157,6 +161,8 @@ namespace Ignorama.Migrations
                         .IsUnique()
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("PermissionLevelID");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -303,6 +309,14 @@ namespace Ignorama.Migrations
                     b.HasOne("Ignorama.Models.User")
                         .WithMany("Threads")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Ignorama.Models.User", b =>
+                {
+                    b.HasOne("Ignorama.Models.PermissionLevel", "PermissionLevel")
+                        .WithMany()
+                        .HasForeignKey("PermissionLevelID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<long>", b =>
