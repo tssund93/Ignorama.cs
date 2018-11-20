@@ -1,26 +1,26 @@
-﻿@model IEnumerable<Ignorama.Models.Tag>
+﻿@model Ignorama.Models.NewThreadViewModel
 @{
     ViewData["Title"] = "New Thread";
 }
 
 <h2 class="page-title">New Thread</h2>
 
-<form action=b/submit-thread method=post>
+<form asp-action="New">
     <div class=row>
         <div class="col-xs-3 col-sm-2 col-md-1 subject-label">Subject:</div>
-        <input class="col-xs-9 col-sm-10 col-md-11" name=subject type=text id=subjectfield required>
+        <input class="col-xs-9 col-sm-10 col-md-11" type=text asp-for="Title" required>
     </div>
     <div class=row>
-        <textarea class=col-xs-12 id=postfield name=body rows=7 cols=50 required></textarea>
+        <textarea class=col-xs-12 asp-for="Text" rows=7 cols=50 required></textarea>
     </div>
     <div class=row>
         <div class=tagsdropdown>
             Tag:
-            <select id=tagdropdown name=tag required>
+            <select asp-for="TagID" required>
                 <option value="">- Select a tag -</option>
                 @if (Model != null)
                 {
-                    foreach (var tag in Model)
+                    foreach (var tag in Model.Tags)
                     {
                         <option value="@tag.ID">@tag.Name</option>
                     }
@@ -28,14 +28,14 @@
             </select>
         </div>
         <div class="rightbuttons bottom">
-            <input class="btn btn-default btn-sm" id=submitbutton name=Submit type=submit value=Submit>
-            <input class="btn btn-default btn-sm" onclick="window.location='/'" type=button value=Back>
+            <input class="btn btn-default btn-sm" type=submit value=Submit>
+            <input class="btn btn-default btn-sm" asp-controller="HomeController" asp-route="Index" type=button value=Back>
         </div>
     </div>
 </form>
-<div class=row>
-    <form class=col-xs-12 id=uploadForm><input id=upload onchange=updateFilename(); type=file name=upload><input class=invisiblebutton id=uploadsubmit type=submit value=Upload> <input id=filename type=hidden name=filename value=none> </form>
-</div>
+@*<div class=row>
+        <form class=col-xs-12 id=uploadForm><input id=upload onchange=updateFilename(); type=file name=upload><input class=invisiblebutton id=uploadsubmit type=submit value=Upload> <input id=filename type=hidden name=filename value=none> </form>
+    </div>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
