@@ -13,8 +13,9 @@ namespace Ignorama.Models
         [Required]
         public Thread Thread { get; set; }
 
-        [Required]
         public User User { get; set; }
+
+        public string IP { get; set; }
 
         [Required]
         public string Text { get; set; }
