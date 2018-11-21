@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -229,6 +230,28 @@ namespace Ignorama.Controllers
                 return new OkObjectResult(t.ThreadID);
             }
             else return new BadRequestObjectResult(thread);
+        }
+
+        [HttpGet("/Threads/View/{threadID}")]
+        public IActionResult View(int threadID)
+        {
+            var thread = _context.Threads
+                .Where(t => t.ID == threadID)
+                .FirstOrDefault();
+
+            return View(thread);
+        }
+
+        [HttpGet("/Threads/GetPosts/{threadID}")]
+        public IActionResult GetPosts(int threadID)
+        {
+            var user = _userManager.GetUserAsync(HttpContext.User).Result;
+
+            return new OkObjectResult(
+                _context.Posts
+                    .Where(post => post.Thread.ID == threadID)
+                    .Include(post => post.User)
+                    .OrderBy(post => post.Time));
         }
     }
 }
