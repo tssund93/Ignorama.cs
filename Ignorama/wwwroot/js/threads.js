@@ -34,19 +34,15 @@
         }
     },
     methods: {
-        hideThread: function (thread) {
-            console.log(thread.ID);
-            axios.post("/Threads/Hide", { ThreadID: thread.ID })
+        toggleHidden: function (thread) {
+            axios.post("/Threads/ToggleHidden", { ThreadID: thread.ID })
                 .then(response => {
-                    console.log("Hid thread " + response.data);
+                    console.log("Toggle hidden for thread " + response.data);
                 })
                 .catch(error => {
-                    console.log("Error hiding thread: " + error);
+                    console.error("Error toggling hidden: " + error);
                 });
-            thread.Hidden = true;
-        },
-        unhideThread: function (thread) {
-            thread.Hidden = false;
+            thread.Hidden = !thread.Hidden;
         }
     }
 });
