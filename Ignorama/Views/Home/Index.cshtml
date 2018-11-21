@@ -66,10 +66,10 @@
             </a>
             <ul class="dropdown-menu pull-right">
                 <li>
-                    <a v-if="thread.Hidden" href="#" v-on:click="unhideThread(thread)">
+                    <a v-if="thread.Hidden" href="#" v-on:click="toggleHidden(thread)">
                         Unhide thread
                     </a>
-                    <a v-else href="#" v-on:click="hideThread(thread)">
+                    <a v-else href="#" v-on:click="toggleHidden(thread)">
                         Hide thread
                     </a>
             </ul>

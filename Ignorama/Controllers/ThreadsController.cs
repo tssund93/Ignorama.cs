@@ -98,7 +98,7 @@ namespace Ignorama.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Hide([FromBody] ThreadIDModel t)
+        public async Task<IActionResult> ToggleHidden([FromBody] ThreadIDModel t)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user == null) return new BadRequestObjectResult(user);
@@ -113,8 +113,19 @@ namespace Ignorama.Controllers
                     User = user
                 };
 
-                await _context.AddAsync(hiddenThread);
+                var hiddenThreadRows = _context.HiddenThreads
+                    .Where(ht => ht.User == user && ht.Thread == thread);
+                if (!hiddenThreadRows.Any())
+                {
+                    await _context.AddAsync(hiddenThread);
+                }
+                else
+                {
+                    foreach (HiddenThread row in hiddenThreadRows)
+                        _context.Remove(row);
+                }
                 await _context.SaveChangesAsync();
+
                 return new OkObjectResult(t.ThreadID);
             }
             else return new BadRequestObjectResult(thread);
