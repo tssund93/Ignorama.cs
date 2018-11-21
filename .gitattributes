@@ -62,4 +62,4 @@
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
 
-Ignorama/wwwroot/lib/* linguist-vendored
+Ignorama/wwwroot/lib/** linguist-vendored
