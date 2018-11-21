@@ -135,5 +135,75 @@ namespace Ignorama.Controllers
             }
             else return new BadRequestObjectResult(thread);
         }
+
+        public class ThreadIDLastSeenPostModel
+        {
+            public int ThreadID { get; set; }
+            public int LastSeenPostID { get; set; }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Follow([FromBody] ThreadIDLastSeenPostModel t)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null) return new BadRequestObjectResult(user);
+
+            var thread = _context.Threads.Find(t.ThreadID);
+            var lastSeenPost = _context.Posts.Find(t.LastSeenPostID);
+
+            if (thread != null)
+            {
+                var followedThreadRows =
+                    _context.FollowedThreads.Where(ft => ft.User == user && ft.Thread == thread);
+                if (!followedThreadRows.Any())
+                {
+                    var followedThread = new FollowedThread
+                    {
+                        Thread = thread,
+                        User = user,
+                        LastSeenPost = lastSeenPost
+                    };
+
+                    await _context.AddAsync(followedThread);
+                }
+                else
+                {
+                    foreach (FollowedThread row in followedThreadRows)
+                    {
+                        _context.Update(row);
+                        row.LastSeenPost = lastSeenPost;
+                    }
+                }
+                await _context.SaveChangesAsync();
+
+                return new OkObjectResult(t.ThreadID);
+            }
+            else return new BadRequestObjectResult(thread);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Unfollow([FromBody] ThreadIDModel t)
+        {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            if (user == null) return new BadRequestObjectResult(user);
+
+            var thread = _context.Threads.Find(t.ThreadID);
+
+            if (thread != null)
+            {
+                var followedThreadRows =
+                    _context.FollowedThreads.Where(ft => ft.User == user && ft.Thread == thread);
+                if (followedThreadRows.Any())
+                {
+                    foreach (FollowedThread row in followedThreadRows)
+                        _context.Remove(row);
+                };
+
+                await _context.SaveChangesAsync();
+
+                return new OkObjectResult(t.ThreadID);
+            }
+            else return new BadRequestObjectResult(thread);
+        }
     }
 }
