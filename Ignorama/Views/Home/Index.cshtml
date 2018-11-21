@@ -79,7 +79,7 @@
         <a :title="thread.FirstPost.Text" href="#" v-on:click="thread.Following = true">
             {{ thread.Title }}
         </a>
-        <a v-if="thread.following" v-on:click="thread.Following = false" href="#" title="Unfollow thread" style="padding-right: 5px;">
+        <a v-if="thread.Following" v-on:click="thread.Following = false" href="#" title="Unfollow thread" style="padding-right: 5px;">
             <b class="unfollow-link glyphicon glyphicon-eye-close"></b>
         </a>
         <br>
