@@ -107,16 +107,16 @@ namespace Ignorama.Controllers
 
             if (thread != null)
             {
-                var hiddenThread = new HiddenThread
-                {
-                    Thread = thread,
-                    User = user
-                };
-
-                var hiddenThreadRows = _context.HiddenThreads
-                    .Where(ht => ht.User == user && ht.Thread == thread);
+                var hiddenThreadRows =
+                    _context.HiddenThreads.Where(ht => ht.User == user && ht.Thread == thread);
                 if (!hiddenThreadRows.Any())
                 {
+                    var hiddenThread = new HiddenThread
+                    {
+                        Thread = thread,
+                        User = user
+                    };
+
                     await _context.AddAsync(hiddenThread);
                 }
                 else
