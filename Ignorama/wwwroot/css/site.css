@@ -223,3 +223,7 @@ label {
     border: none !important;
     font-size: 0;
 }
+
+.bold {
+    font-weight: bold;
+}

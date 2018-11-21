@@ -34,13 +34,13 @@
                     </label>
             </ul>
         </form>
-        <a v-on:click="view = ''" href="#">
+        <a v-on:click="view = ''" href="#" v-bind:class="{ bold: view === '' }">
             All
         </a>
-        <a v-on:click="view = 'following'" href="#">
+        <a v-on:click="view = 'following'" href="#" v-bind:class="{ bold: view === 'following' }">
             Following
         </a>
-        <a v-on:click="view = 'hidden'" href="#">
+        <a v-on:click="view = 'hidden'" href="#" v-bind:class="{ bold: view === 'hidden' }">
             Hidden
         </a>
         <span style="float: right; margin: 3px;">
