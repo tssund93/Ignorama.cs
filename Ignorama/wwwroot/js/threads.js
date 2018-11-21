@@ -2,7 +2,7 @@
     el: 'main',
     data: {
         threads: [],
-        view: '',
+        view: this.$cookies.get('view') ? this.$cookies.get('view') : '',
     },
     created: function () {
         axios.get('/Threads/GetThreads')
@@ -27,6 +27,11 @@
                 return this.threads.filter(thread => thread.Following && !thread.Hidden);
             else
                 return this.threads.filter(thread => !thread.Hidden);
+        }
+    },
+    watch: {
+        view: function (val) {
+            this.$cookies.set('view', val);
         }
     },
     methods: {
