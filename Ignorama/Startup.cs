@@ -84,6 +84,7 @@ namespace Ignorama
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute("view-thread", "{controller=Threads}/{action=View}/{threadID}");
             });
         }
     }
