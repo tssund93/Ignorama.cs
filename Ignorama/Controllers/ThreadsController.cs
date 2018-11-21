@@ -73,6 +73,10 @@ namespace Ignorama.Controllers
                 .Where(hiddenThread => hiddenThread.User == user.Result)
                 .Select(hiddenThread => hiddenThread.Thread)
                 .ToList();
+            var followedThreads = _context.FollowedThreads
+                .Where(followedThread => followedThread.User == user.Result)
+                .Select(followedThread => followedThread.Thread)
+                .ToList();
             return new OkObjectResult(
                 _context.Threads
                     .OrderByDescending(thread => thread.Posts.OrderBy(post => post.Time).FirstOrDefault().Time)
@@ -88,7 +92,8 @@ namespace Ignorama.Controllers
                         LastPost = thread.Posts.Last(),
                         PostCount = thread.Posts.Count(),
                         OP = thread.Posts.First().User,
-                        Hidden = hiddenThreads.Contains(thread)
+                        Hidden = hiddenThreads.Contains(thread),
+                        Following = followedThreads.Contains(thread)
                     }));
         }
 

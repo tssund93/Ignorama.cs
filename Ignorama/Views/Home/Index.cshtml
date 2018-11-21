@@ -76,10 +76,10 @@
         </div>
         <span v-if="thread.Stickied" class="thread-icon glyphicon glyphicon-bookmark"></span>
         <span v-if="thread.Locked" class="thread-icon glyphicon glyphicon-lock"></span>
-        <a :title="thread.FirstPost.Text" href="#" v-on:click="thread.Following = true">
+        <a :title="thread.FirstPost.Text" href="#" v-on:click="follow(thread, thread.LastPost.ID)">
             {{ thread.Title }}
         </a>
-        <a v-if="thread.Following" v-on:click="thread.Following = false" href="#" title="Unfollow thread" style="padding-right: 5px;">
+        <a v-if="thread.Following" v-on:click="unfollow(thread)" href="#" title="Unfollow thread" style="padding-right: 5px;">
             <b class="unfollow-link glyphicon glyphicon-eye-close"></b>
         </a>
         <br>
