@@ -68,15 +68,28 @@ namespace Ignorama.Controllers
 
         public IActionResult GetThreads()
         {
-            var user = _userManager.GetUserAsync(HttpContext.User);
-            var hiddenThreads = _context.HiddenThreads
-                .Where(hiddenThread => hiddenThread.User == user.Result)
-                .Select(hiddenThread => hiddenThread.Thread)
-                .ToList();
-            var followedThreads = _context.FollowedThreads
-                .Where(followedThread => followedThread.User == user.Result)
-                .Select(followedThread => followedThread.Thread)
-                .ToList();
+            var user = _userManager.GetUserAsync(HttpContext.User).Result;
+
+            var hiddenThreads = user != null
+                ? _context.HiddenThreads
+                    .Where(hiddenThread => hiddenThread.User == user)
+                    .Select(hiddenThread => hiddenThread.Thread)
+                    .ToList()
+                : _context.HiddenThreads
+                    .Where(hiddenThread => hiddenThread.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
+                    .Select(hiddenThread => hiddenThread.Thread)
+                    .ToList();
+
+            var followedThreads = user != null
+                ? _context.FollowedThreads
+                    .Where(followedThread => followedThread.User == user)
+                    .Select(followedThread => followedThread.Thread)
+                    .ToList()
+                : _context.FollowedThreads
+                    .Where(followedThread => followedThread.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
+                    .Select(followedThread => followedThread.Thread)
+                    .ToList();
+
             return new OkObjectResult(
                 _context.Threads
                     .OrderByDescending(thread => thread.Posts.OrderBy(post => post.Time).FirstOrDefault().Time)
@@ -106,20 +119,25 @@ namespace Ignorama.Controllers
         public async Task<IActionResult> ToggleHidden([FromBody] ThreadIDModel t)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (user == null) return new BadRequestObjectResult(user);
 
             var thread = _context.Threads.Find(t.ThreadID);
 
             if (thread != null)
             {
-                var hiddenThreadRows =
-                    _context.HiddenThreads.Where(ht => ht.User == user && ht.Thread == thread);
+                var hiddenThreadRows = user != null
+                    ? _context.HiddenThreads.Where(ht => ht.User == user && ht.Thread == thread)
+                    : _context.HiddenThreads.Where(
+                        ht => ht.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString() && ht.Thread == thread);
+
                 if (!hiddenThreadRows.Any())
                 {
                     var hiddenThread = new HiddenThread
                     {
                         Thread = thread,
-                        User = user
+                        User = user,
+                        IP = user == null
+                            ? Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                            : null
                     };
 
                     await _context.AddAsync(hiddenThread);
@@ -146,21 +164,26 @@ namespace Ignorama.Controllers
         public async Task<IActionResult> Follow([FromBody] ThreadIDLastSeenPostModel t)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (user == null) return new BadRequestObjectResult(user);
 
             var thread = _context.Threads.Find(t.ThreadID);
             var lastSeenPost = _context.Posts.Find(t.LastSeenPostID);
 
             if (thread != null)
             {
-                var followedThreadRows =
-                    _context.FollowedThreads.Where(ft => ft.User == user && ft.Thread == thread);
+                var followedThreadRows = user != null
+                    ? _context.FollowedThreads.Where(ft => ft.User == user && ft.Thread == thread)
+                    : _context.FollowedThreads.Where(
+                        ft => ft.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString() && ft.Thread == thread);
+
                 if (!followedThreadRows.Any())
                 {
                     var followedThread = new FollowedThread
                     {
                         Thread = thread,
                         User = user,
+                        IP = user == null
+                            ? Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                            : null,
                         LastSeenPost = lastSeenPost
                     };
 
@@ -185,14 +208,16 @@ namespace Ignorama.Controllers
         public async Task<IActionResult> Unfollow([FromBody] ThreadIDModel t)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            if (user == null) return new BadRequestObjectResult(user);
 
             var thread = _context.Threads.Find(t.ThreadID);
 
             if (thread != null)
             {
-                var followedThreadRows =
-                    _context.FollowedThreads.Where(ft => ft.User == user && ft.Thread == thread);
+                var followedThreadRows = user != null
+                    ? _context.FollowedThreads.Where(ft => ft.User == user && ft.Thread == thread)
+                    : _context.FollowedThreads.Where(
+                        ft => ft.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString() && ft.Thread == thread);
+
                 if (followedThreadRows.Any())
                 {
                     foreach (FollowedThread row in followedThreadRows)
