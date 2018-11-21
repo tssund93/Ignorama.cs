@@ -17,10 +17,6 @@ namespace Ignorama.Areas.Identity
         {
             builder.ConfigureServices((context, services) =>
             {
-                services.AddDbContext<ForumContext>(options =>
-                    options.UseSqlServer(
-                        context.Configuration.GetConnectionString("ForumContextConnection")));
-
                 services.AddDefaultIdentity<User>()
                     .AddEntityFrameworkStores<ForumContext>()
                     .AddDefaultTokenProviders();

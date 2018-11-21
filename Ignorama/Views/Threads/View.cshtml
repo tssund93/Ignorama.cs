@@ -1,0 +1,25 @@
+﻿@model Ignorama.Models.Thread
+
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="page-title">@Model.Title</h2>
+
+<div class="row" v-for="post in posts">
+    <div class="col-xs-12 thread" v-cloak>
+        <div style="margin-bottom: -15px;">
+            <span style="font-size: 12px; color: gray;">
+                <b>{{ post.User.UserName }}</b>
+                <span class="time" style="float: right;">{{ post.Time | date }}</span>
+            </span>
+        </div>
+        <br>
+        <div>{{ post.Text }}</div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="/js/posts.js"></script>
+}
