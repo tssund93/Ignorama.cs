@@ -1,4 +1,8 @@
-﻿html, body, div.main {
+﻿[v-cloak] {
+    display: none;
+}
+
+html, body, div.main {
     height: 100%;
 }
 
@@ -20,8 +24,8 @@ body {
     box-shadow: 0px 1.5px 3px 0px rgba(0,0,0,0.75);
 }
 
-footer {<SID>my_cr_function()
-
+footer {
+    <SID>my_cr_function()
 }
 
 .slogan {
@@ -76,7 +80,9 @@ a:active {
     color: white;
 }
 
-.header-link { padding: 3px; }
+.header-link {
+    padding: 3px;
+}
 
 ul.dropdown-menu-form {
     padding: 5px 10px 0;
@@ -97,7 +103,7 @@ ul.dropdown-menu-form {
 }
 
 select {
-    height:30px;
+    height: 30px;
     text-shadow: 0px 1px 0px #FFF;
     background-image: none;
     background-repeat: repeat-x;
@@ -108,7 +114,7 @@ select {
     box-shadow: none;
 }
 
-.pagination-sm > li > a, .pagination-sm > li > span,.pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus, .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {
+.pagination-sm > li > a, .pagination-sm > li > span, .pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus, .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {
     text-shadow: 0px 1px 0px #FFF;
     height: 30px;
     background-image: none;
@@ -138,26 +144,26 @@ select.pagination {
     margin-bottom: -9px;
 }
 
-.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus {
-    background-color: #330066;
-    border-color: #663399;
-}
+    .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+        background-color: #330066;
+        border-color: #663399;
+    }
 
-.pagination>li>a, .pagination>li>span{
-    color: #663399;
-}
+    .pagination > li > a, .pagination > li > span {
+        color: #663399;
+    }
 
-.pagination>li>a:hover, .pagination>li>span:hover, .pagination>li>a:focus, .pagination>li>span:focus {
-    color: #663399;
-}
+        .pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {
+            color: #663399;
+        }
 
-.pagination>.disabled>span, .pagination>.disabled>span:hover, .pagination>.disabled>span:focus, .pagination>.disabled>a, .pagination>.disabled>a:hover, .pagination>.disabled>a:focus{
-    cursor: default;
-}
+    .pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus, .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {
+        cursor: default;
+    }
 
 .searchbox {
-    height:30px;
-    margin-right:-5px;
+    height: 30px;
+    margin-right: -5px;
     font-weight: normal;
 }
 
@@ -184,15 +190,15 @@ select.pagination {
     color: black !important;
 }
 
-input[type='checkbox']{
+input[type='checkbox'] {
     margin-right: 3px;
 }
 
-input[type='text']{
+input[type='text'] {
     margin-bottom: 5px;
 }
 
-label{
+label {
     font-weight: 400 !important;
 }
 
