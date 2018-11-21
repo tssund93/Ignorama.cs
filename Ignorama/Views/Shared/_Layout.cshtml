@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -103,15 +107,26 @@
                         <div class=row>
                             <div class=col-xs-12>
                                 <div style="float: right;">
-                                    <div>
-                                        <a class=header-link asp-area="Identity" asp-page="/Account/Register">
-                                            Sign up
-                                        </a>
-                                        <span class=header-link style="color: white;">/</span>
-                                        <a class=header-link asp-area="Identity" asp-page="/Account/Login">
-                                            Log in
-                                        </a>
-                                    </div>
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        <div style="color: white;">
+                                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
+                                                Logged in as @UserManager.GetUserName(User)<button type="submit" class="btn btn-link navbar-btn navbar-link">(logout)</button>
+                                            </form>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div>
+                                            <a class=header-link asp-area="Identity" asp-page="/Account/Register">
+                                                Sign up
+                                            </a>
+                                            <span class=header-link style="color: white;">/</span>
+                                            <a class=header-link asp-area="Identity" asp-page="/Account/Login">
+                                                Log in
+                                            </a>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
