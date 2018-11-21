@@ -7,11 +7,7 @@
     created: function () {
         axios.get('/Threads/GetThreads')
             .then(response => {
-                this.threads = response.data.map(thread =>
-                    ({
-                        ...thread,
-                        Following: true,
-                    }));
+                this.threads = response.data;
             });
     },
     filters: {
@@ -37,12 +33,32 @@
         toggleHidden: function (thread) {
             axios.post("/Threads/ToggleHidden", { ThreadID: thread.ID })
                 .then(response => {
-                    console.log("Toggle hidden for thread " + response.data);
+                    console.log("Toggled hidden for thread " + response.data);
                 })
                 .catch(error => {
                     console.error("Error toggling hidden: " + error);
                 });
             thread.Hidden = !thread.Hidden;
+        },
+        follow: function (thread, lastSeenID) {
+            axios.post("/Threads/Follow", { ThreadID: thread.ID, LastSeenPostID: lastSeenID })
+                .then(response => {
+                    console.log("Followed thread " + response.data);
+                })
+                .catch(error => {
+                    console.error("Error following thread: " + error);
+                });
+            thread.Following = true;
+        },
+        unfollow: function (thread) {
+            axios.post("/Threads/Unfollow", { ThreadID: thread.ID })
+                .then(response => {
+                    console.log("Unfollowed thread " + response.data);
+                })
+                .catch(error => {
+                    console.error("Error unfollowing thread: " + error);
+                });
+            thread.Following = false;
         }
     }
 });
