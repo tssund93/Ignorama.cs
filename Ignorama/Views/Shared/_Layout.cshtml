@@ -110,7 +110,7 @@
                                     @if (SignInManager.IsSignedIn(User))
                                     {
                                         <div style="color: white;">
-                                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post">
+                                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Context.Request.Path" method="post">
                                                 Logged in as @UserManager.GetUserName(User)<button type="submit" class="btn btn-link navbar-btn navbar-link">(logout)</button>
                                             </form>
                                         </div>
