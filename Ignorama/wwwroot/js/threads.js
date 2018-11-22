@@ -49,6 +49,7 @@
     },
     methods: {
         toggleHidden: function (thread) {
+            thread.Hidden = !thread.Hidden;
             axios.post("/Threads/ToggleHidden", { ThreadID: thread.ID })
                 .then(response => {
                     console.log("Toggled hidden for thread " + response.data);
@@ -56,9 +57,9 @@
                 .catch(error => {
                     console.error("Error toggling hidden: " + error);
                 });
-            thread.Hidden = !thread.Hidden;
         },
         follow: function (thread, lastSeenID) {
+            thread.Following = true;
             axios.post("/Threads/Follow", { ThreadID: thread.ID, LastSeenPostID: lastSeenID })
                 .then(response => {
                     console.log("Followed thread " + response.data);
@@ -66,9 +67,9 @@
                 .catch(error => {
                     console.error("Error following thread: " + error);
                 });
-            thread.Following = true;
         },
         unfollow: function (thread) {
+            thread.Following = false;
             axios.post("/Threads/Unfollow", { ThreadID: thread.ID })
                 .then(response => {
                     console.log("Unfollowed thread " + response.data);
@@ -76,7 +77,6 @@
                 .catch(error => {
                     console.error("Error unfollowing thread: " + error);
                 });
-            thread.Following = false;
         },
         updateSelectedTag: function (tag) {
             axios.post("/Tags/ToggleSelectedTag", { TagID: tag.ID })
