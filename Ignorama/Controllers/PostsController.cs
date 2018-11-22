@@ -38,9 +38,7 @@ namespace Ignorama.Controllers
                 {
                     Thread = thread,
                     User = user,
-                    IP = user == null
-                            ? Request.HttpContext.Connection.RemoteIpAddress.ToString()
-                            : null,
+                    IP = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
                     Text = text,
                     Time = DateTime.UtcNow,
                     Deleted = false,
