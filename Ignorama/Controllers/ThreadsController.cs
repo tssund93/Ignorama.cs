@@ -56,7 +56,10 @@ namespace Ignorama.Controllers
                     User = user,
                     Text = model.Text,
                     Time = DateTime.UtcNow,
-                    Deleted = false
+                    Deleted = false,
+                    Bump = false,
+                    RevealOP = true,
+                    Anonymous = false
                 };
 
                 _context.Threads.Add(thread);
