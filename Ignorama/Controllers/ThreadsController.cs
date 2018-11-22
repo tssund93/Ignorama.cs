@@ -254,8 +254,6 @@ namespace Ignorama.Controllers
         [HttpGet("/Threads/GetPosts/{threadID}")]
         public IActionResult GetPosts(int threadID)
         {
-            var user = _userManager.GetUserAsync(HttpContext.User).Result;
-
             return new OkObjectResult(
                 _context.Posts
                     .Where(post => post.Thread.ID == threadID)
