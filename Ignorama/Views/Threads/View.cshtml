@@ -20,6 +20,30 @@
     </div>
 </div>
 
+<div class='hidden-xs slid-in' id='quickreply' style='background-color: #E8E8E8; padding-right:5px; padding-left:5px;z-index:5;'>
+    <div style='text-align:center;'><a href='javascript:slide();'>Reply</a></div>
+    <form id='postform' action='php/submitPost.php?thread=' method='post'>
+        @Html.AntiForgeryToken()
+        <textarea id='postfield' name='Text' rows='7' class='col-xs-12' style='resize:none;' required></textarea>
+        <br />
+        <div style='float:left;'>
+            <input name='RevealOP' type='checkbox'>Reveal OP
+            <input name='Bump' type='checkbox'>Bump!
+            <input name='Anonymous' type='checkbox'>Post Anonymously
+            <div style='padding-bottom:5px; display:block;'>
+                <input id='submitbutton' style="margin-top: 5px;float:right;" class='btn btn-default btn-sm' name="Submit1" type="submit" value="Submit" />
+            </div>
+    </form>
+    <form id='uploadForm' action="php/uploadfile.php" method='post' enctype='multipart/form-data'>
+        @Html.AntiForgeryToken()
+        <span class='block-inline'>
+            <input id='test' onchange='updateFilename();' type='file' name='upload' style='left: 6px;position: absolute;bottom: 7px;width: 219px;'>
+        </span>
+        <input id='uploadsubmit' class='btn btn-default btn-xs' type='submit' value='Upload' style='background: transparent;border: none !important;font-size:0;'>
+        <input id='filename' type='hidden' name='filename' value='none'>
+    </form>
+</div>
+
 @section Scripts {
     <script src="/js/posts.js"></script>
 }
