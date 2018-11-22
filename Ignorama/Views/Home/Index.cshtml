@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<Ignorama.Models.Tag>
+@{
     ViewData["Title"] = "Ignorama";
 }
 
@@ -6,32 +7,16 @@
     <div class=col-xs-12 style="margin-top: 5px; margin-bottom: 5px;">
         <a class="btn btn-default btn-sm threads" style="margin: 3px;" asp-controller="Threads" asp-action="New">New Thread</a>
         <form style="float: right;" action=b/apply-tags method=post>
-            <input class="btn btn-default btn-sm threads" type=submit style="margin: 3px;" value="Apply Boards">
             <a class="dropdown-toggle btn btn-default btn-sm" style="margin-left: 3px;" data-toggle=dropdown>
                 Boards <b class=caret>
                 </b>
             </a>
             <ul class="dropdown-menu dropdown-menu-form pull-right" role=menu>
-                <li>
+                <li v-for="tag in tags">
                     <label>
-                        <input type=checkbox name=1 checked> Anime &amp; Manga
+                        <input v-model="selectedTags" type=checkbox :value=tag.ID :checked="selectedTags.includes(tag.ID)">{{ tag.Name }}
                     </label>
-                <li>
-                    <label>
-                        <input type=checkbox name=52 checked> Music
-                    </label>
-                <li>
-                    <label>
-                        <input type=checkbox name=22 checked> Off-Topic
-                    </label>
-                <li>
-                    <label>
-                        <input type=checkbox name=10 checked> Technology
-                    </label>
-                <li>
-                    <label>
-                        <input type=checkbox name=2 checked> Video Games
-                    </label>
+                </li>
             </ul>
         </form>
         <a v-on:click="view = ''" href="#" v-bind:class="{ bold: view === '' }">
@@ -87,7 +72,7 @@
             <span v-if="thread.FirstPost.Anonymous || !thread.OP">Anonymous</span>
             <span v-else>{{ thread.OP.UserName }}</span>
             <br>
-            Board: {{ thread.TagName }} | Replies: {{ thread.PostCount }} | Last reply: <span class=time>{{ thread.LastPost.Time | date }}</span>
+            Board: {{ thread.Tag.Name }} | Replies: {{ thread.PostCount }} | Last reply: <span class=time>{{ thread.LastPost.Time | date }}</span>
         </span>
     </div>
 </div>

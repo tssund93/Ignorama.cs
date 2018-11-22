@@ -3,11 +3,17 @@
     data: {
         threads: [],
         view: this.$cookies.get('view') ? this.$cookies.get('view') : '',
+        tags: [],
+        selectedTags: []
     },
     created: function () {
         axios.get('/Threads/GetThreads')
             .then(response => {
                 this.threads = response.data;
+            });
+        axios.get('/Tags/GetTags')
+            .then(response => {
+                this.tags = response.data;
             });
     },
     filters: {
@@ -19,14 +25,17 @@
     },
     computed: {
         visibleThreads: function () {
+            viewThreads = [];
             if (this.view === '')
-                return this.threads.filter(thread => !thread.Hidden);
+                viewThreads = this.threads.filter(thread => !thread.Hidden);
             else if (this.view === 'hidden')
-                return this.threads.filter(thread => thread.Hidden);
+                viewThreads = this.threads.filter(thread => thread.Hidden);
             else if (this.view === 'following')
-                return this.threads.filter(thread => thread.Following && !thread.Hidden);
+                viewThreads = this.threads.filter(thread => thread.Following && !thread.Hidden);
             else
-                return this.threads.filter(thread => !thread.Hidden);
+                viewThreads = this.threads.filter(thread => !thread.Hidden);
+
+            return viewThreads.filter(thread => this.selectedTags.includes(thread.Tag.ID));
         }
     },
     watch: {

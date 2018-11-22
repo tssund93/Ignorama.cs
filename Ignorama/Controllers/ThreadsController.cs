@@ -104,7 +104,7 @@ namespace Ignorama.Controllers
                         thread.ID,
                         thread.Locked,
                         thread.Stickied,
-                        TagName = thread.Tag.Name,
+                        Tag = thread.Tag,
                         FirstPost = thread.Posts.First(),
                         LastPost = thread.Posts.Last(),
                         PostCount = thread.Posts.Count(),
