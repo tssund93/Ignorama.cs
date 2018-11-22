@@ -11,7 +11,7 @@
     <div class="col-xs-12 thread" v-cloak>
         <div style="margin-bottom: -15px;">
             <span style="font-size: 12px; color: gray;">
-                <b v-if="post.Anonymous">Anonymous</b>
+                <b v-if="post.Anonymous || !post.UserName">Anonymous</b>
                 <b v-else>{{ post.User.UserName }}</b>
                 <span v-if="post.Bump">| Bump</span>
                 <span v-if="post.RevealOP">| OP</span>
