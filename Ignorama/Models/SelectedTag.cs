@@ -12,6 +12,8 @@ namespace Ignorama.Models
 
         public User User { get; set; }
 
+        public string IP { get; set; }
+
         [Required]
         public Tag Tag { get; set; }
     }
