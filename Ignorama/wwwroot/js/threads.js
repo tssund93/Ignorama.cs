@@ -15,6 +15,10 @@
             .then(response => {
                 this.tags = response.data;
             });
+        axios.get('/Tags/GetSelectedTags')
+            .then(response => {
+                this.selectedTags = response.data;
+            });
     },
     filters: {
         date: function (date) {
@@ -73,6 +77,15 @@
                     console.error("Error unfollowing thread: " + error);
                 });
             thread.Following = false;
+        },
+        updateSelectedTag: function (tag) {
+            axios.post("/Tags/ToggleSelectedTag", { TagID: tag.ID })
+                .then(response => {
+                    console.log("Updated selected tag " + response.data);
+                })
+                .catch(error => {
+                    console.error("Error updating selected tag: " + error);
+                });
         }
     }
 });
