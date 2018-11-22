@@ -227,3 +227,13 @@ label {
 .bold {
     font-weight: bold;
 }
+
+#quickreply {
+    position: fixed;
+    float: right;
+    border: 1px solid #000;
+    bottom: -222px;
+    right: 59px;
+    width: 300px;
+    height: 242px;
+}
