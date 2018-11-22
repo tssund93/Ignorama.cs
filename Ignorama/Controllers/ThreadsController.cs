@@ -48,7 +48,6 @@ namespace Ignorama.Controllers
                 };
 
                 var user = await _userManager.GetUserAsync(HttpContext.User);
-                if (user == null) return View("Error");
 
                 var post = new Post
                 {
@@ -59,7 +58,10 @@ namespace Ignorama.Controllers
                     Deleted = false,
                     Bump = false,
                     RevealOP = true,
-                    Anonymous = false
+                    Anonymous = false,
+                    IP = user == null
+                            ? Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                            : null
                 };
 
                 _context.Threads.Add(thread);
