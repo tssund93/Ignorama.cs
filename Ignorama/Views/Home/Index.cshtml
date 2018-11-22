@@ -84,7 +84,8 @@
         </a>
         <br>
         <span style="font-size: 12px; color: gray;">
-            {{ thread.OP.UserName }}
+            <span v-if="thread.FirstPost.Anonymous || !thread.OP">Anonymous</span>
+            <span v-else>{{ thread.OP.UserName }}</span>
             <br>
             Board: {{ thread.TagName }} | Replies: {{ thread.PostCount }} | Last reply: <span class=time>{{ thread.LastPost.Time | date }}</span>
         </span>
