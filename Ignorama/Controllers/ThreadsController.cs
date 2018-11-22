@@ -59,9 +59,7 @@ namespace Ignorama.Controllers
                     Bump = false,
                     RevealOP = true,
                     Anonymous = false,
-                    IP = user == null
-                            ? Request.HttpContext.Connection.RemoteIpAddress.ToString()
-                            : null
+                    IP = Request.HttpContext.Connection.RemoteIpAddress.ToString()
                 };
 
                 _context.Threads.Add(thread);
@@ -242,6 +240,12 @@ namespace Ignorama.Controllers
         {
             var thread = _context.Threads
                 .Where(t => t.ID == threadID)
+                .Select(t => new ThreadViewModel
+                {
+                    Title = t.Title,
+                    IsOP = t.Posts.FirstOrDefault().User.UserName == _userManager.GetUserName(User)
+                        || t.Posts.FirstOrDefault().IP == Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                })
                 .FirstOrDefault();
 
             return View(thread);
