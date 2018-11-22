@@ -25,5 +25,14 @@ namespace Ignorama.Models
 
         [Required]
         public bool Deleted { get; set; }
+
+        [Required]
+        public bool Anonymous { get; set; }
+
+        [Required]
+        public bool Bump { get; set; }
+
+        [Required]
+        public bool RevealOP { get; set; }
     }
 }
