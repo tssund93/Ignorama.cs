@@ -19,7 +19,7 @@ namespace Ignorama.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(_context.Tags.OrderBy(tag => tag.Name));
         }
 
         public IActionResult Privacy()
