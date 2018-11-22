@@ -1,4 +1,6 @@
-﻿@model Ignorama.Models.Thread
+﻿@model Ignorama.Models.ThreadViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
 
 @{
     ViewData["Title"] = "View";
@@ -30,9 +32,18 @@
         <textarea id='postfield' name='Text' rows='7' class='col-xs-12' style='resize:none;' required></textarea>
         <br />
         <div style='float:left;'>
-            <input name='RevealOP' type='checkbox'>Reveal OP
-            <input name='Bump' type='checkbox'>Bump!
-            <input name='Anonymous' type='checkbox'>Post Anonymously
+            @if (Model.IsOP)
+            {
+                <input name='RevealOP' type='checkbox'><text>Reveal OP</text>
+            }
+            else
+            {
+                <input name='Bump' type='checkbox'><text>Bump!</text>
+            }
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <input vname='Anonymous' type='checkbox'><text>Post Anonymously</text>
+            }
             <div style='padding-bottom:5px; display:block;'>
                 <input id='submitbutton' style="margin-top: 5px;float:right;" class='btn btn-default btn-sm' name="Submit1" type="submit" value="Submit" />
             </div>
