@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
@@ -20,17 +22,20 @@ namespace Ignorama.Areas.Identity.Pages.Account
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ForumContext _context;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ForumContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         [BindProperty]
@@ -74,6 +79,47 @@ namespace Ignorama.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    var loggedInUser = await _context.Users.Where(u => u.UserName == Input.UserName).FirstOrDefaultAsync();
+
+                    var ipFollowedThreads = _context.FollowedThreads
+                        .Where(thread => thread.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
+                        .Include(thread => thread.Thread);
+                    foreach (FollowedThread followedThread in ipFollowedThreads)
+                    {
+                        await _context.AddAsync(new FollowedThread
+                        {
+                            User = loggedInUser,
+                            Thread = followedThread.Thread,
+                            LastSeenPost = followedThread.LastSeenPost
+                        });
+                    }
+
+                    var ipHiddenThreads = _context.HiddenThreads
+                        .Where(thread => thread.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
+                        .Include(thread => thread.Thread);
+                    foreach (HiddenThread hiddenThread in ipHiddenThreads)
+                    {
+                        await _context.AddAsync(new HiddenThread
+                        {
+                            User = loggedInUser,
+                            Thread = hiddenThread.Thread
+                        });
+                    }
+
+                    var ipSelectedTags = _context.SelectedTags
+                        .Where(tag => tag.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
+                        .Include(tag => tag.Tag);
+                    foreach (SelectedTag selectedTag in ipSelectedTags)
+                    {
+                        await _context.AddAsync(new SelectedTag
+                        {
+                            User = loggedInUser,
+                            Tag = selectedTag.Tag
+                        });
+                    }
+                    await _context.SaveChangesAsync();
+
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)
