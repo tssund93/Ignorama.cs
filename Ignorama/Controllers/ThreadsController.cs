@@ -249,13 +249,21 @@ namespace Ignorama.Controllers
         [HttpGet("/Threads/View/{threadID}")]
         public IActionResult View(int threadID)
         {
+            var user = _userManager.GetUserAsync(HttpContext.User).Result;
+            var followedThreadRows = (user != null
+                    ? _context.FollowedThreads.Where(ft => ft.User == user && ft.Thread.ID == threadID)
+                    : _context.FollowedThreads.Where(
+                        ft => ft.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString() && ft.Thread.ID == threadID))
+                    .Include(ft => ft.LastSeenPost);
+
             var thread = _context.Threads
                 .Where(t => t.ID == threadID)
                 .Select(t => new ThreadViewModel
                 {
                     Title = t.Title,
                     IsOP = t.Posts.FirstOrDefault().User.UserName == _userManager.GetUserName(User)
-                        || t.Posts.FirstOrDefault().IP == Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                        || t.Posts.FirstOrDefault().IP == Request.HttpContext.Connection.RemoteIpAddress.ToString(),
+                    LastSeenPostID = followedThreadRows.Any() ? followedThreadRows.FirstOrDefault().LastSeenPost.ID : 0,
                 })
                 .FirstOrDefault();
 
