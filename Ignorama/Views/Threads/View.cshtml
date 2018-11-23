@@ -16,8 +16,8 @@
             <span style="font-size: 12px; color: gray;">
                 <b v-if="post.Anonymous || !post.User">Anonymous</b>
                 <b v-else>{{ post.User.UserName }}</b>
-                <span v-if="post.Bump">| Bump</span>
                 <span v-if="post.RevealOP">| OP</span>
+                <span v-else-if="post.Bump">| Bump</span>
                 <span class="time" style="float: right;">{{ post.Time | date }}</span>
             </span>
         </div>
