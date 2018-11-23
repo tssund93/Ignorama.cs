@@ -38,7 +38,7 @@ var postsVue = new Vue({
             post = post.replace(/\[b\](.*?)\[\/b\]/igs, "<b>$1</b>");
             post = post.replace(/\[u\](.*?)\[\/u\]/igs, "<u>$1</u>");
             //spoilers
-            post = post.replace(/\[spoiler\](.*?)\[\/spoiler\]/igs, "<span class='spoiler' style='background-color:#333;'>$1</span>");
+            post = post.replace(/\[spoiler\](.*?)\[\/spoiler\]/igs, "<span class='spoiler'>$1</span>");
             //replies
             post = post.replace(/\[reply[=| ]([0-9]+)\]\R*\[\/reply\]/igs, "<a href='javascript:viewPost($1);'><b>$1</b></a>");
             post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\R*\[\/reply\]/igs, "<a href='javascript:viewPost($1);'><b>$2</b></a>");
