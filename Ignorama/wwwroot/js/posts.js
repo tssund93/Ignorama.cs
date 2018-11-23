@@ -24,6 +24,40 @@ var postsVue = new Vue({
             if (!date) return '';
             date = new Date(date);
             return date.toLocaleString();
+        },
+        formatPost: function (post) {
+            post = escapeHTML(post);
+            post = post.replace(/\n/g, '<br>');
+
+            //images
+            post = post.replace(/\[img\](.*?)\[\/img\]/gi, '<a target="_blank" href="$1"><img href="$1" src="$1" class="img img-responsive" style="max-height: 480px;"></img></a>');
+            //webm
+            post = post.replace(/\[webm\](.*?)\[\/webm\]/gi, '<video preload="none" controls="controls" class="img img-responsive"><source type="video/webm" src="$1"></video>');
+            //bold and italics
+            post = post.replace(/\[i\](.*?)\[\/i\]/igs, "<i>$1</i>");
+            post = post.replace(/\[b\](.*?)\[\/b\]/igs, "<b>$1</b>");
+            post = post.replace(/\[u\](.*?)\[\/u\]/igs, "<u>$1</u>");
+            //spoilers
+            post = post.replace(/\[spoiler\](.*?)\[\/spoiler\]/igs, "<span class='spoiler' style='background-color:#333;'>$1</span>");
+            //replies
+            post = post.replace(/\[reply[=| ]([0-9]+)\]\R*\[\/reply\]/igs, "<a href='javascript:viewPost($1);'><b>$1</b></a>");
+            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\R*\[\/reply\]/igs, "<a href='javascript:viewPost($1);'><b>$2</b></a>");
+            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\R*\[\/reply\]/igs, "<a href='javascript:viewPost($2);'><b>$1</b></a>");
+            post = post.replace(/&gt;&gt;([0-9]+)/igs, "<a href='javascript:viewPost($1);'><b>$1</b></a>");
+            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\R*(.*?)\R*\[\/reply\]\R?/igs, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$2</a> said:</b><br/>$3</div>");
+            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\R*(.*?)\R*\[\/reply\]\R?/igs, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($2);'>$1</a> said:</b><br/>$3</div>");
+            post = post.replace(/\[reply[=| ]([0-9]+)\]\R*(.*?)\R*\[\/reply\]\R?/igs, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$1</a> said:</b><br/>$2</div>");
+            //quotes
+            post = post.replace(/\[quote\]\R?(.*?)\R?\[\/quote\]\R?/igs, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b>Quote:</b><br/>$1</div>");
+            //code
+            post = post.replace(/\[code\]\R*(.*?)\R*\[\/code\]/igs, "<pre><code>$1</code></pre>");
+            //colored text
+            post = post.replace(/\[color=(.*?)\](.*?)\[\/color\]/g, "<span style='color:$1'>$2</span>");
+            //url
+            post = post.replace(/\[url=(http(s?):\/\/)?(.*?)\](.*?)\[\/url\]/g, "<a target='_blank' href='http$2://$3'>$4</a>");
+            //youtube embed
+            post = post.replace(/[a-zA-Z\/\/:\.]*(youtube.com\/watch\?v=|youtu.be\/)([a-zA-Z0-9\-_]+)([a-zA-Z0-9\/\*\-\_\?\&\;\%\=\.]*)/gi, "<div class='flex-video widescreen'><iframe width=\"560\" height=\"315\" src=\"//www.youtube.com/embed/$2\" frameborder=\"0\" allowfullscreen></iframe></div>");
+            return post;
         }
     },
     watch: {
@@ -72,6 +106,7 @@ $('#postform').submit(function (e) {
             slide();
 
             postsVue.getPosts(threadID);
+            postsVue.page = Math.ceil(postsVue.posts.length / postsVue.perPage);
         },
         error: function (_, e) {
             console.log($('#postform').serialize())
@@ -79,3 +114,14 @@ $('#postform').submit(function (e) {
         }
     });
 });
+
+var escape = document.createElement('textarea');
+function escapeHTML(html) {
+    escape.textContent = html;
+    return escape.innerHTML;
+}
+
+function unescapeHTML(html) {
+    escape.innerHTML = html;
+    return escape.textContent;
+}
