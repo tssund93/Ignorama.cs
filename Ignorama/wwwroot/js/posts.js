@@ -18,13 +18,27 @@ var postsVue = new Vue({
             return date.toLocaleString();
         }
     },
+    watch: {
+        posts: function (val) {
+            this.follow(threadID, Math.max(...val.map(p => p.ID)));
+        }
+    },
     methods: {
         getPosts: function (threadID) {
             axios.get('/Threads/GetPosts/' + threadID)
                 .then(response => {
                     this.posts = response.data;
                 });
-        }
+        },
+        follow: function (threadID, lastSeenID) {
+            axios.post("/Threads/Follow", { ThreadID: threadID, LastSeenPostID: lastSeenID })
+                .then(response => {
+                    console.log("Followed thread " + response.data);
+                })
+                .catch(error => {
+                    console.error("Error following thread: " + error);
+                });
+        },
     }
 });
 
