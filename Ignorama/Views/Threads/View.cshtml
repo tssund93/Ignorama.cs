@@ -9,7 +9,8 @@
 
 <h2 class="page-title">@Model.Title</h2>
 
-<div class="row" v-for="post in posts">
+<b-pagination size="md" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
+<div class="row" v-for="post in visiblePosts">
     <div class="col-xs-12 thread" v-cloak>
         <div style="margin-bottom: -15px;">
             <span style="font-size: 12px; color: gray;">
@@ -24,6 +25,7 @@
         <div>{{ post.Text }}</div>
     </div>
 </div>
+<b-pagination size="md" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
 
 <div class='slid-in' id='quickreply' style='background-color: #E8E8E8; padding-right:5px; padding-left:5px;z-index:5;'>
     <div style='text-align:center;'><a href='javascript:slide();'>Reply</a></div>
