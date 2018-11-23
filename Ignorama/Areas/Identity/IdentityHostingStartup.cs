@@ -19,11 +19,11 @@ namespace Ignorama.Areas.Identity
             builder.ConfigureServices((context, services) =>
             {
                 services.AddDefaultIdentity<User>()
-                    .AddEntityFrameworkStores<ForumContext>()
                     .AddDefaultTokenProviders()
                     .AddRoles<IdentityRole<long>>()
                     .AddRoleManager<RoleManager<IdentityRole<long>>>()
-                    .AddRoleStore<RoleStore<IdentityRole<long>, ForumContext, long>>(); ;
+                    .AddRoleStore<RoleStore<IdentityRole<long>, ForumContext, long>>()
+                    .AddEntityFrameworkStores<ForumContext>();
             });
         }
     }
