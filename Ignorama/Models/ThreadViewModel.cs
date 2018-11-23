@@ -10,5 +10,7 @@ namespace Ignorama.Models
         public string Title { get; set; }
 
         public bool IsOP { get; set; }
+
+        public int LastSeenPostID { get; set; }
     }
 }
