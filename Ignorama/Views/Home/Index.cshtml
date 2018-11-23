@@ -29,16 +29,7 @@
             Hidden
         </a>
         <span style="float: right; margin: 3px;">
-            <span class=hidden-xs>
-                <form class=searchform action="/" method=get>
-                    <input class=searchbox name=search type=text>
-                    <input type=hidden name=f value=search>
-                    <button class="btn btn-default btn-sm searchbutton" type=submit>
-                        <span class="glyphicon glyphicon-search">
-                        </span>
-                    </button>
-                </form>
-            </span>
+            <input class=searchbox name=search type=text placeholder="Search" v-model="search">
         </span>
     </div>
 </div>
