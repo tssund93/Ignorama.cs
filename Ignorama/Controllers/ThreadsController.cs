@@ -56,7 +56,7 @@ namespace Ignorama.Controllers
                     Text = model.Text,
                     Time = DateTime.UtcNow,
                     Deleted = false,
-                    Bump = false,
+                    Bump = true,
                     RevealOP = true,
                     Anonymous = false,
                     IP = Request.HttpContext.Connection.RemoteIpAddress.ToString()
@@ -98,7 +98,9 @@ namespace Ignorama.Controllers
 
             return new OkObjectResult(
                 _context.Threads
-                    .OrderByDescending(thread => thread.Posts.OrderBy(post => post.Time).FirstOrDefault().Time)
+                    .OrderByDescending(thread => thread.Posts
+                                        .Where(post => post.Bump == true)
+                                        .OrderByDescending(post => post.Time).FirstOrDefault().Time)
                     .Where(thread => thread.Deleted == false)
                     .Select(thread => new
                     {
