@@ -102,7 +102,6 @@ namespace Ignorama
                 var roleExist = await roleManager.RoleExistsAsync(roleName);
                 if (!roleExist)
                 {
-                    //create the roles and seed them to the database: Question 1
                     roleResult = await roleManager.CreateAsync(new IdentityRole<long>(roleName));
                 }
             }

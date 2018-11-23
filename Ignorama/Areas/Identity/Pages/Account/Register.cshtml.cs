@@ -82,6 +82,8 @@ namespace Ignorama.Areas.Identity.Pages.Account
 
                     var loggedInUser = await _context.Users.Where(u => u.UserName == Input.UserName).FirstOrDefaultAsync();
 
+                    await _userManager.AddToRoleAsync(user, "User");
+
                     var ipFollowedThreads = _context.FollowedThreads
                         .Where(thread => thread.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
                         .Include(thread => thread.Thread);
