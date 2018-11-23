@@ -4,7 +4,8 @@
         threads: [],
         view: this.$cookies.get('view') ? this.$cookies.get('view') : '',
         tags: [],
-        selectedTags: []
+        selectedTags: [],
+        search: "",
     },
     created: function () {
         axios.get('/Threads/GetThreads')
@@ -39,7 +40,11 @@
             else
                 viewThreads = this.threads.filter(thread => !thread.Hidden);
 
-            return viewThreads.filter(thread => this.selectedTags.includes(thread.Tag.ID));
+            searchPattern = new RegExp(".*" + this.search.replace(/ +/ig, ".*") + ".*", "ig");
+            return viewThreads
+                .filter(thread =>
+                    this.selectedTags.includes(thread.Tag.ID) &&
+                    (searchPattern.test(thread.Title + ' ' + thread.FirstPost.Text)));
         }
     },
     watch: {
