@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -48,14 +49,13 @@ namespace Ignorama
             var connection = Configuration.GetConnectionString("ForumContextConnection");
             services.AddDbContext<ForumContext>
                 (options => options.UseSqlServer(connection));
-
-            services.AddIdentityCore<User>()
-                    .AddEntityFrameworkStores<ForumContext>()
-                    .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IHostingEnvironment env,
+            IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -79,6 +79,8 @@ namespace Ignorama
 
             app.UseAuthentication();
 
+            CreateRoles(serviceProvider).Wait();
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
@@ -86,6 +88,24 @@ namespace Ignorama
                     template: "{controller=Home}/{action=Index}/{id?}");
                 routes.MapRoute("view-thread", "{controller=Threads}/{action=View}/{threadID}");
             });
+        }
+
+        private async Task CreateRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<long>>>();
+
+            string[] roleNames = { "Admin", "Moderator", "User" };
+            IdentityResult roleResult;
+
+            foreach (var roleName in roleNames)
+            {
+                var roleExist = await roleManager.RoleExistsAsync(roleName);
+                if (!roleExist)
+                {
+                    //create the roles and seed them to the database: Question 1
+                    roleResult = await roleManager.CreateAsync(new IdentityRole<long>(roleName));
+                }
+            }
         }
     }
 }
