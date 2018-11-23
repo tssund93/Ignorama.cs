@@ -176,10 +176,11 @@ namespace Ignorama.Controllers
 
             if (thread != null)
             {
-                var followedThreadRows = user != null
+                var followedThreadRows = (user != null
                     ? _context.FollowedThreads.Where(ft => ft.User == user && ft.Thread == thread)
                     : _context.FollowedThreads.Where(
-                        ft => ft.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString() && ft.Thread == thread);
+                        ft => ft.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString() && ft.Thread == thread))
+                    .Include(ft => ft.LastSeenPost);
 
                 if (!followedThreadRows.Any())
                 {
@@ -199,8 +200,11 @@ namespace Ignorama.Controllers
                 {
                     foreach (FollowedThread row in followedThreadRows)
                     {
-                        _context.Update(row);
-                        row.LastSeenPost = lastSeenPost;
+                        if (row.LastSeenPost.ID < lastSeenPost.ID)
+                        {
+                            _context.Update(row);
+                            row.LastSeenPost = lastSeenPost;
+                        }
                     }
                 }
                 await _context.SaveChangesAsync();
