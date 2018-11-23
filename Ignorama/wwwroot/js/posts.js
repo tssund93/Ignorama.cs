@@ -7,6 +7,14 @@ var postsVue = new Vue({
     el: 'main',
     data: {
         posts: [],
+        page: 1,
+        perPage: 5,
+    },
+    computed: {
+        visiblePosts: function () {
+            var startPost = (this.page - 1) * this.perPage;
+            return this.posts.slice(startPost, startPost + this.perPage);
+        }
     },
     created: function () {
         this.getPosts(threadID);
@@ -19,7 +27,7 @@ var postsVue = new Vue({
         }
     },
     watch: {
-        posts: function (val) {
+        visiblePosts: function (val) {
             this.follow(threadID, Math.max(...val.map(p => p.ID)));
         }
     },
