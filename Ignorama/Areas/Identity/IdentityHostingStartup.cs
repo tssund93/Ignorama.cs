@@ -1,6 +1,7 @@
 ﻿using Ignorama.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +20,10 @@ namespace Ignorama.Areas.Identity
             {
                 services.AddDefaultIdentity<User>()
                     .AddEntityFrameworkStores<ForumContext>()
-                    .AddDefaultTokenProviders();
+                    .AddDefaultTokenProviders()
+                    .AddRoles<IdentityRole<long>>()
+                    .AddRoleManager<RoleManager<IdentityRole<long>>>()
+                    .AddRoleStore<RoleStore<IdentityRole<long>, ForumContext, long>>(); ;
             });
         }
     }
