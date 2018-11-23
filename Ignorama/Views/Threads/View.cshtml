@@ -50,16 +50,10 @@
                 <input id='submitbutton' style="margin-top: 5px;float:right;" class='btn btn-default btn-sm' name="Submit1" type="submit" value="Submit" />
             </div>
     </form>
-    <form id='uploadForm' action="php/uploadfile.php" method='post' enctype='multipart/form-data'>
-        @Html.AntiForgeryToken()
-        <span class='block-inline'>
-            <input id='test' onchange='updateFilename();' type='file' name='upload' style='left: 6px;position: absolute;bottom: 7px;width: 219px;'>
-        </span>
-        <input id='uploadsubmit' class='btn btn-default btn-xs' type='submit' value='Upload' style='background: transparent;border: none !important;font-size:0;'>
-        <input id='filename' type='hidden' name='filename' value='none'>
-    </form>
+    <partial name="_UploadForm" />
 </div>
 
 @section Scripts {
-    <script src="/js/posts.js"></script>
+    <script src="~/js/posts.js"></script>
+    <script src="~/js/uploadfile.js"></script>
 }
