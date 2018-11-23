@@ -58,16 +58,6 @@
                     console.error("Error toggling hidden: " + error);
                 });
         },
-        follow: function (thread, lastSeenID) {
-            thread.Following = true;
-            axios.post("/Threads/Follow", { ThreadID: thread.ID, LastSeenPostID: lastSeenID })
-                .then(response => {
-                    console.log("Followed thread " + response.data);
-                })
-                .catch(error => {
-                    console.error("Error following thread: " + error);
-                });
-        },
         unfollow: function (thread) {
             thread.Following = false;
             axios.post("/Threads/Unfollow", { ThreadID: thread.ID })

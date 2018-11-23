@@ -65,9 +65,11 @@ namespace Ignorama.Controllers
                 _context.Threads.Add(thread);
                 _context.Posts.Add(post);
                 await _context.SaveChangesAsync();
+
+                return RedirectToAction("View", "Threads", new { threadID = thread.ID });
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction();
         }
 
         public IActionResult GetThreads()
