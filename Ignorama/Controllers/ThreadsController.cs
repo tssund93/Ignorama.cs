@@ -89,11 +89,11 @@ namespace Ignorama.Controllers
             var followedThreads = user != null
                 ? _context.FollowedThreads
                     .Where(followedThread => followedThread.User == user)
-                    .Select(followedThread => followedThread.Thread)
+                    .Select(followedThread => followedThread)
                     .ToList()
                 : _context.FollowedThreads
                     .Where(followedThread => followedThread.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
-                    .Select(followedThread => followedThread.Thread)
+                    .Select(followedThread => followedThread)
                     .ToList();
 
             return new OkObjectResult(
@@ -108,13 +108,16 @@ namespace Ignorama.Controllers
                         thread.ID,
                         thread.Locked,
                         thread.Stickied,
-                        Tag = thread.Tag,
+                        thread.Tag,
                         FirstPost = thread.Posts.First(),
                         LastPost = thread.Posts.Last(),
                         PostCount = thread.Posts.Count(),
                         OP = thread.Posts.First().User,
                         Hidden = hiddenThreads.Contains(thread),
-                        Following = followedThreads.Contains(thread)
+                        Following = followedThreads.Select(ft => ft.Thread).Contains(thread),
+                        LastSeenPostID = followedThreads.Where(ft => ft.Thread.ID == thread.ID)
+                                                        .Select(ft => ft.LastSeenPost.ID)
+                                                        .FirstOrDefault(),
                     }));
         }
 
