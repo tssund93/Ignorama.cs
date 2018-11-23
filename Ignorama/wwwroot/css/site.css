@@ -224,6 +224,14 @@ label {
     font-size: 0;
 }
 
+.spoiler:hover {
+    background-color: inherit;
+}
+
+.spoiler {
+    background-color: #333;
+}
+
 .bold {
     font-weight: bold;
 }
