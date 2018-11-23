@@ -22,7 +22,7 @@
             </span>
         </div>
         <br>
-        <div>{{ post.Text }}</div>
+        <div v-html="$options.filters.formatPost(post.Text)"></div>
     </div>
 </div>
 <b-pagination size="md" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
