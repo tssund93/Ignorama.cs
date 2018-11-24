@@ -261,3 +261,6 @@ __pycache__/
 *.pyc
 
 tags
+
+Ignorama/wwwroot/js/*.min.js
+Ignorama/wwwroot/css/*.min.css
