@@ -18,6 +18,7 @@
                 <b v-else>{{ post.User.UserName }}</b>
                 <span v-if="post.RevealOP">| OP</span>
                 <span v-else-if="post.Bump">| Bump</span>
+                <a href="#" v-on:click="reply(post)">reply</a>
                 <span class="time" style="float: right;">{{ post.Time | date }}</span>
             </span>
         </div>

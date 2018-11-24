@@ -2,7 +2,7 @@
 
 var threadID = function () {
     var url = window.location.href.replace(/\/$/, '');
-    return url.substr(url.lastIndexOf('/') + 1);
+    return url.substr(url.lastIndexOf('/') + 1).replace(/#.*$/, '');
 }();
 
 var postsVue = new Vue({
@@ -42,17 +42,15 @@ var postsVue = new Vue({
             //spoilers
             post = post.replace(/\[spoiler\]([\s\S]*?)\[\/spoiler\]/ig, "<span class='spoiler'>$1</span>");
             //replies
-            post = post.replace(/\[reply[=| ]([0-9]+)\]\R*\[\/reply\]/ig, "<a href='javascript:viewPost($1);'><b>$1</b></a>");
-            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\R*\[\/reply\]/ig, "<a href='javascript:viewPost($1);'><b>$2</b></a>");
-            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\R*\[\/reply\]/ig, "<a href='javascript:viewPost($2);'><b>$1</b></a>");
-            post = post.replace(/&gt;&gt;([0-9]+)/ig, "<a href='javascript:viewPost($1);'><b>$1</b></a>");
-            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\R*([\s\S]*?)\R*\[\/reply\]\R?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$2</a> said:</b><br/>$3</div>");
-            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\R*([\s\S]*?)\R*\[\/reply\]\R?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($2);'>$1</a> said:</b><br/>$3</div>");
-            post = post.replace(/\[reply[=| ]([0-9]+)\]\R*([\s\S]*?)\R*\[\/reply\]\R?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$1</a> said:</b><br/>$2</div>");
+            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\s*\[\/reply\]/ig, "<a href='javascript:viewPost($1);'><b>$2</b></a>");
+            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*\[\/reply\]/gi, "<a href='javascript:viewPost($2);'><b>$1</b></a>");
+            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$2</a> said:</b><br/>$3</div>");
+            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($2);'>$1</a> said:</b><br/>$3</div>");
+            post = post.replace(/\[reply[=| ]([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$1</a> said:</b><br/>$2</div>");
             //quotes
-            post = post.replace(/\[quote\]\R?([\s\S]*?)\R?\[\/quote\]\R?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b>Quote:</b><br/>$1</div>");
+            post = post.replace(/\[quote\]\s?([\s\S]*?)\s?\[\/quote\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b>Quote:</b><br/>$1</div>");
             //code
-            post = post.replace(/\[code\]\R*([\s\S]*?)\R*\[\/code\]/ig, "<pre><code>$1</code></pre>");
+            post = post.replace(/\[code\]\s*([\s\S]*?)\s*\[\/code\]/ig, "<pre><code>$1</code></pre>");
             //colored text
             post = post.replace(/\[color=(.*?)\]([\s\S]*?)\[\/color\]/ig, "<span style='color:$1'>$2</span>");
             //url
@@ -92,16 +90,29 @@ var postsVue = new Vue({
                     post.ID > id) + 1) / this.perPage);
                 this.page = newPage !== 0 ? newPage : Math.ceil(this.posts.length / this.perPage);
             }
+        },
+        reply: function (post) {
+            var quotelessText = post.Text.replace(/\s*\[reply.*?\][\s\S]+\[\/reply\]\s*/gi, "");
+            $("#postfield").val('[reply user=' + post.User.UserName +
+                ' post=' + post.ID + ']\n' + quotelessText + '\n[/reply]');
+            slideOut();
         }
     }
 });
 
+function slideOut() {
+    $("#quickreply").stop(true).animate({ bottom: -1 }, 200).attr("class", "slid-out");
+}
+
+function slideIn() {
+    $("#quickreply").animate({ bottom: -222 }, 200).delay(200).queue(function (next) { $(this).attr("class", "slid-in"); next(); });
+}
+
 function slide() {
-    if ($("#quickreply").hasClass("slid-out")) {
-        $("#quickreply").animate({ bottom: -222 }, 200).delay(200).queue(function (next) { $(this).attr("class", "slid-in"); next(); });
-    }
+    if ($("#quickreply").hasClass("slid-out"))
+        slideIn();
     else
-        $("#quickreply").stop(true).animate({ bottom: -1 }, 200).attr("class", "slid-out");
+        slideOut();
 }
 
 $('#postform').submit(function (e) {
