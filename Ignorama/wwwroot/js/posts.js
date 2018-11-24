@@ -103,9 +103,9 @@ var postsVue = new Vue({
                 resolve();
             })
                 .then(() => {
-                    this.posts = this.posts.map(post =>
-                        ({ ...post, Highlighted: post.ID == postID ? true : false }));
-                    this.$scrollTo('#post' + postID)
+                    this.posts = this.posts.forEach(post =>
+                        post.Highlighted = post.ID == postID ? true : false);
+                    this.$scrollTo('#post' + postID);
                 });
         }
     }
