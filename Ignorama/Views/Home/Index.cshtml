@@ -19,13 +19,13 @@
                 </li>
             </ul>
         </form>
-        <a v-on:click="view = ''" href="#" v-bind:class="{ bold: view === '' }">
+        <a v-on:click.prevent="view = ''" href="#" v-bind:class="{ bold: view === '' }">
             All
         </a>
-        <a v-on:click="view = 'following'" href="#" v-bind:class="{ bold: view === 'following' }">
+        <a v-on:click.prevent="view = 'following'" href="#" v-bind:class="{ bold: view === 'following' }">
             Following
         </a>
-        <a v-on:click="view = 'hidden'" href="#" v-bind:class="{ bold: view === 'hidden' }">
+        <a v-on:click.prevent="view = 'hidden'" href="#" v-bind:class="{ bold: view === 'hidden' }">
             Hidden
         </a>
         <span style="float: right; margin: 3px;">
@@ -42,26 +42,26 @@
             </a>
             <ul class="dropdown-menu pull-right">
                 <li>
-                    <a v-if="thread.Hidden" href="#" v-on:click="toggleHidden(thread)">
+                    <a v-if="thread.Hidden" href="#" v-on:click.prevent="toggleHidden(thread)">
                         Unhide thread
                     </a>
-                    <a v-else href="#" v-on:click="toggleHidden(thread)">
+                    <a v-else href="#" v-on:click.prevent="toggleHidden(thread)">
                         Hide thread
                     </a>
                 </li>
                 <li v-if="thread.UserRoles.includes('Admin') || thread.UserRoles.includes('Moderator')">
-                    <a v-if="thread.Stickied" href="#" v-on:click="toggleStickied(thread)">
+                    <a v-if="thread.Stickied" href="#" v-on:click.prevent="toggleStickied(thread)">
                         Unsticky thread
                     </a>
-                    <a v-else href="#" v-on:click="toggleStickied(thread)">
+                    <a v-else href="#" v-on:click.prevent="toggleStickied(thread)">
                         Sticky thread
                     </a>
                 </li>
                 <li v-if="thread.UserRoles.includes('Admin') || thread.UserRoles.includes('Moderator')">
-                    <a v-if="thread.Locked" href="#" v-on:click="toggleLocked(thread)">
+                    <a v-if="thread.Locked" href="#" v-on:click.prevent="toggleLocked(thread)">
                         Unlock thread
                     </a>
-                    <a v-else href="#" v-on:click="toggleLocked(thread)">
+                    <a v-else href="#" v-on:click.prevent="toggleLocked(thread)">
                         Lock thread
                     </a>
                 </li>
@@ -72,7 +72,7 @@
         <a :title="thread.FirstPost.Text" :href="'Threads/View/' + thread.ID">
             {{ thread.Title }}
         </a>
-        <a v-if="thread.Following" v-on:click="unfollow(thread)" href="#" title="Unfollow thread" style="padding-right: 5px;">
+        <a v-if="thread.Following" v-on:click.prevent="unfollow(thread)" href="#" title="Unfollow thread" style="padding-right: 5px;">
             <b class="unfollow-link glyphicon glyphicon-eye-close"></b>
         </a>
         <br>

@@ -11,7 +11,7 @@
 
 <b-pagination size="md" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
 <div class="row" v-for="post in visiblePosts">
-    <div :id="'post' + post.ID" class="col-xs-12 thread" :class="{ seen: post.ID <= @Model.LastSeenPostID }" v-cloak>
+    <div :id="'post' + post.ID" class="col-xs-12 thread" :class="{ seen: post.ID <= @Model.LastSeenPostID, highlighted: post.Highlighted }" v-cloak>
         <div style="margin-bottom: -15px;">
             <span style="font-size: 12px; color: gray;">
                 <b v-if="post.Anonymous || !post.User">Anonymous</b>

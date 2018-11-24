@@ -8,7 +8,7 @@ var postsVue = new Vue({
     data: {
         posts: [],
         page: 1,
-        perPage: 20,
+        perPage: 10,
     },
     computed: {
         visiblePosts: function () {
@@ -96,22 +96,29 @@ var postsVue = new Vue({
             slideOut();
         },
         viewPost: function (postID) {
-            var newPage = Math.ceil((this.posts.findIndex(post =>
-                post.ID > postID)) / this.perPage);
-            this.page = newPage;
-            $('.thread').removeClass('highlighted');
-            $('#post' + postID).addClass('highlighted');
-            this.$scrollTo('#post' + postID);
+            var newPage = Math.ceil((this.posts.findIndex(p =>
+                p.ID > postID)) / this.perPage);
+            new Promise(resolve => {
+                this.page = newPage;
+                resolve();
+            })
+                .then(() => {
+                    this.posts = this.posts.map(post =>
+                        ({ ...post, Highlighted: post.ID == postID ? true : false }));
+                    this.$scrollTo('#post' + postID)
+                });
         }
     }
 });
 
 function slideOut() {
     $("#quickreply").stop(true).animate({ bottom: -1 }, 200).attr("class", "slid-out");
+    return false;
 }
 
 function slideIn() {
     $("#quickreply").animate({ bottom: -222 }, 200).delay(200).queue(function (next) { $(this).attr("class", "slid-in"); next(); });
+    return false;
 }
 
 function slide() {
@@ -119,6 +126,7 @@ function slide() {
         slideIn();
     else
         slideOut();
+    return false;
 }
 
 $('#postform').submit(function (e) {
