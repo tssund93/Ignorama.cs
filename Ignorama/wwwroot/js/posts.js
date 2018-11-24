@@ -40,11 +40,11 @@ var postsVue = new Vue({
             //spoilers
             post = post.replace(/\[spoiler\]([\s\S]*?)\[\/spoiler\]/ig, "<span class='spoiler'>$1</span>");
             //replies
-            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\s*\[\/reply\]/ig, "<a href='javascript:viewPost($1);'><b>$2</b></a>");
-            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*\[\/reply\]/gi, "<a href='javascript:viewPost($2);'><b>$1</b></a>");
-            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$2</a> said:</b><br/>$3</div>");
-            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($2);'>$1</a> said:</b><br/>$3</div>");
-            post = post.replace(/\[reply[=| ]([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$1</a> said:</b><br/>$2</div>");
+            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\s*\[\/reply\]/ig, "<a href='javascript:postsVue.viewPost($1);'><b>$2</b></a>");
+            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*\[\/reply\]/gi, "<a href='javascript:postsVue.viewPost($2);'><b>$1</b></a>");
+            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:postsVue.viewPost($1);'>$2</a> said:</b><br/>$3</div>");
+            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:postsVue.viewPost($2);'>$1</a> said:</b><br/>$3</div>");
+            post = post.replace(/\[reply[=| ]([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:postsVue.viewPost($1);'>$1</a> said:</b><br/>$2</div>");
             //quotes
             post = post.replace(/\[quote\]\s?([\s\S]*?)\s?\[\/quote\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b>Quote:</b><br/>$1</div>");
             //code
@@ -94,6 +94,14 @@ var postsVue = new Vue({
             $("#postfield").val('[reply user=' + post.User.UserName +
                 ' post=' + post.ID + ']\n' + quotelessText + '\n[/reply]');
             slideOut();
+        },
+        viewPost: function (postID) {
+            var newPage = Math.ceil((this.posts.findIndex(post =>
+                post.ID > postID)) / this.perPage);
+            this.page = newPage;
+            $('.thread').removeClass('highlighted');
+            $('#post' + postID).addClass('highlighted');
+            this.$scrollTo('#post' + postID);
         }
     }
 });
