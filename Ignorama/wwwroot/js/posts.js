@@ -10,7 +10,7 @@ var postsVue = new Vue({
     data: {
         posts: [],
         page: 1,
-        perPage: 5,
+        perPage: 20,
     },
     computed: {
         visiblePosts: function () {
