@@ -86,7 +86,8 @@ namespace Ignorama.Areas.Identity.Pages.Account
 
                     var ipFollowedThreads = _context.FollowedThreads
                         .Where(thread => thread.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
-                        .Include(thread => thread.Thread);
+                        .Include(thread => thread.Thread)
+                        .Include(thread => thread.LastSeenPost);
                     foreach (FollowedThread followedThread in ipFollowedThreads)
                     {
                         await _context.AddAsync(new FollowedThread

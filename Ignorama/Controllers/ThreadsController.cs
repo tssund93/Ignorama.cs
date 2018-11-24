@@ -97,11 +97,10 @@ namespace Ignorama.Controllers
                     .Select(followedThread => followedThread)
                     .ToList();
 
-            return new OkObjectResult(
-                _context.Threads
+            var threads = _context.Threads
                     .OrderByDescending(thread => thread.Posts
                                         .Where(post => post.Bump == true)
-                                        .OrderByDescending(post => post.Time).FirstOrDefault().Time)
+                                        .FirstOrDefault().Time)
                     .Where(thread => thread.Deleted == false)
                     .Select(thread => new
                     {
@@ -116,10 +115,14 @@ namespace Ignorama.Controllers
                         OP = thread.Posts.First().User,
                         Hidden = hiddenThreads.Contains(thread),
                         Following = followedThreads.Select(ft => ft.Thread).Contains(thread),
-                        LastSeenPostID = followedThreads.Where(ft => ft.Thread.ID == thread.ID)
-                                                        .Select(ft => ft.LastSeenPost.ID)
-                                                        .FirstOrDefault(),
-                    }));
+                        LastSeenPostID = followedThreads.Where(ft => ft.Thread.ID == thread.ID) != null
+                            ? followedThreads.Where(ft => ft.Thread.ID == thread.ID)
+                                             .Select(ft => ft.LastSeenPost.ID)
+                                             .FirstOrDefault()
+                            : 0,
+                    });
+
+            return new OkObjectResult(threads);
         }
 
         public class ThreadIDModel
