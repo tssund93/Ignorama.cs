@@ -1,4 +1,6 @@
-﻿var threadsVue = new Vue({
+﻿"use strict";
+
+var threadsVue = new Vue({
     el: 'main',
     data: {
         threads: [],
@@ -30,7 +32,7 @@
     },
     computed: {
         visibleThreads: function () {
-            viewThreads = [];
+            var viewThreads = [];
             if (this.view === '')
                 viewThreads = this.threads.filter(thread => !thread.Hidden);
             else if (this.view === 'hidden')
@@ -40,11 +42,13 @@
             else
                 viewThreads = this.threads.filter(thread => !thread.Hidden);
 
-            searchPattern = new RegExp(".*?" + this.search.replace(/\s+/ig, ".*?") + ".*?", "ig");
+            var searchPattern = new RegExp(".*?" + this.search.replace(/\s+/ig, ".*?") + ".*?", "ig");
             return viewThreads
                 .filter(thread =>
                     this.selectedTags.includes(thread.Tag.ID) &&
-                    (searchPattern.test(thread.Title + ' ' + thread.FirstPost.Text)));
+                    (searchPattern.test(thread.Title + ' ' + thread.FirstPost.Text)))
+                .sort((t1, t2) =>
+                    t2.Stickied - t1.Stickied);
         }
     },
     watch: {
