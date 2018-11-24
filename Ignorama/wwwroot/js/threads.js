@@ -40,7 +40,7 @@
             else
                 viewThreads = this.threads.filter(thread => !thread.Hidden);
 
-            searchPattern = new RegExp(".*" + this.search.replace(/ +/ig, ".*") + ".*", "ig");
+            searchPattern = new RegExp(".*?" + this.search.replace(/\s+/ig, ".*?") + ".*?", "ig");
             return viewThreads
                 .filter(thread =>
                     this.selectedTags.includes(thread.Tag.ID) &&
