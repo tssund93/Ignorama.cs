@@ -92,7 +92,7 @@ var postsVue = new Vue({
             }
         },
         reply: function (post) {
-            var quotelessText = post.Text.replace(/\s*\[reply.*?\][\s\S]+\[\/reply\]\s*/gi, "");
+            var quotelessText = post.Text.replace(/\s*(\[reply.*?\][\s\S]+\[\/reply\]|\[quote\][\s\S]*\[\/quote\])\s*/gi, "");
             $("#postfield").val('[reply user=' + post.User.UserName +
                 ' post=' + post.ID + ']\n' + quotelessText + '\n[/reply]');
             slideOut();
