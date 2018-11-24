@@ -63,6 +63,26 @@
                     console.error("Error toggling hidden: " + error);
                 });
         },
+        toggleStickied: function (thread) {
+            thread.Stickied = !thread.Stickied;
+            axios.post("/Threads/ToggleStickied/" + thread.ID)
+                .then(response => {
+                    console.log("Toggled stickied for thread " + response.data);
+                })
+                .catch(error => {
+                    console.error("Error toggling stickied: " + error);
+                });
+        },
+        toggleLocked: function (thread) {
+            thread.Locked = !thread.Locked;
+            axios.post("/Threads/ToggleLocked/" + thread.ID)
+                .then(response => {
+                    console.log("Toggled locked for thread " + response.data);
+                })
+                .catch(error => {
+                    console.error("Error toggling locked: " + error);
+                });
+        },
         unfollow: function (thread) {
             thread.Following = false;
             axios.post("/Threads/Unfollow", { ThreadID: thread.ID })

@@ -76,6 +76,9 @@ namespace Ignorama.Controllers
         public IActionResult GetThreads()
         {
             var user = _userManager.GetUserAsync(HttpContext.User).Result;
+            var roles = user != null
+                ? _userManager.GetRolesAsync(user).Result
+                : new[] { "User" };
 
             var hiddenThreads = user != null
                 ? _context.HiddenThreads
@@ -120,6 +123,7 @@ namespace Ignorama.Controllers
                                              .Select(ft => ft.LastSeenPost.ID)
                                              .FirstOrDefault()
                             : 0,
+                        UserRoles = roles,
                     });
 
             return new OkObjectResult(threads);
@@ -282,6 +286,40 @@ namespace Ignorama.Controllers
                     .Where(post => post.Thread.ID == threadID)
                     .Include(post => post.User)
                     .OrderBy(post => post.Time));
+        }
+
+        [Authorize(Roles = "Admin,Moderator")]
+        [HttpPost("/Threads/ToggleStickied/{threadID}")]
+        public async Task<IActionResult> ToggleStickied(int threadID)
+        {
+            var thread = await _context.Threads.FindAsync(threadID);
+
+            if (thread != null)
+            {
+                _context.Update(thread);
+                thread.Stickied = !thread.Stickied;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            return new BadRequestResult();
+        }
+
+        [Authorize(Roles = "Admin,Moderator")]
+        [HttpPost("/Threads/ToggleLocked/{threadID}")]
+        public async Task<IActionResult> ToggleLocked(int threadID)
+        {
+            var thread = await _context.Threads.FindAsync(threadID);
+
+            if (thread != null)
+            {
+                _context.Update(thread);
+                thread.Locked = !thread.Locked;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            return new BadRequestResult();
         }
     }
 }

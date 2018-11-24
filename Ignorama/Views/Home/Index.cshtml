@@ -48,6 +48,23 @@
                     <a v-else href="#" v-on:click="toggleHidden(thread)">
                         Hide thread
                     </a>
+                </li>
+                <li v-if="thread.UserRoles.includes('Admin') || thread.UserRoles.includes('Moderator')">
+                    <a v-if="thread.Stickied" href="#" v-on:click="toggleStickied(thread)">
+                        Unsticky thread
+                    </a>
+                    <a v-else href="#" v-on:click="toggleStickied(thread)">
+                        Sticky thread
+                    </a>
+                </li>
+                <li v-if="thread.UserRoles.includes('Admin') || thread.UserRoles.includes('Moderator')">
+                    <a v-if="thread.Locked" href="#" v-on:click="toggleLocked(thread)">
+                        Unlock thread
+                    </a>
+                    <a v-else href="#" v-on:click="toggleLocked(thread)">
+                        Locked thread
+                    </a>
+                </li>
             </ul>
         </div>
         <span v-if="thread.Stickied" class="thread-icon glyphicon glyphicon-bookmark"></span>
