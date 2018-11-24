@@ -1,4 +1,6 @@
-﻿var threadID = function () {
+﻿"use strict";
+
+var threadID = function () {
     var url = window.location.href.replace(/\/$/, '');
     return url.substr(url.lastIndexOf('/') + 1);
 }();
@@ -63,6 +65,14 @@ var postsVue = new Vue({
     watch: {
         visiblePosts: function (val) {
             this.follow(threadID, Math.max(...val.map(p => p.ID)));
+        },
+        posts: function () {
+            if (lastSeenPostID !== '') {
+                var id = parseInt(lastSeenPostID);
+                var newPage = Math.ceil((this.posts.findIndex(post =>
+                    post.ID > id) + 1) / this.perPage);
+                this.page = newPage !== 0 ? newPage : Math.ceil(this.posts.length / this.perPage);
+            }
         }
     },
     methods: {
