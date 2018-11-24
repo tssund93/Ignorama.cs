@@ -64,6 +64,7 @@
                 .catch(error => {
                     console.error("Error toggling hidden: " + error);
                 });
+            return false;
         },
         toggleStickied: function (thread) {
             thread.Stickied = !thread.Stickied;
@@ -84,6 +85,7 @@
                 .catch(error => {
                     console.error("Error toggling locked: " + error);
                 });
+            return false;
         },
         unfollow: function (thread) {
             thread.Following = false;
@@ -94,6 +96,7 @@
                 .catch(error => {
                     console.error("Error unfollowing thread: " + error);
                 });
+            return false;
         },
         updateSelectedTag: function (tag) {
             axios.post("/Tags/ToggleSelectedTag", { TagID: tag.ID })

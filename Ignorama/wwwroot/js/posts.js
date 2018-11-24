@@ -8,7 +8,7 @@ var postsVue = new Vue({
     data: {
         posts: [],
         page: 1,
-        perPage: 20,
+        perPage: 10,
     },
     computed: {
         visiblePosts: function () {
@@ -40,11 +40,11 @@ var postsVue = new Vue({
             //spoilers
             post = post.replace(/\[spoiler\]([\s\S]*?)\[\/spoiler\]/ig, "<span class='spoiler'>$1</span>");
             //replies
-            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\s*\[\/reply\]/ig, "<a href='javascript:viewPost($1);'><b>$2</b></a>");
-            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*\[\/reply\]/gi, "<a href='javascript:viewPost($2);'><b>$1</b></a>");
-            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$2</a> said:</b><br/>$3</div>");
-            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($2);'>$1</a> said:</b><br/>$3</div>");
-            post = post.replace(/\[reply[=| ]([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$1</a> said:</b><br/>$2</div>");
+            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\s*\[\/reply\]/ig, "<a href='javascript:postsVue.viewPost($1);'><b>$2</b></a>");
+            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*\[\/reply\]/gi, "<a href='javascript:postsVue.viewPost($2);'><b>$1</b></a>");
+            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:postsVue.viewPost($1);'>$2</a> said:</b><br/>$3</div>");
+            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:postsVue.viewPost($2);'>$1</a> said:</b><br/>$3</div>");
+            post = post.replace(/\[reply[=| ]([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:postsVue.viewPost($1);'>$1</a> said:</b><br/>$2</div>");
             //quotes
             post = post.replace(/\[quote\]\s?([\s\S]*?)\s?\[\/quote\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b>Quote:</b><br/>$1</div>");
             //code
@@ -94,16 +94,31 @@ var postsVue = new Vue({
             $("#postfield").val('[reply user=' + post.User.UserName +
                 ' post=' + post.ID + ']\n' + quotelessText + '\n[/reply]');
             slideOut();
+        },
+        viewPost: function (postID) {
+            var newPage = Math.ceil((this.posts.findIndex(p =>
+                p.ID > postID)) / this.perPage);
+            new Promise(resolve => {
+                this.page = newPage;
+                resolve();
+            })
+                .then(() => {
+                    this.posts = this.posts.map(post =>
+                        ({ ...post, Highlighted: post.ID == postID ? true : false }));
+                    this.$scrollTo('#post' + postID)
+                });
         }
     }
 });
 
 function slideOut() {
     $("#quickreply").stop(true).animate({ bottom: -1 }, 200).attr("class", "slid-out");
+    return false;
 }
 
 function slideIn() {
     $("#quickreply").animate({ bottom: -222 }, 200).delay(200).queue(function (next) { $(this).attr("class", "slid-in"); next(); });
+    return false;
 }
 
 function slide() {
@@ -111,6 +126,7 @@ function slide() {
         slideIn();
     else
         slideOut();
+    return false;
 }
 
 $('#postform').submit(function (e) {

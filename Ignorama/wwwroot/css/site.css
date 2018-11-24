@@ -213,6 +213,10 @@ label {
     background-color: #F9F2FF;
 }
 
+.thread.highlighted {
+    background-color: #e8d7f7;
+}
+
 .invisiblebutton {
     background: transparent;
     border: none !important;
