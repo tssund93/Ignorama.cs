@@ -103,6 +103,7 @@ namespace Ignorama.Controllers
             var threads = _context.Threads
                     .OrderByDescending(thread => thread.Posts
                                         .Where(post => post.Bump == true)
+                                        .OrderByDescending(post => post.Time)
                                         .FirstOrDefault().Time)
                     .Where(thread => thread.Deleted == false)
                     .Select(thread => new
