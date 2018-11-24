@@ -91,8 +91,8 @@ var postsVue = new Vue({
         },
         reply: function (post) {
             var quotelessText = post.Text.replace(/\s*(\[reply.*?\][\s\S]+\[\/reply\]|\[quote\][\s\S]*\[\/quote\])\s*/gi, "");
-            $("#postfield").val('[reply user=' + post.User.UserName +
-                ' post=' + post.ID + ']\n' + quotelessText + '\n[/reply]');
+            $("#postfield").val('[reply user=' + (post.User ? post.User.UserName : 'Anonymous') +
+                ' post=' + post.ID + ']\n' + quotelessText + '\n[/reply]\n').focus();
             slideOut();
         },
         viewPost: function (postID) {
@@ -103,7 +103,7 @@ var postsVue = new Vue({
                 resolve();
             })
                 .then(() => {
-                    this.posts = this.posts.forEach(post =>
+                    this.posts.forEach(post =>
                         post.Highlighted = post.ID == postID ? true : false);
                     this.$scrollTo('#post' + postID);
                 });
