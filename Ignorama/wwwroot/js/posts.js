@@ -19,7 +19,7 @@ var postsVue = new Vue({
         }
     },
     created: function () {
-        this.getPosts(threadID);
+        this.getPosts(threadID, this.updatePage);
     },
     filters: {
         date: function (date) {
@@ -36,27 +36,27 @@ var postsVue = new Vue({
             //webm
             post = post.replace(/\[webm\](.*?)\[\/webm\]/gi, '<video preload="none" controls="controls" class="img img-responsive"><source type="video/webm" src="$1"></video>');
             //bold and italics
-            post = post.replace(/\[i\](.*?)\[\/i\]/igs, "<i>$1</i>");
-            post = post.replace(/\[b\](.*?)\[\/b\]/igs, "<b>$1</b>");
-            post = post.replace(/\[u\](.*?)\[\/u\]/igs, "<u>$1</u>");
+            post = post.replace(/\[i\]([\s\S]*?)\[\/i\]/ig, "<i>$1</i>");
+            post = post.replace(/\[b\]([\s\S]*?)\[\/b\]/ig, "<b>$1</b>");
+            post = post.replace(/\[u\]([\s\S]*?)\[\/u\]/ig, "<u>$1</u>");
             //spoilers
-            post = post.replace(/\[spoiler\](.*?)\[\/spoiler\]/igs, "<span class='spoiler'>$1</span>");
+            post = post.replace(/\[spoiler\]([\s\S]*?)\[\/spoiler\]/ig, "<span class='spoiler'>$1</span>");
             //replies
-            post = post.replace(/\[reply[=| ]([0-9]+)\]\R*\[\/reply\]/igs, "<a href='javascript:viewPost($1);'><b>$1</b></a>");
-            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\R*\[\/reply\]/igs, "<a href='javascript:viewPost($1);'><b>$2</b></a>");
-            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\R*\[\/reply\]/igs, "<a href='javascript:viewPost($2);'><b>$1</b></a>");
-            post = post.replace(/&gt;&gt;([0-9]+)/igs, "<a href='javascript:viewPost($1);'><b>$1</b></a>");
-            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\R*(.*?)\R*\[\/reply\]\R?/igs, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$2</a> said:</b><br/>$3</div>");
-            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\R*(.*?)\R*\[\/reply\]\R?/igs, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($2);'>$1</a> said:</b><br/>$3</div>");
-            post = post.replace(/\[reply[=| ]([0-9]+)\]\R*(.*?)\R*\[\/reply\]\R?/igs, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$1</a> said:</b><br/>$2</div>");
+            post = post.replace(/\[reply[=| ]([0-9]+)\]\R*\[\/reply\]/ig, "<a href='javascript:viewPost($1);'><b>$1</b></a>");
+            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\R*\[\/reply\]/ig, "<a href='javascript:viewPost($1);'><b>$2</b></a>");
+            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\R*\[\/reply\]/ig, "<a href='javascript:viewPost($2);'><b>$1</b></a>");
+            post = post.replace(/&gt;&gt;([0-9]+)/ig, "<a href='javascript:viewPost($1);'><b>$1</b></a>");
+            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\R*([\s\S]*?)\R*\[\/reply\]\R?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$2</a> said:</b><br/>$3</div>");
+            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\R*([\s\S]*?)\R*\[\/reply\]\R?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($2);'>$1</a> said:</b><br/>$3</div>");
+            post = post.replace(/\[reply[=| ]([0-9]+)\]\R*([\s\S]*?)\R*\[\/reply\]\R?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:viewPost($1);'>$1</a> said:</b><br/>$2</div>");
             //quotes
-            post = post.replace(/\[quote\]\R?(.*?)\R?\[\/quote\]\R?/igs, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b>Quote:</b><br/>$1</div>");
+            post = post.replace(/\[quote\]\R?([\s\S]*?)\R?\[\/quote\]\R?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b>Quote:</b><br/>$1</div>");
             //code
-            post = post.replace(/\[code\]\R*(.*?)\R*\[\/code\]/igs, "<pre><code>$1</code></pre>");
+            post = post.replace(/\[code\]\R*([\s\S]*?)\R*\[\/code\]/ig, "<pre><code>$1</code></pre>");
             //colored text
-            post = post.replace(/\[color=(.*?)\](.*?)\[\/color\]/g, "<span style='color:$1'>$2</span>");
+            post = post.replace(/\[color=(.*?)\]([\s\S]*?)\[\/color\]/ig, "<span style='color:$1'>$2</span>");
             //url
-            post = post.replace(/\[url=(http(s?):\/\/)?(.*?)\](.*?)\[\/url\]/g, "<a target='_blank' href='http$2://$3'>$4</a>");
+            post = post.replace(/\[url=(http(s?):\/\/)?(.*?)\](.*?)\[\/url\]/ig, "<a target='_blank' href='http$2://$3'>$4</a>");
             //youtube embed
             post = post.replace(/[a-zA-Z\/\/:\.]*(youtube.com\/watch\?v=|youtu.be\/)([a-zA-Z0-9\-_]+)([a-zA-Z0-9\/\*\-\_\?\&\;\%\=\.]*)/gi, "<div class='flex-video widescreen'><iframe width=\"560\" height=\"315\" src=\"//www.youtube.com/embed/$2\" frameborder=\"0\" allowfullscreen></iframe></div>");
             return post;
@@ -64,22 +64,16 @@ var postsVue = new Vue({
     },
     watch: {
         visiblePosts: function (val) {
-            this.follow(threadID, Math.max(...val.map(p => p.ID)));
+            var lspID = Math.max(...val.map(p => p.ID));
+            this.follow(threadID, lspID);
         },
-        posts: function () {
-            if (lastSeenPostID !== '') {
-                var id = parseInt(lastSeenPostID);
-                var newPage = Math.ceil((this.posts.findIndex(post =>
-                    post.ID > id) + 1) / this.perPage);
-                this.page = newPage !== 0 ? newPage : Math.ceil(this.posts.length / this.perPage);
-            }
-        }
     },
     methods: {
-        getPosts: function (threadID) {
+        getPosts: function (threadID, callback) {
             axios.get('/Threads/GetPosts/' + threadID)
                 .then(response => {
                     this.posts = response.data;
+                    if (callback) callback();
                 });
         },
         follow: function (threadID, lastSeenID) {
@@ -91,6 +85,14 @@ var postsVue = new Vue({
                     console.error("Error following thread: " + error);
                 });
         },
+        updatePage: function () {
+            if (lastSeenPostID !== '') {
+                var id = parseInt(lastSeenPostID);
+                var newPage = Math.ceil((this.posts.findIndex(post =>
+                    post.ID > id) + 1) / this.perPage);
+                this.page = newPage !== 0 ? newPage : Math.ceil(this.posts.length / this.perPage);
+            }
+        }
     }
 });
 
@@ -115,8 +117,8 @@ $('#postform').submit(function (e) {
             $('input[name=RevealOP]').prop('checked', false);
             slide();
 
-            postsVue.getPosts(threadID);
-            postsVue.page = Math.ceil(postsVue.posts.length / postsVue.perPage);
+            postsVue.getPosts(threadID,
+                () => postsVue.page = Math.ceil((postsVue.posts.length + 1) / postsVue.perPage));
         },
         error: function (_, e) {
             console.log($('#postform').serialize())
