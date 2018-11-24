@@ -12,5 +12,11 @@ namespace Ignorama.Models
         public bool IsOP { get; set; }
 
         public int LastSeenPostID { get; set; }
+
+        public bool Locked { get; set; }
+
+        public User User { get; set; }
+
+        public IList<string> Roles { get; set; }
     }
 }

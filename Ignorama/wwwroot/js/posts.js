@@ -119,15 +119,20 @@ $('#postform').submit(function (e) {
         url: '/Posts/New/' + threadID,
         type: 'post',
         data: $('#postform').serialize(),
-        success: function () {
-            $('#postfield').val('');
-            $('input[name=Bump]').prop('checked', false);
-            $('input[name=Anonymous]').prop('checked', false);
-            $('input[name=RevealOP]').prop('checked', false);
-            slide();
+        success: function (result) {
+            if (result.error) {
+                alert("Error: " + result.error)
+            }
+            else {
+                $('#postfield').val('');
+                $('input[name=Bump]').prop('checked', false);
+                $('input[name=Anonymous]').prop('checked', false);
+                $('input[name=RevealOP]').prop('checked', false);
+                slide();
 
-            postsVue.getPosts(threadID,
-                () => postsVue.page = Math.ceil((postsVue.posts.length + 1) / postsVue.perPage));
+                postsVue.getPosts(threadID,
+                    () => postsVue.page = Math.ceil((postsVue.posts.length + 1) / postsVue.perPage));
+            }
         },
         error: function (_, e) {
             console.log($('#postform').serialize())
