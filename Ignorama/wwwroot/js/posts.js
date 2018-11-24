@@ -1,6 +1,4 @@
-﻿"use strict";
-
-var threadID = function () {
+﻿var threadID = function () {
     var url = window.location.href.replace(/\/$/, '');
     return url.substr(url.lastIndexOf('/') + 1).replace(/#.*$/, '');
 }();

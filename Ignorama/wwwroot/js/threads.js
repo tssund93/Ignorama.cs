@@ -1,6 +1,4 @@
-﻿"use strict";
-
-var threadsVue = new Vue({
+﻿var threadsVue = new Vue({
     el: 'main',
     data: {
         threads: [],
