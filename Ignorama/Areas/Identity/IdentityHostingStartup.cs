@@ -18,7 +18,8 @@ namespace Ignorama.Areas.Identity
         {
             builder.ConfigureServices((context, services) =>
             {
-                services.AddDefaultIdentity<User>()
+                services.AddIdentity<User, IdentityRole<long>>()
+                    .AddDefaultUI()
                     .AddDefaultTokenProviders()
                     .AddRoles<IdentityRole<long>>()
                     .AddRoleManager<RoleManager<IdentityRole<long>>>()
