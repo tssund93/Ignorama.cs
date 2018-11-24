@@ -28,29 +28,39 @@ namespace Ignorama.Controllers
             try
             {
                 var user = await _userManager.GetUserAsync(HttpContext.User);
+                var roles = user != null
+                    ? _userManager.GetRolesAsync(user).Result
+                    : new[] { "User" };
                 var thread = _context.Threads.Find(threadID);
-                collection.TryGetValue("Text", out StringValues text);
-                collection.TryGetValue("Anonymous", out StringValues anonymous);
-                collection.TryGetValue("Bump", out StringValues bump);
-                collection.TryGetValue("RevealOP", out StringValues revealOP);
-
-                var post = new Post
+                if (!thread.Locked || roles.Contains("Admin") || roles.Contains("Moderator"))
                 {
-                    Thread = thread,
-                    User = user,
-                    IP = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
-                    Text = text,
-                    Time = DateTime.UtcNow,
-                    Deleted = false,
-                    Anonymous = anonymous == "on" ? true : false,
-                    Bump = bump == "on" ? true : false,
-                    RevealOP = revealOP == "on" ? true : false,
-                };
+                    collection.TryGetValue("Text", out StringValues text);
+                    collection.TryGetValue("Anonymous", out StringValues anonymous);
+                    collection.TryGetValue("Bump", out StringValues bump);
+                    collection.TryGetValue("RevealOP", out StringValues revealOP);
 
-                await _context.AddAsync(post);
-                await _context.SaveChangesAsync();
+                    var post = new Post
+                    {
+                        Thread = thread,
+                        User = user,
+                        IP = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
+                        Text = text,
+                        Time = DateTime.UtcNow,
+                        Deleted = false,
+                        Anonymous = anonymous == "on" ? true : false,
+                        Bump = bump == "on" ? true : false,
+                        RevealOP = revealOP == "on" ? true : false,
+                    };
 
-                return new OkObjectResult(collection);
+                    await _context.AddAsync(post);
+                    await _context.SaveChangesAsync();
+
+                    return new OkObjectResult(collection);
+                }
+                else
+                {
+                    return new JsonResult(new { error = "Cannot post reply: thread locked." });
+                }
             }
             catch
             {

@@ -184,7 +184,9 @@ namespace Ignorama.Controllers
         public async Task<IActionResult> Follow([FromBody] ThreadIDLastSeenPostModel t)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
-
+            var roles = user != null
+                ? _userManager.GetRolesAsync(user).Result
+                : new[] { "User" };
             var thread = _context.Threads.Find(t.ThreadID);
             var lastSeenPost = _context.Posts.Find(t.LastSeenPostID);
 
@@ -205,7 +207,7 @@ namespace Ignorama.Controllers
                         IP = user == null
                             ? Request.HttpContext.Connection.RemoteIpAddress.ToString()
                             : null,
-                        LastSeenPost = lastSeenPost
+                        LastSeenPost = lastSeenPost,
                     };
 
                     await _context.AddAsync(followedThread);
@@ -259,6 +261,9 @@ namespace Ignorama.Controllers
         public IActionResult View(int threadID)
         {
             var user = _userManager.GetUserAsync(HttpContext.User).Result;
+            var roles = user != null
+                ? _userManager.GetRolesAsync(user).Result
+                : new[] { "User" };
             var followedThreadRows = (user != null
                     ? _context.FollowedThreads.Where(ft => ft.User == user && ft.Thread.ID == threadID)
                     : _context.FollowedThreads.Where(
@@ -273,6 +278,9 @@ namespace Ignorama.Controllers
                     IsOP = t.Posts.FirstOrDefault().User.UserName == _userManager.GetUserName(User)
                         || t.Posts.FirstOrDefault().IP == Request.HttpContext.Connection.RemoteIpAddress.ToString(),
                     LastSeenPostID = followedThreadRows.Any() ? followedThreadRows.FirstOrDefault().LastSeenPost.ID : 0,
+                    Locked = t.Locked,
+                    User = user,
+                    Roles = roles,
                 })
                 .FirstOrDefault();
 
