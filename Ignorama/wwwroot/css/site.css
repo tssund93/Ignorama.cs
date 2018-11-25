@@ -392,3 +392,8 @@ footer {
     text-align: center;
     font-size: 9pt;
 }
+
+.caret.caret-up {
+    border-top-width: 0;
+    border-bottom: 4px solid;
+}
