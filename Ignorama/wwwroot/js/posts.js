@@ -27,7 +27,6 @@ var postsVue = new Vue({
         },
         formatPost: function (post) {
             post = escapeHTML(post);
-            post = post.replace(/\n/g, '<br>');
 
             //images
             post = post.replace(/\[img\](.*?)\[\/img\]/gi, '<a target="_blank" href="$1"><img href="$1" src="$1" class="img img-responsive" style="max-height: 480px;"></img></a>');
@@ -40,11 +39,8 @@ var postsVue = new Vue({
             //spoilers
             post = post.replace(/\[spoiler\]([\s\S]*?)\[\/spoiler\]/ig, "<span class='spoiler'>$1</span>");
             //replies
-            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\s*\[\/reply\]/ig, "<a href='javascript:postsVue.viewPost($1);'><b>$2</b></a>");
-            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*\[\/reply\]/gi, "<a href='javascript:postsVue.viewPost($2);'><b>$1</b></a>");
-            post = post.replace(/\[reply post=([0-9]+) user=(.*?)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:postsVue.viewPost($1);'>$2</a> said:</b><br/>$3</div>");
+            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*\[\/reply\]/ig, "<a href='javascript:postsVue.viewPost($2);'><b>$1</b></a>");
             post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:postsVue.viewPost($2);'>$1</a> said:</b><br/>$3</div>");
-            post = post.replace(/\[reply[=| ]([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:postsVue.viewPost($1);'>$1</a> said:</b><br/>$2</div>");
             //quotes
             post = post.replace(/\[quote\]\s?([\s\S]*?)\s?\[\/quote\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b>Quote:</b><br/>$1</div>");
             //code
@@ -55,6 +51,8 @@ var postsVue = new Vue({
             post = post.replace(/\[url=(http(s?):\/\/)?(.*?)\](.*?)\[\/url\]/ig, "<a target='_blank' href='http$2://$3'>$4</a>");
             //youtube embed
             post = post.replace(/[a-zA-Z\/\/:\.]*(youtube.com\/watch\?v=|youtu.be\/)([a-zA-Z0-9\-_]+)([a-zA-Z0-9\/\*\-\_\?\&\;\%\=\.]*)/gi, "<div class='flex-video widescreen'><iframe width=\"560\" height=\"315\" src=\"//www.youtube.com/embed/$2\" frameborder=\"0\" allowfullscreen></iframe></div>");
+
+            post = post.replace(/\n/g, '<br>');
             return post;
         }
     },
@@ -89,10 +87,11 @@ var postsVue = new Vue({
                 this.page = newPage !== 0 ? newPage : Math.ceil(this.posts.length / this.perPage);
             }
         },
-        reply: function (post) {
-            var quotelessText = post.Text.replace(/\s*(\[reply.*?\][\s\S]+\[\/reply\]|\[quote\][\s\S]*\[\/quote\])\s*/gi, "");
-            $("#postfield").val('[reply user=' + (post.User && !post.Anonymous ? post.User.UserName : 'Anonymous') +
-                ' post=' + post.ID + ']\n' + quotelessText + '\n[/reply]\n').focus();
+        reply: function (post, quote) {
+            var quotelessText = post.Text
+                .replace(/\s*(\[reply.*?\]\s*?\S+\s*?\[\/reply\])\s*/gi, "");
+            $("#postfield").val($("#postfield").val() + '[reply user=' + (post.User && !post.Anonymous ? post.User.UserName : 'Anonymous') +
+                ' post=' + post.ID + ']' + (quote ? '\n' + quotelessText + '\n' : '') + '[/reply]\n').focus();
             slideOut();
         },
         viewPost: function (postID) {
