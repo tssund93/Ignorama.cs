@@ -9,8 +9,19 @@
 
 <h2 class="page-title">@Model.Title</h2>
 
-<b-pagination size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
-<div class="row" v-for="post in visiblePosts">
+<b-pagination v-if="posts.length > perPage" size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
+
+<div class="row" v-if="!posts.length">
+    <div class="col-xs-12 thread loading">
+        <img src="~/loading.png" />
+    </div>
+</div>
+<div class="row" v-else-if="!visiblePosts.length" v-cloak>
+    <div class="col-xs-12 thread">
+        Nothing to see here!
+    </div>
+</div>
+<div v-else class="row" v-for="post in visiblePosts">
     <div :id="'post' + post.ID" class="col-xs-12 thread" :class="{ seen: post.ID <= @Model.LastSeenPostID, highlighted: post.Highlighted }" v-cloak>
         <div style="margin-bottom: -15px;">
             <span style="font-size: 12px; color: gray;">
@@ -35,7 +46,8 @@
         <div v-html="$options.filters.formatPost(post.Text)"></div>
     </div>
 </div>
-<b-pagination size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
+
+<b-pagination v-if="posts.length > perPage" size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
 
 @if (!Model.Locked || Model.Roles.Contains("Moderator"))
 {
