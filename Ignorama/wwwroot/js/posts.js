@@ -8,7 +8,7 @@ var postsVue = new Vue({
     data: {
         posts: [],
         page: 1,
-        perPage: 10,
+        perPage: 20,
     },
     computed: {
         visiblePosts: function () {
@@ -19,8 +19,14 @@ var postsVue = new Vue({
     created: function () {
         this.getPosts(threadID, () => {
             this.updatePage();
+            var id = parseInt(lastSeenPostID);
+            var newPost = this.posts.find(post =>
+                post.ID > id);
             setTimeout(function () {
-                this.$scrollTo('#post' + postID);
+                if (newPost)
+                    postsVue.$scrollTo('#post' + newPost.ID, 1);
+                else
+                    window.scrollTo(0, document.body.scrollHeight);
             }, 100);
         });
     },
@@ -157,7 +163,12 @@ $('#postform').submit(function (e) {
                 slide();
 
                 postsVue.getPosts(threadID,
-                    () => postsVue.page = Math.ceil((postsVue.posts.length + 1) / postsVue.perPage));
+                    () => {
+                        postsVue.page = Math.ceil((postsVue.posts.length + 1) / postsVue.perPage);
+                        setTimeout(function () {
+                                window.scrollTo(0, document.body.scrollHeight);
+                        }, 100);
+                    });
             }
         },
         error: function (_, e) {
