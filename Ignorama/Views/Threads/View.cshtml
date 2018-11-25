@@ -20,7 +20,7 @@
                 <span v-else-if="post.Bump">| Bump</span>
                 <span class="time" style="float: right;">{{ post.Time | date }}</span>
                 <br />
-                <a href="#" v-on:click.prevent="reply(post)">reply</a>
+                <a v-if="'@Model.Locked' !== 'True' || '@Model.Roles.Contains("Moderator")' === 'True'" href="#" v-on:click.prevent="reply(post)">reply</a>
             </span>
         </div>
         <br>
