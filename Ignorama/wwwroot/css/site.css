@@ -42,17 +42,19 @@ body {
 .navbar-default .btn-link {
     color: white;
 }
-.navbar-default .btn-link:hover {
-    color: white;
-}
+
+    .navbar-default .btn-link:hover {
+        color: white;
+    }
 
 .navbar-default .navbar-nav > li > a {
     color: white;
 }
-.navbar-default .navbar-nav > li > a:hover {
-    color: white;
-    text-decoration: underline;
-}
+
+    .navbar-default .navbar-nav > li > a:hover {
+        color: white;
+        text-decoration: underline;
+    }
 
 .slogan {
     color: white;
@@ -61,7 +63,7 @@ body {
     display: inline-block;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1, h2, h3, h4, h5, h6 {
     color: #330066;
 }
 
@@ -133,9 +135,9 @@ select {
     color: #663399;
 }
 
-.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {
-    color: #663399;
-}
+    .pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {
+        color: #663399;
+    }
 
 .pagination > .disabled > span, .pagination > .disabled > span:hover, .pagination > .disabled > span:focus, .pagination > .disabled > a, .pagination > .disabled > a:hover, .pagination > .disabled > a:focus {
     cursor: default;
@@ -186,9 +188,9 @@ select {
     box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
 }
 
-.dropdown-menu.pull-right {
-    right: 17px;
-}
+    .dropdown-menu.pull-right.boards {
+        right: 17px;
+    }
 
 .dropdown-item {
     margin: 15px;
@@ -285,6 +287,6 @@ ul.nav a:hover, ul.nav a:focus {
     background-color: #dadada;
 }
 
-#quickreply #submitbutton {
-    margin-top: 5px;
-}
+    #quickreply #submitbutton {
+        margin-top: 5px;
+    }
