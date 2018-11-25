@@ -112,6 +112,20 @@ ul.dropdown-menu-form {
     color: gray;
 }
 
+.post-info {
+    margin-bottom: -15px;
+    font-size: 12px;
+    color: gray;
+}
+
+input[type=file] {
+    padding: 5px;
+}
+
+.post-info .time {
+    float: right;
+}
+
 a.btn {
     color: black;
 }
@@ -295,7 +309,7 @@ label {
     max-width: 300px;
     padding: 10px;
     margin-top: 70px;
-    height: 70px;
+    height: 80px;
 }
 
 .row .navbar-nav {
@@ -332,6 +346,7 @@ label {
     margin-right: 10px;
     z-index: 0;
 }
+
 .navbar-nav.tabs {
     margin-top: 0px;
     height: 31px;
@@ -364,4 +379,19 @@ ul.nav.tabs a:hover, ul.nav a:focus {
 .tabs .nav-item > .active:focus {
     background-color: white !important;
     outline-style: none;
+}
+
+.centered {
+    text-align: center;
+    vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+footer {
+    color: darkgray;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-align: center;
+    font-size: 9pt;
 }

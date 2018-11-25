@@ -27,19 +27,17 @@
 </div>
 <div v-else class="row constrained" v-for="post in visiblePosts">
     <div :id="'post' + post.ID" class="col-xs-12 thread" :class="{ seen: post.ID <= @Model.LastSeenPostID, highlighted: post.Highlighted }" v-cloak>
-        <div style="margin-bottom: -15px;">
-            <span style="font-size: 12px; color: gray;">
-                <b v-if="post.Anonymous || !post.User">Anonymous</b>
-                <b v-else>{{ post.User.UserName }}</b>
-                <span v-if="post.RevealOP">| OP</span>
-                <span v-else-if="post.Bump">| Bump</span>
-                <span class="time" style="float: right;">{{ post.Time | date }}</span>
-                <br />
-                <span v-if="'@Model.Locked' !== 'True' || '@Model.Roles.Contains("Moderator")' === 'True'">
-                    <a href="#" v-on:click.prevent="reply(post, true)">reply</a>
-                    |
-                    <a href="#" v-on:click.prevent="reply(post)">reference poster</a>
-                </span>
+        <div class="post-info">
+            <b v-if="post.Anonymous || !post.User">Anonymous</b>
+            <b v-else>{{ post.User.UserName }}</b>
+            <span v-if="post.RevealOP">| OP</span>
+            <span v-else-if="post.Bump">| Bump</span>
+            <span class="time">{{ post.Time | date }}</span>
+            <br />
+            <span v-if="'@Model.Locked' !== 'True' || '@Model.Roles.Contains("Moderator")' === 'True'">
+                <a href="#" v-on:click.prevent="reply(post, true)">reply</a>
+                |
+                <a href="#" v-on:click.prevent="reply(post)">reference poster</a>
             </span>
         </div>
         <br>
@@ -54,25 +52,34 @@
 @if (!Model.Locked || Model.Roles.Contains("Moderator"))
 {
     <div class='slid-in' id='quickreply'>
-        <div style='text-align:center;'><a href='javascript:slide();'>Reply</a></div>
+        <div class="centered"><a href='javascript:slide();'>Reply</a></div>
         <form id='postform' asp-controller="Posts" asp-action="New" method='post'>
             @Html.AntiForgeryToken()
             <textarea id='postfield' name='Text' rows='7' class='col-xs-12' style='resize:none;' required></textarea>
             <br />
-            <div style='float:left;'>
+            <div>
                 @if (Model.IsOP)
                 {
-                    <input name='RevealOP' type='checkbox'><text>Reveal OP</text>
+                    <label>
+                        <input id='RevealOP' name='RevealOP' type='checkbox'>
+                        Reveal OP
+                    </label>
                 }
                 else
                 {
-                    <input name='Bump' type='checkbox'><text>Bump!</text>
+                    <label>
+                        <input name='Bump' type='checkbox'>
+                        Bump!
+                    </label>
                 }
                 @if (SignInManager.IsSignedIn(User))
                 {
-                    <input name='Anonymous' type='checkbox'><text>Post Anonymously</text>
+                    <label>
+                        <input name='Anonymous' type='checkbox'>
+                        Post Anonymously
+                    </label>
                 }
-                <div style='padding-bottom:5px; display:block;'>
+                <div>
                     <input id='submitbutton' class='btn btn-default btn-sm' name="Submit1" type="submit" value="Submit" />
                 </div>
             </div>
