@@ -126,7 +126,7 @@ input[type=file] {
     float: right;
 }
 
-.btn {
+.btn.btn-default {
     color: black;
 }
 
@@ -297,7 +297,7 @@ label {
     margin-bottom: 5px;
 }
 
-.rightbuttons > input {
+.rightbuttons > input, .rightbuttons > a {
     float: right;
     margin-top: 10px;
 }
