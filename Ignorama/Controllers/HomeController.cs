@@ -60,8 +60,8 @@ namespace Ignorama.Controllers
             };
             var ext = Path.GetExtension(upload.filename);
             if (upload.file.Length > 0 &&
-                allowedTypes.Contains(upload.file.ContentType) &&
-                allowedExts.Contains(ext))
+                allowedTypes.Contains(upload.file.ContentType.ToLower()) &&
+                allowedExts.Contains(ext.ToLower()))
             {
                 using (var stream = new FileStream(
                     Path.Combine(_hostingEnvironment.WebRootPath, "uploads/", upload.filename), FileMode.Create))

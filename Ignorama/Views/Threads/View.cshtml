@@ -9,7 +9,7 @@
 
 <h2 class="page-title">@Model.Title</h2>
 
-<b-pagination size="md" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
+<b-pagination size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
 <div class="row" v-for="post in visiblePosts">
     <div :id="'post' + post.ID" class="col-xs-12 thread" :class="{ seen: post.ID <= @Model.LastSeenPostID, highlighted: post.Highlighted }" v-cloak>
         <div style="margin-bottom: -15px;">
@@ -35,11 +35,11 @@
         <div v-html="$options.filters.formatPost(post.Text)"></div>
     </div>
 </div>
-<b-pagination size="md" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
+<b-pagination size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
 
 @if (!Model.Locked || Model.Roles.Contains("Moderator"))
 {
-    <div class='slid-in' id='quickreply' style='background-color: #E8E8E8; padding-right:5px; padding-left:5px;z-index:5;'>
+    <div class='slid-in' id='quickreply'>
         <div style='text-align:center;'><a href='javascript:slide();'>Reply</a></div>
         <form id='postform' asp-controller="Posts" asp-action="New" method='post'>
             @Html.AntiForgeryToken()
@@ -59,7 +59,7 @@
                     <input name='Anonymous' type='checkbox'><text>Post Anonymously</text>
                 }
                 <div style='padding-bottom:5px; display:block;'>
-                    <input id='submitbutton' style="margin-top: 5px;float:right;" class='btn btn-default btn-sm' name="Submit1" type="submit" value="Submit" />
+                    <input id='submitbutton' class='btn btn-default btn-sm' name="Submit1" type="submit" value="Submit" />
                 </div>
         </form>
         <partial name="_UploadForm" />
