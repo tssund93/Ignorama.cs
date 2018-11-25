@@ -7,7 +7,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="page-title">@Model.Title</h2>
+<h2 class="page-title">@ViewData["Title"]</h2>
 
 <b-pagination v-if="posts.length > perPage" size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
 
