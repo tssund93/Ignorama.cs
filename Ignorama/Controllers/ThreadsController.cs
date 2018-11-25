@@ -26,9 +26,27 @@ namespace Ignorama.Controllers
 
         public IActionResult New()
         {
+            var user = _userManager.GetUserAsync(HttpContext.User).Result;
+            var selectedTags = user != null
+                 ? _context.SelectedTags
+                     .Where(st => st.User == user)
+                     .Select(st => st.Tag)
+                     .ToList()
+                 : _context.SelectedTags
+                     .Where(st => st.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
+                     .Select(st => st.Tag)
+                     .ToList();
+
+            if (!selectedTags.Any())
+            {
+                selectedTags = _context.Tags.ToList();
+            }
+
             var newThreadModel = new NewThreadViewModel
             {
-                Tags = _context.Tags.OrderBy(t => t.Name)
+                Tags = _context.Tags
+                    .Where(tag => selectedTags.Contains(tag))
+                    .OrderBy(t => t.Name)
             };
             return View(newThreadModel);
         }
