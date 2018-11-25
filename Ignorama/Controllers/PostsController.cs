@@ -32,7 +32,7 @@ namespace Ignorama.Controllers
                     ? _userManager.GetRolesAsync(user).Result
                     : new[] { "User" };
                 var thread = _context.Threads.Find(threadID);
-                if (!thread.Locked || roles.Contains("Admin") || roles.Contains("Moderator"))
+                if (!thread.Locked || roles.Contains("Moderator"))
                 {
                     collection.TryGetValue("Text", out StringValues text);
                     collection.TryGetValue("Anonymous", out StringValues anonymous);

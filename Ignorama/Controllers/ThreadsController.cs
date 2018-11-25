@@ -116,7 +116,7 @@ namespace Ignorama.Controllers
                         FirstPost = thread.Posts.First(),
                         LastPost = thread.Posts.Last(),
                         PostCount = thread.Posts.Count(),
-                        OP = thread.Posts.First().User,
+                        OP = thread.Posts.First().Anonymous ? null : thread.Posts.First().User,
                         Hidden = hiddenThreads.Contains(thread),
                         Following = followedThreads.Select(ft => ft.Thread).Contains(thread),
                         LastSeenPostID = followedThreads.Where(ft => ft.Thread.ID == thread.ID) != null
@@ -290,14 +290,29 @@ namespace Ignorama.Controllers
         [HttpGet("/Threads/GetPosts/{threadID}")]
         public IActionResult GetPosts(int threadID)
         {
+            var user = _userManager.GetUserAsync(HttpContext.User).Result;
+            var roles = user != null
+               ? _userManager.GetRolesAsync(user).Result
+               : new[] { "User" };
+
             return new OkObjectResult(
                 _context.Posts
                     .Where(post => post.Thread.ID == threadID)
-                    .Include(post => post.User)
-                    .OrderBy(post => post.Time));
+                    .OrderBy(post => post.Time)
+                    .Select(post => new
+                    {
+                        post.ID,
+                        Highlighted = false,
+                        post.Anonymous,
+                        User = post.Anonymous && !roles.Contains("Moderator") ? null : post.User,
+                        post.RevealOP,
+                        post.Bump,
+                        post.Time,
+                        post.Text,
+                    }));
         }
 
-        [Authorize(Roles = "Admin,Moderator")]
+        [Authorize(Roles = "Moderator")]
         [HttpPost("/Threads/ToggleStickied/{threadID}")]
         public async Task<IActionResult> ToggleStickied(int threadID)
         {
@@ -314,7 +329,7 @@ namespace Ignorama.Controllers
             return new BadRequestResult();
         }
 
-        [Authorize(Roles = "Admin,Moderator")]
+        [Authorize(Roles = "Moderator")]
         [HttpPost("/Threads/ToggleLocked/{threadID}")]
         public async Task<IActionResult> ToggleLocked(int threadID)
         {
