@@ -17,7 +17,12 @@ var postsVue = new Vue({
         }
     },
     created: function () {
-        this.getPosts(threadID, this.updatePage);
+        this.getPosts(threadID, () => {
+            this.updatePage();
+            setTimeout(function () {
+                this.$scrollTo('#post' + postID);
+            }, 100);
+        });
     },
     filters: {
         date: function (date) {
