@@ -11,7 +11,7 @@
                 Boards <b class=caret>
                 </b>
             </a>
-            <ul class="dropdown-menu dropdown-menu-form pull-right" role=menu>
+            <ul class="dropdown-menu dropdown-menu-form pull-right boards" role=menu>
                 <li v-for="tag in tags">
                     <label>
                         <input v-model="selectedTags" type=checkbox :value=tag.ID :checked="selectedTags.includes(tag.ID)" v-on:change="updateSelectedTag(tag)">{{ tag.Name }}
