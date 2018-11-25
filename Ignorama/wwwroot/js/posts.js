@@ -38,8 +38,9 @@ var postsVue = new Vue({
             post = post.replace(/\[u\]([\s\S]*?)\[\/u\]/ig, "<u>$1</u>");
             //spoilers
             post = post.replace(/\[spoiler\]([\s\S]*?)\[\/spoiler\]/ig, "<span class='spoiler'>$1</span>");
+            //user reference
+            post = post.replace(/\[(.*?)\|([0-9]+)\]/ig, "<a href='javascript:postsVue.viewPost($2);'><b>$1</b></a>");
             //replies
-            post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*\[\/reply\]/ig, "<a href='javascript:postsVue.viewPost($2);'><b>$1</b></a>");
             post = post.replace(/\[reply user=(.*?) post=([0-9]+)\]\s*([\s\S]*?)\s*\[\/reply\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b><a href='javascript:postsVue.viewPost($2);'>$1</a> said:</b><br/>$3</div>");
             //quotes
             post = post.replace(/\[quote\]\s?([\s\S]*?)\s?\[\/quote\]\s?/ig, "<div style='padding: 5px;border: 1px solid #DDD;background-color:#F5F5F5'><b>Quote:</b><br/>$1</div>");
@@ -89,9 +90,14 @@ var postsVue = new Vue({
         },
         reply: function (post, quote) {
             var quotelessText = post.Text
-                .replace(/\s*(\[reply.*?\]\s*?\S+\s*?\[\/reply\])\s*/gi, "");
-            $("#postfield").val($("#postfield").val() + '[reply user=' + (post.User && !post.Anonymous ? post.User.UserName : 'Anonymous') +
-                ' post=' + post.ID + ']' + (quote ? '\n' + quotelessText + '\n' : '') + '[/reply]\n').focus();
+                .replace(/\s*(\[reply.*?\][\s\S]*?\[\/reply\])\s*/gi, "");
+            if (quote) {
+                $("#postfield").val($("#postfield").val() + '[reply user=' + (post.User && !post.Anonymous ? post.User.UserName : 'Anonymous') +
+                    ' post=' + post.ID + ']\n' + quotelessText + '\n[/reply]\n').focus();
+            }
+            else {
+                $("#postfield").val($("#postfield").val() + '[' + (post.User && !post.Anonymous ? post.User.UserName : 'Anonymous') + '|' + post.ID + ']').focus();
+            }
             slideOut();
         },
         viewPost: function (postID) {
