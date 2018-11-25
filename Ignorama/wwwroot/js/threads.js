@@ -43,7 +43,6 @@
             var searchPattern = new RegExp(".*?" + this.search.replace(/\s+/ig, ".*?") + ".*?", "i");
             return viewThreads
                 .filter(thread => {
-                    console.log(searchPattern + '\n' + thread.Title)
                     return (!this.selectedTags.length
                         ? true
                         : this.selectedTags.includes(thread.Tag.ID))
