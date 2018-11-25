@@ -6,10 +6,9 @@
 <div class="row dropdown">
     <div class="col-xs-12 above-threads">
         <a class="btn btn-default btn-sm threads" asp-controller="Threads" asp-action="New">New Thread</a>
-        <div class="right-dropdown">
+        <form class="right-dropdown">
             <a class="dropdown-toggle btn btn-default btn-sm" data-toggle=dropdown>
-                Boards <b class=caret>
-                </b>
+                Boards <b class=caret></b>
             </a>
             <ul class="dropdown-menu dropdown-menu-form pull-right boards" role=menu>
                 <li v-for="tag in tags">
@@ -18,7 +17,7 @@
                     </label>
                 </li>
             </ul>
-        </div>
+        </form>
         <div class="right-dropdown">
             <a class="dropdown-toggle btn btn-default btn-sm" data-toggle=dropdown>
                 <b class="glyphicon glyphicon-search"></b> <b class=caret></b>
