@@ -32,11 +32,14 @@
         visibleThreads: function () {
             var viewThreads = [];
             if (this.view === '')
-                viewThreads = this.threads.filter(thread => !thread.Hidden);
+                viewThreads = this.threads.filter(thread => !thread.Hidden)
+                    .sort((t1, t2) => t2.Stickied - t1.Stickied);
             else if (this.view === 'hidden')
                 viewThreads = this.threads.filter(thread => thread.Hidden);
             else if (this.view === 'following')
-                viewThreads = this.threads.filter(thread => thread.Following && !thread.Hidden);
+                viewThreads = this.threads.filter(thread => thread.Following && !thread.Hidden)
+                    .sort((t1, t2) => new Date(t2.LastPost.Time)
+                                        - new Date(t1.LastPost.Time));
             else
                 viewThreads = this.threads.filter(thread => !thread.Hidden);
 
@@ -47,9 +50,7 @@
                         ? true
                         : this.selectedTags.includes(thread.Tag.ID))
                       && (searchPattern.test(thread.Title + ' ' + thread.FirstPost.Text));
-                    })
-                .sort((t1, t2) =>
-                    t2.Stickied - t1.Stickied);
+                    });
         }
     },
     watch: {
