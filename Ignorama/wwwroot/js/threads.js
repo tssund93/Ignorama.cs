@@ -40,17 +40,15 @@
             else
                 viewThreads = this.threads.filter(thread => !thread.Hidden);
 
-            var searchPattern = new RegExp(".*?" + this.search.replace(/\s+/ig, ".*?") + ".*?", "ig");
+            var searchPattern = new RegExp(".*?" + this.search.replace(/\s+/ig, ".*?") + ".*?", "i");
             return viewThreads
                 .filter(thread => {
-                    if (!this.selectedTags.length) {
-                        return true;
-                    }
-                    else {
-                        return this.selectedTags.includes(thread.Tag.ID) &&
-                            (searchPattern.test(thread.Title + ' ' + thread.FirstPost.Text));
-                    }
-                })
+                    console.log(searchPattern + '\n' + thread.Title)
+                    return (!this.selectedTags.length
+                        ? true
+                        : this.selectedTags.includes(thread.Tag.ID))
+                      && (searchPattern.test(thread.Title + ' ' + thread.FirstPost.Text));
+                    })
                 .sort((t1, t2) =>
                     t2.Stickied - t1.Stickied);
         }
