@@ -332,3 +332,18 @@ label {
     margin-top: 5px;
     margin-bottom: 5px;
 }
+
+.rightbuttons > input {
+    float: right;
+    margin-top: 10px;
+}
+
+.upload-to-thread-form {
+    border-style: solid;
+    border-color: darkgray;
+    border-width: 1px;
+    max-width: 300px;
+    padding: 10px;
+    margin-top: 70px;
+    height: 70px;
+}
