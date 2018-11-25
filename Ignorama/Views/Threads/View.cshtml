@@ -21,6 +21,7 @@
                 <span class="time" style="float: right;">{{ post.Time | date }}</span>
                 <br />
                 <a v-if="'@Model.Locked' !== 'True' || '@Model.Roles.Contains("Moderator")' === 'True'" href="#" v-on:click.prevent="reply(post)">reply</a>
+                <a v-if="'@Model.Locked' !== 'True' || '@Model.Roles.Contains("Moderator")' === 'True'" href="#" v-on:click.prevent="reply(post, true)">quote</a>
             </span>
         </div>
         <br>
