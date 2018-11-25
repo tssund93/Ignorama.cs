@@ -197,6 +197,11 @@ label {
     outline-width: 1px;
 }
 
+    .thread.loading > img {
+        display: block;
+        margin: auto;
+    }
+
 .newposts {
     background-color: #F9F2FF;
 }
@@ -223,9 +228,30 @@ label {
     background-color: #333;
 }
 
-.bold {
-    font-weight: bold;
+.navbar-nav > li > a {
+    padding: 10px;
 }
+
+ul.nav a:hover, ul.nav a:focus {
+    background-color: inherit;
+    outline-color: #CCC;
+    outline-style: solid;
+    outline-width: 1px;
+}
+
+.nav-item {
+    min-width: 70px;
+    text-align: center;
+}
+
+    .nav-item > .active {
+        background-color: white !important;
+        outline-color: #CCC !important;
+        outline-style: solid !important;
+        outline-width: 1px !important;
+        outline-offset: 0px !important;
+        font-weight: bold;
+    }
 
 #quickreply {
     position: fixed;
