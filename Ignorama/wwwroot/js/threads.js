@@ -42,9 +42,15 @@
 
             var searchPattern = new RegExp(".*?" + this.search.replace(/\s+/ig, ".*?") + ".*?", "ig");
             return viewThreads
-                .filter(thread =>
-                    this.selectedTags.includes(thread.Tag.ID) &&
-                    (searchPattern.test(thread.Title + ' ' + thread.FirstPost.Text)))
+                .filter(thread => {
+                    if (!this.selectedTags.length) {
+                        return true;
+                    }
+                    else {
+                        return this.selectedTags.includes(thread.Tag.ID) &&
+                            (searchPattern.test(thread.Title + ' ' + thread.FirstPost.Text));
+                    }
+                })
                 .sort((t1, t2) =>
                     t2.Stickied - t1.Stickied);
         }
