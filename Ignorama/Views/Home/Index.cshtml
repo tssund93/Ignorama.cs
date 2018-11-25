@@ -6,7 +6,7 @@
 <div class="row dropdown">
     <div class=col-xs-12 style="margin-top: 5px; margin-bottom: 5px;">
         <a class="btn btn-default btn-sm threads" style="margin: 3px;" asp-controller="Threads" asp-action="New">New Thread</a>
-        <form style="float: right;" action=b/apply-tags method=post>
+        <div style="float: right;">
             <a class="dropdown-toggle btn btn-default btn-sm" style="margin-left: 3px;" data-toggle=dropdown>
                 Boards <b class=caret>
                 </b>
@@ -18,14 +18,24 @@
                     </label>
                 </li>
             </ul>
-        </form>
+        </div>
+        <div style="float: right;">
+            <a class="dropdown-toggle btn btn-default btn-sm" data-toggle=dropdown>
+                <b class="glyphicon glyphicon-search"></b> <b class=caret></b>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-form searchmenu pull-right">
+                <li>
+                    <input class=searchbox name=search type=text placeholder="Search" v-model="search">
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
-<ul class="nav navbar-nav navbar-right">
+@*<ul class="nav navbar-nav navbar-right">
     <li>
         <input class=searchbox name=search type=text placeholder="Search" v-model="search">
     </li>
-</ul>
+</ul>*@
 <ul class="nav navbar-nav">
     <li class="nav-item">
         <a class="nav-link" v-on:click.prevent="view = ''" href="#" v-bind:class="{ active: view === '' }">All</a>
