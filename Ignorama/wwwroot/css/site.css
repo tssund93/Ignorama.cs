@@ -156,22 +156,66 @@ select {
     font-weight: normal;
 }
 
+.searchmenu {
+    margin-right: 10px;
+}
+
 @media (min-width: 767px) {
-    .searchbox {
-        margin-right: -5px;
-        float: right;
-        margin-right: 10px;
+    .navbar-nav {
+        margin-top: 0px;
+        height: 31px;
+    }
+
+    .navbar-nav > li > a {
+        line-height: 9px;
+        z-index: 1;
+    }
+
+    .nav-item {
+        min-width: 90px;
+        text-align: center;
+    }
+
+        .nav-item > .active {
+            font-weight: bold;
+            background-color: white !important;
+            border-bottom-style: solid;
+            border-bottom-color: white !important;
+            border-bottom-width: 1px;
+            border-color: #CCC;
+            border-style: solid;
+            border-width: 1px;
+        }
+
+    ul.nav a:hover, ul.nav a:focus {
+        background-color: inherit;
+        border-color: #CCC;
+        border-style: solid;
+        border-width: 1px;
+        border-bottom-color: white;
+    }
+
+    .nav-item > .active:focus {
+        background-color: white !important;
+        outline-style: none;
     }
 }
 
 @media (max-width: 767px) {
-    .searchbox {
-        width: -moz-calc(100% - 36px);
-        width: -webkit-calc(100% - 36px);
-        width: -o-calc(100% - 36px);
-        width: calc(100% - 36px);
-        margin: 18px;
-        margin-top: 5px;
+    .nav-item > .active {
+        background-color: white !important;
+        outline-color: #CCC !important;
+        outline-style: solid !important;
+        outline-width: 1px !important;
+        outline-offset: 0px !important;
+        font-weight: bold;
+    }
+
+    ul.nav a:hover, ul.nav a:focus {
+        background-color: inherit;
+        outline-color: #CCC;
+        outline-style: solid;
+        outline-width: 1px;
     }
 }
 
@@ -248,34 +292,9 @@ label {
     background-color: #333;
 }
 
-.navbar-nav {
-    margin-top: 0px;
-}
-
 .navbar-nav > li > a {
     padding: 10px;
 }
-
-ul.nav a:hover, ul.nav a:focus {
-    background-color: inherit;
-    outline-color: #CCC;
-    outline-style: solid;
-    outline-width: 1px;
-}
-
-.nav-item {
-    min-width: 70px;
-    text-align: center;
-}
-
-    .nav-item > .active {
-        background-color: white !important;
-        outline-color: #CCC !important;
-        outline-style: solid !important;
-        outline-width: 1px !important;
-        outline-offset: 0px !important;
-        font-weight: bold;
-    }
 
 #quickreply {
     position: fixed;
