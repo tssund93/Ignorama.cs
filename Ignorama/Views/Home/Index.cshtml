@@ -19,11 +19,13 @@
                 </li>
             </ul>
         </form>
-        <span style="float: right; margin: 3px;">
-            <input class=searchbox name=search type=text placeholder="Search" v-model="search">
-        </span>
     </div>
 </div>
+<ul class="nav navbar-nav navbar-right">
+    <li>
+        <input class=searchbox name=search type=text placeholder="Search" v-model="search">
+    </li>
+</ul>
 <ul class="nav navbar-nav">
     <li class="nav-item">
         <a class="nav-link" v-on:click.prevent="view = ''" href="#" v-bind:class="{ active: view === '' }">All</a>
