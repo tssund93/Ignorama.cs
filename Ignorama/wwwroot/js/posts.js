@@ -10,6 +10,7 @@ var postsVue = new Vue({
         page: 1,
         perPage: 20,
     },
+    mixins: [dateMixin],
     computed: {
         visiblePosts: function () {
             var startPost = (this.page - 1) * this.perPage;
@@ -31,11 +32,6 @@ var postsVue = new Vue({
         });
     },
     filters: {
-        date: function (date) {
-            if (!date) return '';
-            date = new Date(date + 'Z');
-            return date.toLocaleString();
-        },
         formatPost: function (post) {
             post = escapeHTML(post);
 

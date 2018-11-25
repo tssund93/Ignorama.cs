@@ -7,6 +7,7 @@
         selectedTags: [],
         search: "",
     },
+    mixins: [dateMixin],
     created: function () {
         axios.get('/Threads/GetThreads')
             .then(response => {
@@ -20,13 +21,6 @@
             .then(response => {
                 this.selectedTags = response.data;
             });
-    },
-    filters: {
-        date: function (date) {
-            if (!date) return '';
-            date = new Date(date + 'Z');
-            return date.toLocaleString();
-        }
     },
     computed: {
         visibleThreads: function () {
