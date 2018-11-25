@@ -49,7 +49,7 @@
                         Hide thread
                     </a>
                 </li>
-                <li v-if="thread.UserRoles.includes('Admin') || thread.UserRoles.includes('Moderator')">
+                <li v-if="thread.UserRoles.includes('Moderator')">
                     <a v-if="thread.Stickied" href="#" v-on:click.prevent="toggleStickied(thread)">
                         Unsticky thread
                     </a>
@@ -57,7 +57,7 @@
                         Sticky thread
                     </a>
                 </li>
-                <li v-if="thread.UserRoles.includes('Admin') || thread.UserRoles.includes('Moderator')">
+                <li v-if="thread.UserRoles.includes('Moderator')">
                     <a v-if="thread.Locked" href="#" v-on:click.prevent="toggleLocked(thread)">
                         Unlock thread
                     </a>
