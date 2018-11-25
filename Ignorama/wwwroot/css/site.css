@@ -14,18 +14,44 @@ body {
     background-color: #E8E8E8;
 }
 
-.header {
+.navbar {
     background-color: #330066;
-    padding-top: 6px;
-    padding-bottom: 5px;
-    margin-bottom: 1px;
     -webkit-box-shadow: 0px 1.5px 3px 0px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 1.5px 3px 0px rgba(0,0,0,0.75);
     box-shadow: 0px 1.5px 3px 0px rgba(0,0,0,0.75);
+    border: none;
+}
+
+.navbar-brand > img {
+    margin-top: -5px;
+}
+
+.loggedInAs {
+    color: white;
+    float: right;
+    padding: 15px 15px;
+}
+
+.navbar-default .btn-link {
+    color: white;
+}
+.navbar-default .btn-link:hover {
+    color: white;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: white;
+}
+.navbar-default .navbar-nav > li > a:hover {
+    color: white;
+    text-decoration: underline;
 }
 
 .slogan {
     color: white;
+    margin-top: 21px;
+    margin-left: -14px;
+    display: inline-block;
 }
 
 .page-title {
