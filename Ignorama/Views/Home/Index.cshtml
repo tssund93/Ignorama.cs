@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Ignorama.Models.Tag>
 
-<div class="row dropdown">
+<div class="row constrained dropdown">
     <div class="col-xs-12 above-threads">
         <a class="btn btn-default btn-sm threads" asp-controller="Threads" asp-action="New">New Thread</a>
         <form class="right-dropdown">
@@ -27,29 +27,31 @@
         </div>
     </div>
 </div>
-<ul class="tabs nav navbar-nav">
-    <li class="nav-item">
-        <a class="nav-link" v-on:click.prevent="view = ''" href="#" v-bind:class="{ active: view === '' }">All</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" v-on:click.prevent="view = 'following'" href="#" v-bind:class="{ active: view === 'following' }">Following</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" v-on:click.prevent="view = 'hidden'" href="#" v-bind:class="{ active: view === 'hidden' }">Hidden</a>
-    </li>
-</ul>
+<div class="row constrained">
+    <ul class="tabs nav navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" v-on:click.prevent="view = ''" href="#" v-bind:class="{ active: view === '' }">All</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" v-on:click.prevent="view = 'following'" href="#" v-bind:class="{ active: view === 'following' }">Following</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" v-on:click.prevent="view = 'hidden'" href="#" v-bind:class="{ active: view === 'hidden' }">Hidden</a>
+        </li>
+    </ul>
+</div>
 
-<div class="row" v-if="!threads.length">
+<div class="row constrained" v-if="!threads.length">
     <div class="col-xs-12 thread loading">
         <img src="~/loading.png" />
     </div>
 </div>
-<div class="row" v-else-if="!visibleThreads.length" v-cloak>
+<div class="row constrained" v-else-if="!visibleThreads.length" v-cloak>
     <div class="col-xs-12 thread">
         Nothing to see here!
     </div>
 </div>
-<div v-else class="row" v-for="thread in visibleThreads">
+<div v-else class="row constrained" v-for="thread in visibleThreads">
     <div class="col-xs-12 thread" :class="{ newposts: thread.Following && thread.LastSeenPostID < thread.LastPost.ID }" v-cloak>
         <div class="btn-group thread-dropdown">
             <a class="btn btn-default btn-xs dropdown-toggle" data-toggle=dropdown>
