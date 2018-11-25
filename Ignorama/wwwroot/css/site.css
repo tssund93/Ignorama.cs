@@ -151,12 +151,26 @@ select {
 
 .searchbox {
     height: 30px;
-    margin-right: -5px;
     font-weight: normal;
 }
 
-.searchform {
-    float: right;
+@media (min-width: 767px) {
+    .searchbox {
+        margin-right: -5px;
+        float: right;
+        margin-right: 10px;
+    }
+}
+
+@media (max-width: 767px) {
+    .searchbox {
+        width: -moz-calc(100% - 36px);
+        width: -webkit-calc(100% - 36px);
+        width: -o-calc(100% - 36px);
+        width: calc(100% - 36px);
+        margin: 18px;
+        margin-top: 5px;
+    }
 }
 
 .searchbutton {
@@ -170,6 +184,10 @@ select {
     -moz-border-radius: 0 !important;
     border-radius: 0 !important;
     box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-menu.pull-right {
+    right: 17px;
 }
 
 .dropdown-item {
