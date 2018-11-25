@@ -46,7 +46,7 @@
         Nothing to see here!
     </div>
 </div>
-<div v-else-if="threads.length" class="row" v-for="thread in visibleThreads">
+<div v-else class="row" v-for="thread in visibleThreads">
     <div class="col-xs-12 thread" :class="{ newposts: thread.Following && thread.LastSeenPostID < thread.LastPost.ID }" v-cloak>
         <div class=btn-group style="float: right;">
             <a class="btn btn-default btn-xs dropdown-toggle" data-toggle=dropdown>
