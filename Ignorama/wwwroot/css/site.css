@@ -176,6 +176,12 @@ select {
 }
 
 @media (min-width: 767px) {
+    .row.constrained {
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
     .navbar-nav.tabs {
         margin-top: 0px;
         height: 31px;
@@ -185,11 +191,6 @@ select {
             line-height: 9px;
             z-index: 1;
         }
-
-    .tabs .nav-item {
-        min-width: 90px;
-        text-align: center;
-    }
 
         .tabs .nav-item > .active {
             font-weight: bold;
@@ -347,4 +348,37 @@ label {
     padding: 10px;
     margin-top: 70px;
     height: 70px;
+}
+
+.row .navbar-nav {
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.tabs .navbar-collapse.collapse {
+    display: block !important;
+}
+
+.navbar-nav.tabs > li, .navbar-nav.tabs {
+    float: left !important;
+}
+
+    .navbar-nav.tabs.navbar-right:last-child {
+        margin-right: -15px !important;
+    }
+
+.tabs.navbar-right {
+    float: right !important;
+}
+
+.tabs .nav-item {
+    min-width: 90px;
+    text-align: center;
+}
+
+.row.constrained h2 {
+    margin-left: 10px;
+    margin-right: 10px;
 }

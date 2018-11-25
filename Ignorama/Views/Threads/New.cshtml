@@ -2,10 +2,11 @@
 @{
     ViewData["Title"] = "New Thread";
 }
+<div class="row constrained">
+    <h2 class="page-title">@ViewData["Title"]</h2>
+</div>
 
-<h2 class="page-title">@ViewData["Title"]</h2>
-
-<div class="row">
+<div class="row constrained">
     <div class="col-xs-12">
         <form asp-action="New">
             <div class="form-group">
