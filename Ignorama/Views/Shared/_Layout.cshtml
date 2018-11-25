@@ -32,8 +32,6 @@
     </environment>
 </head>
 <body>
-    <partial name="_CookieConsentPartial" />
-
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
@@ -46,14 +44,14 @@
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                     <img src=/ignorama.png>
                 </a>
-                @{ 
+                @{
                     var slogans = new[]
                     {
-                        "I should've made it blue",
-                        "Ignorance for the masses",
-                        "Made with MS Paint",
-                        "Your hobbies are stupid",
-                    };
+                                "I should've made it blue",
+                                "Ignorance for the masses",
+                                "Made with MS Paint",
+                                "Your hobbies are stupid",
+                            };
                     Random rnd = new Random();
                     int r = rnd.Next(slogans.Length);
                     <b class="slogan hidden-xs">@slogans[r]</b>
@@ -62,33 +60,33 @@
             <div class="collapse navbar-collapse" id="navbar">
                 @if (SignInManager.IsSignedIn(User))
                 {
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Context.Request.Path" method="post">
-                            <button type="submit" class="btn btn-link navbar-btn navbar-link">
-                                Logout
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-                <div class="loggedInAs">Logged in as @UserManager.GetUserName(User)</div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Context.Request.Path" method="post">
+                                <button type="submit" class="btn btn-link navbar-btn navbar-link">
+                                    Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                    <div class="loggedInAs">Logged in as @UserManager.GetUserName(User)</div>
                 }
                 else
                 {
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a class=header-link asp-area="Identity" asp-page="/Account/Register">
-                            Sign up
-                        </a>
-                    </li>
-                    <li>
-                        <a class=header-link asp-area="Identity" asp-page="/Account/Login">
-                            Log in
-                        </a>
-                    </li>
-                </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a class=header-link asp-area="Identity" asp-page="/Account/Register">
+                                Sign up
+                            </a>
+                        </li>
+                        <li>
+                            <a class=header-link asp-area="Identity" asp-page="/Account/Login">
+                                Log in
+                            </a>
+                        </li>
+                    </ul>
                 }
-                </div>
+            </div>
         </div>
     </nav>
 
