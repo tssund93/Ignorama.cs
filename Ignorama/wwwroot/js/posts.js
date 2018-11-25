@@ -96,7 +96,7 @@ var postsVue = new Vue({
                     ' post=' + post.ID + ']\n' + quotelessText + '\n[/reply]\n').focus();
             }
             else {
-                $("#postfield").val($("#postfield").val() + '[' + (post.User && !post.Anonymous ? post.User.UserName : 'Anonymous') + '|' + post.ID + ']').focus();
+                $("#postfield").val($("#postfield").val() + '[' + (post.User && !post.Anonymous ? post.User.UserName : 'Anonymous') + '|' + post.ID + '] ').focus();
             }
             slideOut();
         },
@@ -122,7 +122,7 @@ function slideOut() {
 }
 
 function slideIn() {
-    $("#quickreply").animate({ bottom: -222 }, 200).delay(200).queue(function (next) { $(this).attr("class", "slid-in"); next(); });
+    $("#quickreply").animate({ bottom: -249 }, 200).delay(200).queue(function (next) { $(this).attr("class", "slid-in"); next(); });
     return false;
 }
 
