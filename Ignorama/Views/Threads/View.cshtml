@@ -52,7 +52,7 @@
 @if (!Model.Locked || Model.Roles.Contains("Moderator"))
 {
     <div class='slid-in' id='quickreply'>
-        <div class="centered"><a href='javascript:slide();'>Reply</a></div>
+        <div class="centered"><a href='javascript:slide();'>Reply <span id="replyCaret" class="caret caret-up"></span></a></div>
         <form id='postform' asp-controller="Posts" asp-action="New" method='post'>
             @Html.AntiForgeryToken()
             <textarea id='postfield' name='Text' rows='7' class='col-xs-12' style='resize:none;' required></textarea>

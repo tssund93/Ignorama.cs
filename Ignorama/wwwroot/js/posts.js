@@ -129,11 +129,13 @@ var postsVue = new Vue({
 
 function slideOut() {
     $("#quickreply").stop(true).animate({ bottom: -1 }, 200).attr("class", "slid-out");
+    $("#replyCaret").removeClass('caret-up');
     return false;
 }
 
 function slideIn() {
     $("#quickreply").animate({ bottom: -249 }, 200).delay(200).queue(function (next) { $(this).attr("class", "slid-in"); next(); });
+    $("#replyCaret").addClass('caret-up');
     return false;
 }
 
