@@ -20,7 +20,17 @@
   {
     "outputFileName": "wwwroot/js/threads.min.js",
     "inputFiles": [
-      "wwwroot/js/threads.js",
+      "wwwroot/js/threads.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/uploadfile.min.js",
+    "inputFiles": [
       "wwwroot/js/uploadfile.js"
     ],
     "minify": {

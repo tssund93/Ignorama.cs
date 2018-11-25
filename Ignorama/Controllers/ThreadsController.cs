@@ -78,7 +78,7 @@ namespace Ignorama.Controllers
             var user = _userManager.GetUserAsync(HttpContext.User).Result;
             var roles = user != null
                 ? _userManager.GetRolesAsync(user).Result
-                : new[] { "User" };
+                : new string[] { };
 
             var hiddenThreads = user != null
                 ? _context.HiddenThreads
@@ -186,7 +186,7 @@ namespace Ignorama.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var roles = user != null
                 ? _userManager.GetRolesAsync(user).Result
-                : new[] { "User" };
+                : new string[] { };
             var thread = _context.Threads.Find(t.ThreadID);
             var lastSeenPost = _context.Posts.Find(t.LastSeenPostID);
 
@@ -263,7 +263,7 @@ namespace Ignorama.Controllers
             var user = _userManager.GetUserAsync(HttpContext.User).Result;
             var roles = user != null
                 ? _userManager.GetRolesAsync(user).Result
-                : new[] { "User" };
+                : new string[] { };
             var followedThreadRows = (user != null
                     ? _context.FollowedThreads.Where(ft => ft.User == user && ft.Thread.ID == threadID)
                     : _context.FollowedThreads.Where(
@@ -293,7 +293,7 @@ namespace Ignorama.Controllers
             var user = _userManager.GetUserAsync(HttpContext.User).Result;
             var roles = user != null
                ? _userManager.GetRolesAsync(user).Result
-               : new[] { "User" };
+               : new string[] { };
 
             return new OkObjectResult(
                 _context.Posts
