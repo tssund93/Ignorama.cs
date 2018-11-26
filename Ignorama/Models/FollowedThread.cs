@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ignorama.Models
 {
-    public class FollowedThread
+    public class FollowedThread : IUserIP
     {
         public long ID { get; set; }
 

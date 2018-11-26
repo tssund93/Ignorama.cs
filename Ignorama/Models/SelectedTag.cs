@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ignorama.Models
 {
-    public class SelectedTag
+    public class SelectedTag : IUserIP
     {
         public long ID { get; set; }
 

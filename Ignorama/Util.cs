@@ -18,35 +18,30 @@ namespace Ignorama
                 : new string[] { };
         }
 
+        static public IQueryable<T> GetByUserOrIP<T>(
+            User user, DbSet<T> table, HttpRequest request) where T : class, IUserIP
+        {
+            if (user != null)
+                return table.Where(t => t.User == user);
+            else
+                return table.Where(t => t.IP == request.HttpContext.Connection.RemoteIpAddress.ToString());
+        }
+
         static public List<Tag> GetSelectedTags(User user, ForumContext context, HttpRequest request)
         {
-            return (user != null
-                ? context.SelectedTags
-                    .Where(st => st.User == user)
-                : context.SelectedTags
-                    .Where(st => st.IP == request.HttpContext.Connection.RemoteIpAddress.ToString()))
+            return GetByUserOrIP(user, context.SelectedTags, request)
                 .Select(st => st.Tag)
                 .ToList();
         }
 
         static public List<HiddenThread> GetHiddenThreads(User user, ForumContext context, HttpRequest request)
         {
-            return user != null
-                ? context.HiddenThreads
-                    .Where(hiddenThread => hiddenThread.User == user)
-                    .ToList()
-                : context.HiddenThreads
-                    .Where(hiddenThread => hiddenThread.IP == request.HttpContext.Connection.RemoteIpAddress.ToString())
-                    .ToList();
+            return GetByUserOrIP(user, context.HiddenThreads, request).ToList();
         }
 
         static public List<FollowedThread> GetFollowedThreads(User user, ForumContext context, HttpRequest request)
         {
-            return (user != null
-                ? context.FollowedThreads
-                    .Where(followedThread => followedThread.User == user)
-                : context.FollowedThreads
-                    .Where(followedThread => followedThread.IP == request.HttpContext.Connection.RemoteIpAddress.ToString()))
+            return GetByUserOrIP(user, context.FollowedThreads, request)
                 .Include(ft => ft.LastSeenPost)
                 .ToList();
         }
@@ -54,19 +49,15 @@ namespace Ignorama
         static public IQueryable<HiddenThread> GetHiddenThreadMatches(
             User user, Thread thread, ForumContext context, HttpRequest request)
         {
-            return user != null
-                ? context.HiddenThreads.Where(ht => ht.User == user && ht.Thread == thread)
-                : context.HiddenThreads.Where(
-                    ht => ht.IP == request.HttpContext.Connection.RemoteIpAddress.ToString() && ht.Thread == thread);
+            return GetByUserOrIP(user, context.HiddenThreads, request)
+                .Where(ht => ht.Thread == thread);
         }
 
         static public IQueryable<FollowedThread> GetFollowedThreadMatches(
             User user, Thread thread, ForumContext context, HttpRequest request)
         {
-            return (user != null
-                ? context.FollowedThreads.Where(ft => ft.User == user && ft.Thread == thread)
-                : context.FollowedThreads.Where(
-                    ft => ft.IP == request.HttpContext.Connection.RemoteIpAddress.ToString() && ft.Thread == thread))
+            return GetByUserOrIP(user, context.FollowedThreads, request)
+                .Where(ft => ft.Thread == thread)
                 .Include(ft => ft.LastSeenPost);
         }
     }
