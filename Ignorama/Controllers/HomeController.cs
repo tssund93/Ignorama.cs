@@ -43,8 +43,8 @@ namespace Ignorama.Controllers
 
         public class ImageUploadModel
         {
-            public string filename { get; set; }
-            public IFormFile file { get; set; }
+            public string FileName { get; set; }
+            public IFormFile File { get; set; }
         }
 
         [HttpPost]
@@ -58,15 +58,15 @@ namespace Ignorama.Controllers
             {
                 ".gif", ".jpeg", ".jpg", ".png", ".webm"
             };
-            var ext = Path.GetExtension(upload.filename);
-            if (upload.file.Length > 0 &&
-                allowedTypes.Contains(upload.file.ContentType.ToLower()) &&
+            var ext = Path.GetExtension(upload.FileName);
+            if (upload.File.Length > 0 &&
+                allowedTypes.Contains(upload.File.ContentType.ToLower()) &&
                 allowedExts.Contains(ext.ToLower()))
             {
                 using (var stream = new FileStream(
-                    Path.Combine(_hostingEnvironment.WebRootPath, "uploads/", upload.filename), FileMode.Create))
+                    Path.Combine(_hostingEnvironment.WebRootPath, "uploads/", upload.FileName), FileMode.Create))
                 {
-                    await upload.file.CopyToAsync(stream);
+                    await upload.File.CopyToAsync(stream);
 
                     return new ContentResult
                     {

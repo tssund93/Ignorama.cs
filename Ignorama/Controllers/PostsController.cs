@@ -28,9 +28,7 @@ namespace Ignorama.Controllers
             try
             {
                 var user = await _userManager.GetUserAsync(HttpContext.User);
-                var roles = user != null
-                    ? _userManager.GetRolesAsync(user).Result
-                    : new[] { "User" };
+                var roles = Util.GetRoles(user, _userManager);
                 var thread = _context.Threads.Find(threadID);
                 if (!thread.Locked || roles.Contains("Moderator"))
                 {
