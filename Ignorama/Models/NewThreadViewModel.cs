@@ -22,6 +22,8 @@ namespace Ignorama.Models
         [Display(Name = "Board")]
         public int TagID { get; set; }
 
+        public bool Anonymous { get; set; }
+
         public IEnumerable<Tag> Tags { get; set; }
     }
 }

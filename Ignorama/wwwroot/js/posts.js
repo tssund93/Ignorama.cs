@@ -158,7 +158,6 @@ $('#postform').submit(function (e) {
             else {
                 $('#postfield').val('');
                 $('input[name=Bump]').prop('checked', false);
-                $('input[name=Anonymous]').prop('checked', false);
                 $('input[name=RevealOP]').prop('checked', false);
                 slide();
 

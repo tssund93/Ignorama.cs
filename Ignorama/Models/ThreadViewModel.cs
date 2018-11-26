@@ -11,6 +11,8 @@ namespace Ignorama.Models
 
         public bool IsOP { get; set; }
 
+        public bool CanBump { get; set; }
+
         public int LastSeenPostID { get; set; }
 
         public bool Locked { get; set; }

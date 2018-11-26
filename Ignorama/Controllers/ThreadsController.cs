@@ -69,7 +69,7 @@ namespace Ignorama.Controllers
                     Deleted = false,
                     Bump = true,
                     RevealOP = true,
-                    Anonymous = false,
+                    Anonymous = model.Anonymous,
                     IP = Request.HttpContext.Connection.RemoteIpAddress.ToString()
                 };
 
@@ -250,7 +250,10 @@ namespace Ignorama.Controllers
                 {
                     Title = t.Title,
                     IsOP = t.Posts.FirstOrDefault().User.UserName == _userManager.GetUserName(User)
-                        || t.Posts.FirstOrDefault().IP == Request.HttpContext.Connection.RemoteIpAddress.ToString(),
+                        || (t.Posts.FirstOrDefault().User == null
+                            && t.Posts.FirstOrDefault().IP == Request.HttpContext.Connection.RemoteIpAddress.ToString()),
+                    CanBump = !(t.Posts.FirstOrDefault().User.UserName == _userManager.GetUserName(User)
+                        || t.Posts.FirstOrDefault().IP == Request.HttpContext.Connection.RemoteIpAddress.ToString()),
                     LastSeenPostID = followedThreadRows.Any() ? followedThreadRows.FirstOrDefault().LastSeenPost.ID : 0,
                     Locked = t.Locked,
                     User = user,

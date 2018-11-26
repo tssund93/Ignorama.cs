@@ -65,7 +65,7 @@
                         Reveal OP
                     </label>
                 }
-                else
+                @if (Model.CanBump)
                 {
                     <label>
                         <input name='Bump' type='checkbox'>
@@ -75,7 +75,7 @@
                 @if (SignInManager.IsSignedIn(User))
                 {
                     <label>
-                        <input name='Anonymous' type='checkbox'>
+                        <input name='Anonymous' type='checkbox' checked>
                         Post Anonymously
                     </label>
                 }
