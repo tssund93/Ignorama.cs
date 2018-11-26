@@ -1,8 +1,8 @@
 ﻿<form id='uploadForm' enctype='multipart/form-data'>
     @Html.AntiForgeryToken()
     <span class='block-inline'>
-        <input id='upload' onchange='updateFilename();' type='file' name='file'>
+        <input id='upload' onchange='updateFilename();' type='file' name='File'>
     </span>
     <input id='uploadsubmit' class='btn btn-default btn-xs invisiblebutton' type='submit' value='Upload'>
-    <input id='filename' type='hidden' name='filename' value='none'>
+    <input id='filename' type='hidden' name='FileName' value='none'>
 </form>
