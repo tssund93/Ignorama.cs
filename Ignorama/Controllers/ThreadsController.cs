@@ -241,9 +241,10 @@ namespace Ignorama.Controllers
         {
             var user = _userManager.GetUserAsync(HttpContext.User).Result;
             var roles = Util.GetRoles(user, _userManager);
-            var followedThreadRows = Util.GetFollowedThreadMatches(user, thread, _context, Request);
+            var followedThreadRows =
+                Util.GetFollowedThreadMatches(user, _context.Threads.Find(threadID), _context, Request);
 
-            var thread = _context.Threads
+            var threadView = _context.Threads
                 .Where(t => t.ID == threadID)
                 .Select(t => new ThreadViewModel
                 {
@@ -257,7 +258,7 @@ namespace Ignorama.Controllers
                 })
                 .FirstOrDefault();
 
-            return View(thread);
+            return View(threadView);
         }
 
         [HttpGet("/Threads/GetPosts/{threadID}")]
