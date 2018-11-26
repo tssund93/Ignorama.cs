@@ -60,7 +60,6 @@ var postsVue = new Vue({
             //url
             post = post.replace(/\[url=(http(s?):\/\/)?(.*?)\](.*?)\[\/url\]/ig, "<a target='_blank' href='http$2://$3'>$4</a>");
             post = post.replace(/\b((?:([a-z][\w-]+):(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/ig, function (match, p1, p2) {
-                console.log(p1, p2);
                 return "<a target='_blank' href='" + (p2 ? match : "http://" + match) + "'>" + match + "</a>"
             });
             //youtube embed
