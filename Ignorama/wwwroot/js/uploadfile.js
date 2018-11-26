@@ -1,3 +1,4 @@
+// this code is scary and needs to be rewritten or something, but for now it works
 $(document).ready(function () {
     $(function () {
         $('#uploadForm').submit(function () {
