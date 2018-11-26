@@ -37,9 +37,9 @@ $(document).ready(function () {
                 }
                 $('input[name="javascript"]').remove();
                 inputLength = 0;
-                inputLength += $('input[name="file"]').val().length;
+                inputLength += $('input[name="File"]').val().length;
                 if (0 < inputLength && error === 'none') {
-                    $('input[name="file"]').val('');
+                    $('input[name="File"]').val('');
                     document.getElementById('postfield').value = postcontents;
                     temp = $('#filename').val().split(".");
                     extension = temp[temp.length - 1];
