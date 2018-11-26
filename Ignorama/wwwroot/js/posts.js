@@ -23,12 +23,14 @@ var postsVue = new Vue({
             var id = parseInt(lastSeenPostID);
             var newPost = this.posts.find(post =>
                 post.ID > id);
-            setTimeout(function () {
-                if (newPost)
-                    postsVue.$scrollTo('#post' + newPost.ID, 1);
-                else
-                    window.scrollTo(0, document.body.scrollHeight);
-            }, 100);
+            if (id) {
+                setTimeout(function () {
+                    if (newPost)
+                        postsVue.$scrollTo('#post' + newPost.ID, 1);
+                    else
+                        window.scrollTo(0, document.body.scrollHeight);
+                }, 100);
+            }
         });
     },
     filters: {
@@ -164,7 +166,7 @@ $('#postform').submit(function (e) {
                     () => {
                         postsVue.page = Math.ceil((postsVue.posts.length + 1) / postsVue.perPage);
                         setTimeout(function () {
-                                window.scrollTo(0, document.body.scrollHeight);
+                            window.scrollTo(0, document.body.scrollHeight);
                         }, 100);
                     });
             }
