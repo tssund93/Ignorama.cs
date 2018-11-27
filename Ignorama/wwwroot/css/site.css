@@ -288,7 +288,7 @@ label {
     height: 270px;
     padding-right: 5px;
     padding-left: 5px;
-    z-index: 999;
+    z-index: 2000;
     background-color: #dadada;
 }
 
