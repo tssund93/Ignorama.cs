@@ -15,7 +15,7 @@ namespace Ignorama
         {
             return user != null
                 ? userManager.GetRolesAsync(user).Result
-                : new string[] { };
+                : new string[] { "User" };
         }
 
         static public IQueryable<T> GetByUserOrIP<T>(
@@ -30,7 +30,7 @@ namespace Ignorama
         static public IQueryable<Tag> GetSelectedTags(User user, ForumContext context, HttpRequest request)
         {
             return GetByUserOrIP(user, context.SelectedTags, request)
-                .Where(st => !st.Tag.Deleted)
+                .Where(st => !st.Tag.Deleted && !st.Tag.AlwaysVisible)
                 .Select(st => st.Tag);
         }
 
@@ -64,7 +64,7 @@ namespace Ignorama
             User user, Tag tag, ForumContext context, HttpRequest request)
         {
             return GetByUserOrIP(user, context.SelectedTags, request)
-                .Where(st => st.Tag == tag && !st.Tag.Deleted);
+                .Where(st => st.Tag == tag);
         }
 
         static public IQueryable<Tag> GetTags(ForumContext context)

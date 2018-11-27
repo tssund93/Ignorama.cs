@@ -4,14 +4,16 @@ using Ignorama.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ignorama.Migrations
 {
     [DbContext(typeof(ForumContext))]
-    partial class ForumContextModelSnapshot : ModelSnapshot
+    [Migration("20181127044227_UpdateTagsColumns")]
+    partial class UpdateTagsColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,9 +151,9 @@ namespace Ignorama.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<long>("ReadRoleId");
+                    b.Property<string>("ReadRoleId");
 
-                    b.Property<long>("WriteRoleId");
+                    b.Property<string>("WriteRoleId");
 
                     b.HasKey("ID");
 
@@ -240,6 +242,22 @@ namespace Ignorama.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("NormalizedName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityRole");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<long>", b =>
@@ -404,15 +422,13 @@ namespace Ignorama.Migrations
 
             modelBuilder.Entity("Ignorama.Models.Tag", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<long>", "ReadRole")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "ReadRole")
                         .WithMany()
-                        .HasForeignKey("ReadRoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ReadRoleId");
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<long>", "WriteRole")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "WriteRole")
                         .WithMany()
-                        .HasForeignKey("WriteRoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("WriteRoleId");
                 });
 
             modelBuilder.Entity("Ignorama.Models.Thread", b =>

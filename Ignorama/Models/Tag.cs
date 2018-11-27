@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,8 +13,15 @@ namespace Ignorama.Models
 
         [Required]
         public string Name { get; set; }
-        
-        public PermissionLevel RequiredPermissionLevel { get; set; }
+
+        [Required]
+        public IdentityRole<long> ReadRole { get; set; }
+
+        [Required]
+        public IdentityRole<long> WriteRole { get; set; }
+
+        [Required]
+        public bool AlwaysVisible { get; set; }
 
         [Required]
         public bool Deleted { get; set; }

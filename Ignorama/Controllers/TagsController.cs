@@ -25,6 +25,7 @@ namespace Ignorama.Controllers
         {
             return new OkObjectResult(
                 Util.GetTags(_context)
+                    .Where(tag => !tag.AlwaysVisible)
                     .OrderBy(tag => tag.Name));
         }
 

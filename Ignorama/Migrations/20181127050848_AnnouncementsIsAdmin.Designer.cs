@@ -4,14 +4,16 @@ using Ignorama.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ignorama.Migrations
 {
     [DbContext(typeof(ForumContext))]
-    partial class ForumContextModelSnapshot : ModelSnapshot
+    [Migration("20181127050848_AnnouncementsIsAdmin")]
+    partial class AnnouncementsIsAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,9 +151,9 @@ namespace Ignorama.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<long>("ReadRoleId");
+                    b.Property<long?>("ReadRoleId");
 
-                    b.Property<long>("WriteRoleId");
+                    b.Property<long?>("WriteRoleId");
 
                     b.HasKey("ID");
 
@@ -406,13 +408,11 @@ namespace Ignorama.Migrations
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<long>", "ReadRole")
                         .WithMany()
-                        .HasForeignKey("ReadRoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ReadRoleId");
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<long>", "WriteRole")
                         .WithMany()
-                        .HasForeignKey("WriteRoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("WriteRoleId");
                 });
 
             modelBuilder.Entity("Ignorama.Models.Thread", b =>
