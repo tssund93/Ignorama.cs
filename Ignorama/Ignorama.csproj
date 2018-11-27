@@ -10,6 +10,8 @@
     <Compile Remove="Migrations\20181119222831_SeedTags.Designer.cs" />
     <Compile Remove="Migrations\20181121041933_FollowingTable.cs" />
     <Compile Remove="Migrations\20181121041933_FollowingTable.Designer.cs" />
+    <Compile Remove="Migrations\20181127044538_AddAnnouncementsTag.cs" />
+    <Compile Remove="Migrations\20181127044538_AddAnnouncementsTag.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -31,7 +31,8 @@ namespace Ignorama.Controllers
 
             if (!selectedTags.Any())
             {
-                selectedTags = Util.GetTags(_context);
+                selectedTags = Util.GetTags(_context)
+                    .Where(tag => Util.GetRoles(user, _userManager).Contains(tag.WriteRole.Name));
             }
 
             var newThreadModel = new NewThreadViewModel
@@ -55,10 +56,18 @@ namespace Ignorama.Controllers
                     Stickied = false,
                     Locked = false,
                     Deleted = false,
-                    Tag = _context.Tags.Find(model.TagID)
+                    Tag = _context.Tags
+                        .Include(tag => tag.WriteRole)
+                        .Where(tag => tag.ID == model.TagID)
+                        .FirstOrDefault()
                 };
 
                 var user = await _userManager.GetUserAsync(HttpContext.User);
+
+                if (!Util.GetRoles(user, _userManager).Contains(thread.Tag.WriteRole.Name))
+                {
+                    return RedirectToAction("Error", "Home");
+                }
 
                 var post = new Post
                 {

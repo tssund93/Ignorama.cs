@@ -40,7 +40,7 @@
             var searchPattern = new RegExp(".*?" + this.search.replace(/\s+/ig, ".*?") + ".*?", "i");
             return viewThreads
                 .filter(thread => {
-                    return (!this.selectedTags.length
+                    return (!this.selectedTags.length || thread.Tag.AlwaysVisible
                         ? true
                         : this.selectedTags.includes(thread.Tag.ID))
                       && (searchPattern.test(thread.Title + ' ' + thread.FirstPost.Text));
