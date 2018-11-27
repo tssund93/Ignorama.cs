@@ -14,7 +14,10 @@ namespace Ignorama.Models
         [Required]
         public string Name { get; set; }
 
+        [Required]
         public IdentityRole<long> ReadRole { get; set; }
+
+        [Required]
         public IdentityRole<long> WriteRole { get; set; }
 
         [Required]

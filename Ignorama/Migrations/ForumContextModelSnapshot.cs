@@ -149,9 +149,9 @@ namespace Ignorama.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<long?>("ReadRoleId");
+                    b.Property<long>("ReadRoleId");
 
-                    b.Property<long?>("WriteRoleId");
+                    b.Property<long>("WriteRoleId");
 
                     b.HasKey("ID");
 
@@ -406,11 +406,13 @@ namespace Ignorama.Migrations
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<long>", "ReadRole")
                         .WithMany()
-                        .HasForeignKey("ReadRoleId");
+                        .HasForeignKey("ReadRoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<long>", "WriteRole")
                         .WithMany()
-                        .HasForeignKey("WriteRoleId");
+                        .HasForeignKey("WriteRoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Ignorama.Models.Thread", b =>
