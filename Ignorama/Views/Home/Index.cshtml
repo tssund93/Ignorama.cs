@@ -95,8 +95,10 @@
         <span class="thread-info">
             <span v-if="thread.FirstPost.Anonymous || !thread.OP">Anonymous</span>
             <span v-else>{{ thread.OP.UserName }}</span>
-            <br>
-            Board: {{ thread.Tag.Name }} | Replies: {{ thread.PostCount - 1 }} | Last reply: <span class=time>{{ thread.LastPost.Time | date }}</span>
+            <br />
+            Board: {{ thread.Tag.Name }}
+            <br />
+            Replies: {{ thread.PostCount - 1 }} | Last reply: <span class=time>{{ thread.LastPost.Time | date }}</span>
         </span>
     </div>
 </div>
