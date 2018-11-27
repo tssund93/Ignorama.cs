@@ -31,12 +31,12 @@ namespace Ignorama.Controllers
 
             if (!selectedTags.Any())
             {
-                selectedTags = _context.Tags.ToList();
+                selectedTags = Util.GetTags(_context);
             }
 
             var newThreadModel = new NewThreadViewModel
             {
-                Tags = _context.Tags
+                Tags = Util.GetTags(_context)
                     .Where(tag => selectedTags.Contains(tag))
                     .OrderBy(t => t.Name)
             };
@@ -88,8 +88,8 @@ namespace Ignorama.Controllers
             var user = _userManager.GetUserAsync(HttpContext.User).Result;
             var roles = Util.GetRoles(user, _userManager);
 
-            var hiddenThreads = Util.GetHiddenThreads(user, _context, Request);
-            var followedThreads = Util.GetFollowedThreads(user, _context, Request);
+            var hiddenThreads = Util.GetHiddenThreads(user, _context, Request).ToList();
+            var followedThreads = Util.GetFollowedThreads(user, _context, Request).ToList();
 
             var threads = _context.Threads
                     .OrderByDescending(thread => thread.Posts
