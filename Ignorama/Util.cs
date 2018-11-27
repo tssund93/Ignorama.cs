@@ -27,23 +27,22 @@ namespace Ignorama
                 return table.Where(t => t.IP == request.HttpContext.Connection.RemoteIpAddress.ToString());
         }
 
-        static public List<Tag> GetSelectedTags(User user, ForumContext context, HttpRequest request)
+        static public IQueryable<Tag> GetSelectedTags(User user, ForumContext context, HttpRequest request)
         {
             return GetByUserOrIP(user, context.SelectedTags, request)
-                .Select(st => st.Tag)
-                .ToList();
+                .Where(st => !st.Tag.Deleted)
+                .Select(st => st.Tag);
         }
 
-        static public List<HiddenThread> GetHiddenThreads(User user, ForumContext context, HttpRequest request)
+        static public IQueryable<HiddenThread> GetHiddenThreads(User user, ForumContext context, HttpRequest request)
         {
-            return GetByUserOrIP(user, context.HiddenThreads, request).ToList();
+            return GetByUserOrIP(user, context.HiddenThreads, request);
         }
 
-        static public List<FollowedThread> GetFollowedThreads(User user, ForumContext context, HttpRequest request)
+        static public IQueryable<FollowedThread> GetFollowedThreads(User user, ForumContext context, HttpRequest request)
         {
             return GetByUserOrIP(user, context.FollowedThreads, request)
-                .Include(ft => ft.LastSeenPost)
-                .ToList();
+                .Include(ft => ft.LastSeenPost);
         }
 
         static public IQueryable<HiddenThread> GetHiddenThreadMatches(
@@ -59,6 +58,18 @@ namespace Ignorama
             return GetByUserOrIP(user, context.FollowedThreads, request)
                 .Where(ft => ft.Thread == thread)
                 .Include(ft => ft.LastSeenPost);
+        }
+
+        static public IQueryable<SelectedTag> GetSelectedTagMatches(
+            User user, Tag tag, ForumContext context, HttpRequest request)
+        {
+            return GetByUserOrIP(user, context.SelectedTags, request)
+                .Where(st => st.Tag == tag && !st.Tag.Deleted);
+        }
+
+        static public IQueryable<Tag> GetTags(ForumContext context)
+        {
+            return context.Tags.Where(tag => !tag.Deleted);
         }
     }
 }

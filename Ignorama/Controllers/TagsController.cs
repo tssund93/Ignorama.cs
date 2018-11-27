@@ -24,7 +24,7 @@ namespace Ignorama.Controllers
         public IActionResult GetTags()
         {
             return new OkObjectResult(
-                _context.Tags
+                Util.GetTags(_context)
                     .OrderBy(tag => tag.Name));
         }
 
@@ -32,15 +32,7 @@ namespace Ignorama.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
             return new OkObjectResult(
-                user != null
-                    ? _context.SelectedTags
-                        .Where(tag => tag.User == user)
-                        .Select(tag => tag.Tag.ID)
-                        .ToList()
-                    : _context.SelectedTags
-                        .Where(tag => tag.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
-                        .Select(tag => tag.Tag.ID)
-                        .ToList());
+                Util.GetSelectedTags(user, _context, Request).Select(tag => tag.ID));
         }
 
         public class TagIDModel
@@ -57,10 +49,7 @@ namespace Ignorama.Controllers
 
             if (tag != null)
             {
-                var selectedTagRows = user != null
-                    ? _context.SelectedTags.Where(st => st.User == user && st.Tag == tag)
-                    : _context.SelectedTags.Where(
-                        st => st.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString() && st.Tag == tag);
+                var selectedTagRows = Util.GetSelectedTagMatches(user, tag, _context, Request);
 
                 if (!selectedTagRows.Any())
                 {
