@@ -37,6 +37,8 @@ var postsVue = new Vue({
         formatPost: function (post) {
             post = escapeHTML(post);
 
+            //youtube embed
+            post = post.replace(/[a-zA-Z\/\/:\.]*(youtube.com\/watch\?v=|youtu.be\/)([a-zA-Z0-9\-_]+)([a-zA-Z0-9\/\*\-\_\?\&\;\%\=\.]*)/gi, "<div class='flex-video widescreen'><iframe width=\"560\" height=\"315\" src=\"//www.youtube.com/embed/$2\" frameborder=\"0\" allowfullscreen></iframe></div>");
             //url
             post = post.replace(/(^|\s|\()((?:([a-z][\w-]+):(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))\b/ig, function (match, p1, p2, p3) {
                 return p1 + "<a target='_blank' href='" + (p3 ? p2 : "http://" + p2) + "'>" + p2 + "</a>"
@@ -62,8 +64,6 @@ var postsVue = new Vue({
             post = post.replace(/\[code\]\s*([\s\S]*?)\s*\[\/code\]/ig, "<pre><code>$1</code></pre>");
             //colored text
             post = post.replace(/\[color=(.*?)\]([\s\S]*?)\[\/color\]/ig, "<span style='color:$1'>$2</span>");
-            //youtube embed
-            post = post.replace(/[a-zA-Z\/\/:\.]*(youtube.com\/watch\?v=|youtu.be\/)([a-zA-Z0-9\-_]+)([a-zA-Z0-9\/\*\-\_\?\&\;\%\=\.]*)/gi, "<div class='flex-video widescreen'><iframe width=\"560\" height=\"315\" src=\"//www.youtube.com/embed/$2\" frameborder=\"0\" allowfullscreen></iframe></div>");
 
             post = post.replace(/\n/g, '<br>');
             return post;
