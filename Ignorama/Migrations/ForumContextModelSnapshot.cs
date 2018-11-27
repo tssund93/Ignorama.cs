@@ -142,16 +142,22 @@ namespace Ignorama.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<bool>("AlwaysVisible");
+
                     b.Property<bool>("Deleted");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<int?>("RequiredPermissionLevelID");
+                    b.Property<string>("ReadRoleId");
+
+                    b.Property<string>("WriteRoleId");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("RequiredPermissionLevelID");
+                    b.HasIndex("ReadRoleId");
+
+                    b.HasIndex("WriteRoleId");
 
                     b.ToTable("Tags");
                 });
@@ -236,6 +242,22 @@ namespace Ignorama.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("NormalizedName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityRole");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<long>", b =>
                 {
                     b.Property<long>("Id")
@@ -301,11 +323,9 @@ namespace Ignorama.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<long>", b =>
                 {
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("ProviderKey")
-                        .HasMaxLength(128);
+                    b.Property<string>("ProviderKey");
 
                     b.Property<string>("ProviderDisplayName");
 
@@ -335,11 +355,9 @@ namespace Ignorama.Migrations
                 {
                     b.Property<long>("UserId");
 
-                    b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                    b.Property<string>("LoginProvider");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(128);
+                    b.Property<string>("Name");
 
                     b.Property<string>("Value");
 
@@ -402,9 +420,13 @@ namespace Ignorama.Migrations
 
             modelBuilder.Entity("Ignorama.Models.Tag", b =>
                 {
-                    b.HasOne("Ignorama.Models.PermissionLevel", "RequiredPermissionLevel")
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "ReadRole")
                         .WithMany()
-                        .HasForeignKey("RequiredPermissionLevelID");
+                        .HasForeignKey("ReadRoleId");
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", "WriteRole")
+                        .WithMany()
+                        .HasForeignKey("WriteRoleId");
                 });
 
             modelBuilder.Entity("Ignorama.Models.Thread", b =>
