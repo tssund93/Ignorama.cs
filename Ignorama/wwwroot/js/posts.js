@@ -126,14 +126,3 @@ $('#postform').submit(function (e) {
         }
     });
 });
-
-var escape = document.createElement('textarea');
-function escapeHTML(html) {
-    escape.textContent = html;
-    return escape.innerHTML;
-}
-
-function unescapeHTML(html) {
-    escape.innerHTML = html;
-    return escape.textContent;
-}

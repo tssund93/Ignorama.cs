@@ -1,0 +1,35 @@
+﻿@model string
+
+@{
+    ViewData["Title"] = Model + "'s History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row constrained">
+    <h2>@ViewData["Title"]</h2>
+</div>
+
+<div class="row constrained">
+    <b-pagination v-if="posts.length > perPage" size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
+</div>
+
+<posts-list :posts="posts" :page="page" :per-page="perPage"></posts-list>
+
+<div class="row constrained">
+    <b-pagination v-if="posts.length > perPage" size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
+</div>
+
+@section Scripts {
+    <environment include="Development">
+        <script src="~/js/date-mixin.js" asp-append-version="true"></script>
+        <script src="~/js/user-component.js" asp-append-version="true"></script>
+        <script src="~/js/post-component.js" asp-append-version="true"></script>
+        <script src="~/js/posts-list-component.js" asp-append-version="true"></script>
+        <script src="~/js/user-history.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/user-component.js" asp-append-version="true"></script>
+        <script src="~/js/post-component.js" asp-append-version="true"></script>
+        <script src="~/js/posts-list-component.js" asp-append-version="true"></script>
+        <script src="~/js/user-history.min.js" asp-append-version="true"></script>
+    </environment>
+}
