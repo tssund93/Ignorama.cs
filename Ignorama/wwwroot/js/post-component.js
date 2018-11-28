@@ -54,8 +54,7 @@
     template: `
 <div :id="'post' + post.ID" class="col-xs-12 thread" :class="{ seen: post.Seen, highlighted: post.Highlighted }" v-cloak>
     <div class="post-info">
-        <b v-if="post.Anonymous || !post.User">Anonymous</b>
-        <b v-else>{{ post.User.UserName }}</b>
+        <user :user="post.User" :ip="post.IP" :anonymous="post.Anonymous" :detailed-view="post.Roles.includes('Moderator')"></user>
         <span v-if="post.RevealOP">| OP</span>
         <span v-else-if="post.Bump">| Bump</span>
         <span class="time">{{ post.Time | date }}</span>
