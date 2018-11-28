@@ -74,6 +74,9 @@ var postsVue = new Vue({
             var lspID = Math.max(...val.map(p => p.ID));
             this.follow(threadID, lspID);
         },
+        page: function () {
+            window.scrollTo(0, 0);
+        }
     },
     methods: {
         getPosts: function (threadID, callback) {
