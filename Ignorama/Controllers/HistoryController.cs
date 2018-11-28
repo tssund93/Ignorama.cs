@@ -46,7 +46,7 @@ namespace Ignorama.Controllers
             return new OkObjectResult(
                 _context.Posts
                     .Where(post => post.User.Id == userID)
-                    .OrderBy(post => post.Time)
+                    .OrderByDescending(post => post.Time)
                     .Select(post => new
                     {
                         post.ID,
@@ -74,7 +74,7 @@ namespace Ignorama.Controllers
             return new OkObjectResult(
                 _context.Posts
                     .Where(post => post.IP == userIP)
-                    .OrderBy(post => post.Time)
+                    .OrderByDescending(post => post.Time)
                     .Select(post => new
                     {
                         post.ID,
