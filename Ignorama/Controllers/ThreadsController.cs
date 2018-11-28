@@ -292,12 +292,14 @@ namespace Ignorama.Controllers
                         Highlighted = false,
                         post.Anonymous,
                         User = post.Anonymous && !roles.Contains("Moderator") ? null : post.User,
+                        IP = roles.Contains("Moderator") ? post.IP : null,
                         post.RevealOP,
                         post.Bump,
                         post.Time,
                         post.Text,
                         Locked = post.Thread.Locked && !roles.Contains("Moderator"),
                         Seen = post.ID <= lastSeenPostID,
+                        Roles = roles
                     }));
         }
 
