@@ -279,6 +279,9 @@ namespace Ignorama.Controllers
             var user = _userManager.GetUserAsync(HttpContext.User).Result;
             var roles = Util.GetRoles(user, _userManager);
 
+            var lastSeenPostID =
+                Util.GetLastSeenPost(user, _context.Threads.Find(threadID), _context, Request)?.ID ?? 0;
+
             return new OkObjectResult(
                 _context.Posts
                     .Where(post => post.Thread.ID == threadID)
@@ -293,6 +296,8 @@ namespace Ignorama.Controllers
                         post.Bump,
                         post.Time,
                         post.Text,
+                        Locked = post.Thread.Locked && !roles.Contains("Moderator"),
+                        Seen = post.ID <= lastSeenPostID,
                     }));
         }
 

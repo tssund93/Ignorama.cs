@@ -9,6 +9,8 @@
     "outputFileName": "wwwroot/js/posts.min.js",
     "inputFiles": [
       "wwwroot/js/date-mixin.js",
+      "wwwroot/js/post-component.js",
+      "wwwroot/js/posts-list-component.js",
       "wwwroot/js/posts.js",
       "wwwroot/js/uploadfile.js"
     ],

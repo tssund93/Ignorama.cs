@@ -21,35 +21,7 @@
     <b-pagination v-if="posts.length > perPage" size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
 </div>
 
-<div class="row constrained" v-if="!posts.length">
-    <div class="col-xs-12 thread loading">
-        <img src="~/loading.png" />
-    </div>
-</div>
-<div class="row constrained" v-else-if="!visiblePosts.length" v-cloak>
-    <div class="col-xs-12 thread">
-        Nothing to see here!
-    </div>
-</div>
-<div v-else class="row constrained" v-for="post in visiblePosts">
-    <div :id="'post' + post.ID" class="col-xs-12 thread" :class="{ seen: post.ID <= @Model.LastSeenPostID, highlighted: post.Highlighted }" v-cloak>
-        <div class="post-info">
-            <b v-if="post.Anonymous || !post.User">Anonymous</b>
-            <b v-else>{{ post.User.UserName }}</b>
-            <span v-if="post.RevealOP">| OP</span>
-            <span v-else-if="post.Bump">| Bump</span>
-            <span class="time">{{ post.Time | date }}</span>
-            <br />
-            <span v-if="'@Model.Locked' !== 'True' || '@Model.Roles.Contains("Moderator")' === 'True'">
-                <a href="#" v-on:click.prevent="reply(post, true)">reply</a>
-                |
-                <a href="#" v-on:click.prevent="reply(post)">reference poster</a>
-            </span>
-        </div>
-        <br>
-        <div v-html="$options.filters.formatPost(post.Text)"></div>
-    </div>
-</div>
+<posts-list :posts="posts" :page="page" :per-page="perPage"></posts-list>
 
 <div class="row constrained">
     <b-pagination v-if="posts.length > perPage" size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
@@ -102,6 +74,8 @@
     <script>var lastSeenPostID = '@Model.LastSeenPostID'</script>
     <environment include="Development">
         <script src="~/js/date-mixin.js" asp-append-version="true"></script>
+        <script src="~/js/post-component.js" asp-append-version="true"></script>
+        <script src="~/js/posts-list-component.js" asp-append-version="true"></script>
         <script src="~/js/posts.js" asp-append-version="true"></script>
         <script src="~/js/uploadfile.js" asp-append-version="true"></script>
     </environment>
