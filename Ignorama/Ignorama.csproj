@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <UserSecretsId>e8ff2f26-3403-419a-aafe-4ee89822d0b1</UserSecretsId>
+    <TypeScriptToolsVersion>3.1</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +27,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\date-mixin.js" />
+    <None Include="wwwroot\js\ip-history.js" />
+    <None Include="wwwroot\js\ip-history.min.js" />
+    <None Include="wwwroot\js\post-component.js" />
     <None Include="wwwroot\js\posts-list-component.js" />
+    <None Include="wwwroot\js\posts.js" />
+    <None Include="wwwroot\js\posts.min.js" />
+    <None Include="wwwroot\js\threads.js" />
+    <None Include="wwwroot\js\threads.min.js" />
+    <None Include="wwwroot\js\uploadfile.js" />
+    <None Include="wwwroot\js\uploadfile.min.js" />
+    <None Include="wwwroot\js\user-component.js" />
+    <None Include="wwwroot\js\user-history.js" />
+    <None Include="wwwroot\js\user-history.min.js" />
   </ItemGroup>
 
   <ItemGroup>
