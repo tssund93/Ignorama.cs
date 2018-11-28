@@ -116,7 +116,9 @@ namespace Ignorama.Controllers
                         FirstPost = thread.Posts.First(),
                         LastPost = thread.Posts.Last(),
                         PostCount = thread.Posts.Count(),
-                        OP = thread.Posts.First().Anonymous ? null : thread.Posts.First().User,
+                        OP = thread.Posts.First().Anonymous && !roles.Contains("Moderator")
+                            ? null
+                            : thread.Posts.First().User,
                         Hidden = hiddenThreads.Select(ht => ht.Thread).Contains(thread),
                         Following = followedThreads.Select(ft => ft.Thread).Contains(thread),
                         LastSeenPostID = followedThreads.Where(ft => ft.Thread.ID == thread.ID) != null
