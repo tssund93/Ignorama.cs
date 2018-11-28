@@ -8,9 +8,7 @@
   {
     "outputFileName": "wwwroot/js/posts.min.js",
     "inputFiles": [
-      "wwwroot/js/date-mixin.js",
-      "wwwroot/js/posts.js",
-      "wwwroot/js/uploadfile.js"
+      "wwwroot/js/posts.js"
     ],
     "minify": {
       "enabled": true,
@@ -21,7 +19,6 @@
   {
     "outputFileName": "wwwroot/js/threads.min.js",
     "inputFiles": [
-      "wwwroot/js/date-mixin.js",
       "wwwroot/js/threads.js"
     ],
     "minify": {
@@ -44,7 +41,6 @@
   {
     "outputFileName": "wwwroot/js/user-history.min.js",
     "inputFiles": [
-      "wwwroot/js/date-mixin.js",
       "wwwroot/js/user-history.js"
     ],
     "minify": {
@@ -56,8 +52,18 @@
   {
     "outputFileName": "wwwroot/js/ip-history.min.js",
     "inputFiles": [
-      "wwwroot/js/date-mixin.js",
       "wwwroot/js/ip-history.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/date-mixin.min.js",
+    "inputFiles": [
+      "wwwroot/js/date-mixin.js"
     ],
     "minify": {
       "enabled": true,
