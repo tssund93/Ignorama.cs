@@ -40,5 +40,29 @@
       "renameLocals": true
     },
     "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/user-history.min.js",
+    "inputFiles": [
+      "wwwroot/js/date-mixin.js",
+      "wwwroot/js/user-history.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/ip-history.min.js",
+    "inputFiles": [
+      "wwwroot/js/date-mixin.js",
+      "wwwroot/js/ip-history.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
   }
 ]

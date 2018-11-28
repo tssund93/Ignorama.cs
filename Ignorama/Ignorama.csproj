@@ -29,4 +29,10 @@
     <None Include="wwwroot\js\posts-list-component.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\History\ByIP.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
 </Project>
