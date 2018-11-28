@@ -45,6 +45,11 @@ namespace Ignorama
                 .Include(ft => ft.LastSeenPost);
         }
 
+        static public Post GetLastSeenPost(User user, Thread thread, ForumContext context, HttpRequest request)
+        {
+            return GetFollowedThreadMatches(user, thread, context, request)?.FirstOrDefault()?.LastSeenPost;
+        }
+
         static public IQueryable<HiddenThread> GetHiddenThreadMatches(
             User user, Thread thread, ForumContext context, HttpRequest request)
         {
