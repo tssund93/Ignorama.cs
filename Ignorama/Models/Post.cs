@@ -34,5 +34,7 @@ namespace Ignorama.Models
 
         [Required]
         public bool RevealOP { get; set; }
+
+        public ICollection<Ban> Bans { get; set; }
     }
 }
