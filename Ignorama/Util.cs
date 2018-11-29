@@ -27,6 +27,16 @@ namespace Ignorama
                 return table.Where(t => t.IP == request.HttpContext.Connection.RemoteIpAddress.ToString());
         }
 
+        static public IQueryable<T> GetByUserAndIP<T>(
+            User user, DbSet<T> table, HttpRequest request) where T : class, IUserIP
+        {
+            if (user != null)
+                return table.Where(t => t.User == user ||
+                            t.IP == request.HttpContext.Connection.RemoteIpAddress.ToString());
+            else
+                return table.Where(t => t.IP == request.HttpContext.Connection.RemoteIpAddress.ToString());
+        }
+
         static public IQueryable<Tag> GetSelectedTags(User user, ForumContext context, HttpRequest request)
         {
             return GetByUserOrIP(user, context.SelectedTags, request)
@@ -75,6 +85,19 @@ namespace Ignorama
         static public IQueryable<Tag> GetTags(ForumContext context)
         {
             return context.Tags.Where(tag => !tag.Deleted);
+        }
+
+        static public bool IsBanned(User user, ForumContext context, HttpRequest request)
+        {
+            return GetCurrentBans(user, context, request).Count() > 0;
+        }
+
+        static public IQueryable<Ban> GetCurrentBans(User user, ForumContext context, HttpRequest request)
+        {
+            var usersPosts = Util.GetByUserAndIP(user, context.Posts, request);
+            return context.Bans
+                .Where(b => usersPosts.Contains(b.Post) &&
+                            b.EndTime > DateTime.Now);
         }
     }
 }

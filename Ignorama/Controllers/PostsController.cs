@@ -25,9 +25,15 @@ namespace Ignorama.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> New(int threadID, IFormCollection collection)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (Util.IsBanned(user, _context, Request))
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
             try
             {
-                var user = await _userManager.GetUserAsync(HttpContext.User);
                 var roles = Util.GetRoles(user, _userManager);
                 var thread = _context.Threads.Find(threadID);
                 if (!thread.Locked || roles.Contains("Moderator"))

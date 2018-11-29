@@ -65,8 +65,10 @@
             <a href="#" v-on:click.prevent="reply(post)">reference poster</a>
         </span>
     </div>
-    <br>
+    <br />
     <div v-html="$options.filters.formatPost(post.Text)"></div>
+    <br v-if="post.Bans.length" />
+    <div v-for="ban in post.Bans"><b>(User was banned for this post)</b></div>
 </div>
 `
 })
