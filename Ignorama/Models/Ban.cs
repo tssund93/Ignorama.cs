@@ -10,10 +10,6 @@ namespace Ignorama.Models
     {
         public long ID { get; set; }
 
-        public User User { get; set; }
-
-        public string IP { get; set; }
-
         [Required]
         public string Reason { get; set; }
 
