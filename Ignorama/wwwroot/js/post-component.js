@@ -57,6 +57,17 @@
         <user :user="post.User" :ip="post.IP" :anonymous="post.Anonymous" :detailed-view="post.Roles.includes('Moderator')"></user>
         <span v-if="post.RevealOP">| OP</span>
         <span v-else-if="post.Bump">| Bump</span>
+        <span class="btn-group thread-dropdown">
+            <a class="btn btn-default btn-xs dropdown-toggle" data-toggle=dropdown>
+                <span class=caret>
+                </span>
+            </a>
+            <ul class="dropdown-menu pull-right">
+                <li v-if="post.Roles.includes('Moderator')">
+                    <a :href="'/Bans/New/' + post.ID">Ban User</a>
+                </li>
+            </ul>
+        </span>
         <span class="time">{{ post.Time | date }}</span>
         <br />
         <span v-if="!post.Locked">
