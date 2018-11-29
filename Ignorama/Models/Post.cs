@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ignorama.Models
 {
-    public class Post
+    public class Post : IUserIP
     {
         public int ID { get; set; }
 

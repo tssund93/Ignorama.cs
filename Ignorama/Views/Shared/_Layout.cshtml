@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Ignorama
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@inject ForumContext ForumContext
 
 <!DOCTYPE html>
 <html>
@@ -47,11 +49,11 @@
                 @{
                     var slogans = new[]
                     {
-                                                "I should've made it blue",
-                                                "Ignorance for the masses",
-                                                "Made with MS Paint",
-                                                "Your hobbies are stupid",
-                                            };
+                                                                                                                "I should've made it blue",
+                                                                                                                "Ignorance for the masses",
+                                                                                                                "Made with MS Paint",
+                                                                                                                "Your hobbies are stupid",
+                                                                                                            };
                     Random rnd = new Random();
                     int r = rnd.Next(slogans.Length);
                     <b class="slogan hidden-xs">@slogans[r]</b>
@@ -89,6 +91,11 @@
             </div>
         </div>
     </nav>
+
+    @if (Util.IsBanned(await UserManager.GetUserAsync(User), ForumContext, Context.Request))
+    {
+        <h1 class="centered">You're Banned!</h1>
+    }
 
     <div class="container body-content">
         <main>

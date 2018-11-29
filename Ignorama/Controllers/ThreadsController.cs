@@ -48,6 +48,13 @@ namespace Ignorama.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> New(NewThreadViewModel model)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (Util.IsBanned(user, _context, Request))
+            {
+                return RedirectToAction("Error", "Home");
+            }
+
             if (ModelState.IsValid)
             {
                 var thread = new Thread
@@ -61,8 +68,6 @@ namespace Ignorama.Controllers
                         .Where(tag => tag.ID == model.TagID)
                         .FirstOrDefault()
                 };
-
-                var user = await _userManager.GetUserAsync(HttpContext.User);
 
                 if (!Util.GetRoles(user, _userManager).Contains(thread.Tag.WriteRole.Name))
                 {
@@ -301,7 +306,8 @@ namespace Ignorama.Controllers
                         post.Text,
                         Locked = post.Thread.Locked && !roles.Contains("Moderator"),
                         Seen = post.ID <= lastSeenPostID,
-                        Roles = roles
+                        Roles = roles,
+                        post.Bans,
                     }));
         }
 
