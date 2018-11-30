@@ -57,5 +57,31 @@ namespace Ignorama.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet("Bans/View/{postID?}")]
+        public IActionResult View(int? postID)
+        {
+            IQueryable<Ban> bans;
+            if (postID != null)
+            {
+                var post = _context.Posts.Find(postID);
+                bans = _context.Bans
+                    .Where(b => (b.Post.User != null && post.User != null && b.Post.User.Id == post.User.Id)
+                                || b.Post.IP == post.IP)
+                    .Include(b => b.Post)
+                    .ThenInclude(p => p.User)
+                    .Include(b => b.Moderator)
+                    .OrderByDescending(b => b.EndTime);
+            }
+            else
+            {
+                bans = _context.Bans
+                    .Include(b => b.Post)
+                    .ThenInclude(p => p.User)
+                    .Include(b => b.Moderator)
+                    .OrderByDescending(b => b.EndTime);
+            }
+            return View(bans);
+        }
     }
 }
