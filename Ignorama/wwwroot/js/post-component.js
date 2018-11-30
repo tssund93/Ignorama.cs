@@ -50,41 +50,15 @@
             post = post.replace(/\n/g, '<br>');
             return post;
         },
-        readableTimeSpan: function (date) {
-            var diff = new Date(date + "Z") - new Date();
-            var timeLeft = "";
-            var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            var hours = Math.floor(diff / (1000 * 60 * 60));
-            console.log(days);
-            if (days > 365) {
-                var years = Math.floor(days / 365);
-                timeLeft = years + " year" + (years == 1 ? "" : "s");
-            }
-            else if (days > 30) {
-                var months = Math.floor(days / 30);
-                timeLeft = months + " month" + (months == 1 ? "" : "s");
-            }
-            else if (days > 7) {
-                var weeks = Math.floor(days / 7);
-                timeLeft = weeks + " week" + (weeks == 1 ? "" : "s");
-            }
-            else if (days > 0) {
-                timeLeft = days + " day" + (days == 1 ? "" : "s");
-            }
-            else if (hours > 0) {
-                timeLeft = hours + " hour" + (hours == 1 ? "" : "s");
-            }
-            if (timeLeft === "") timeLeft = "a few minutes";
-
-            return timeLeft;
-        }
-    },
     template: `
 <div :id="'post' + post.ID" class="col-xs-12 thread" :class="{ seen: post.Seen, highlighted: post.Highlighted }" v-cloak>
     <div class="post-info">
         <user :user="post.User" :ip="post.IP" :anonymous="post.Anonymous" :detailed-view="post.Roles.includes('Moderator')"></user>
         <span v-if="post.RevealOP">| OP</span>
         <span v-else-if="post.Bump">| Bump</span>
+        <span v-if="post.UserIPBans.length">
+           | <a :href="'/Bans/View/' + post.ID">Banned</a>
+        </span>
         <span v-if="post.Roles.includes('Moderator')" class="btn-group thread-dropdown">
             <a class="btn btn-default btn-xs dropdown-toggle" data-toggle=dropdown>
                 <span class=caret>
@@ -97,10 +71,6 @@
             </ul>
         </span>
         <span class="time">{{ post.Time | date }}</span>
-        <span v-if="post.UserIPBans.length">
-            <br />
-            <a :href="'/Bans/View/' + post.ID">(banned for {{ post.UserIPBans[0].EndTime | readableTimeSpan }})</a>
-        </span>
         <br />
         <span v-if="!post.Locked && !post.Banned">
             <a href="#" v-on:click.prevent="reply(post, true)">reply</a>
