@@ -309,6 +309,7 @@ namespace Ignorama.Controllers
                         Roles = roles,
                         AllBans = post.Bans,
                         UserIPBans = Util.GetCurrentBans(post.User, post.IP, _context),
+                        Banned = Util.IsBanned(user, Util.GetCurrentIPString(Request), _context),
                     }));
         }
 

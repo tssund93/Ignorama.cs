@@ -102,7 +102,7 @@
             <a :href="'/Bans/View/' + post.ID">(Banned for {{ post.UserIPBans[0].EndTime | readableTimeSpan }})</a>
         </span>
         <br />
-        <span v-if="!post.Locked">
+        <span v-if="!post.Locked && !post.Banned">
             <a href="#" v-on:click.prevent="reply(post, true)">reply</a>
             |
             <a href="#" v-on:click.prevent="reply(post)">reference poster</a>
