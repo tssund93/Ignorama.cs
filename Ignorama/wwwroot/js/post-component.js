@@ -58,21 +58,21 @@
             console.log(days);
             if (days > 365) {
                 var years = Math.floor(days / 365);
-                timeLeft = years + " year" + (years == 1 ? String.Empty : "s");
+                timeLeft = years + " year" + (years == 1 ? "" : "s");
             }
             else if (days > 30) {
                 var months = Math.floor(days / 30);
-                timeLeft = months + " month" + (months == 1 ? String.Empty : "s");
+                timeLeft = months + " month" + (months == 1 ? "" : "s");
             }
             else if (days > 7) {
                 var weeks = Math.floor(days / 7);
-                timeLeft = weeks + " week" + (weeks == 1 ? String.Empty : "s");
+                timeLeft = weeks + " week" + (weeks == 1 ? "" : "s");
             }
             else if (days > 0) {
-                timeLeft = days + " day" + (days == 1 ? String.Empty : "s");
+                timeLeft = days + " day" + (days == 1 ? "" : "s");
             }
             else if (hours > 0) {
-                timeLeft = hours + " hour" + (hours == 1 ? String.Empty : "s");
+                timeLeft = hours + " hour" + (hours == 1 ? "" : "s");
             }
             if (timeLeft === "") timeLeft = "a few minutes";
 
