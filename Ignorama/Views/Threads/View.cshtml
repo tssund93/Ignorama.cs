@@ -40,7 +40,7 @@
     }
     else
     {
-        <div class="centered"><a href='javascript:slide();'>Reply <span id="replyCaret" class="caret caret-up"></span></a></div>
+        <div class="centered"><a href='#' v-on:click.prevent='slide'>Reply <span id="replyCaret" class="caret caret-up"></span></a></div>
     }
     <form id='postform' asp-controller="Posts" asp-action="New" method='post'>
         @Html.AntiForgeryToken()
