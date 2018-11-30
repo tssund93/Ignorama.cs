@@ -1,6 +1,8 @@
 ﻿@model Ignorama.Models.ThreadViewModel
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject ForumContext ForumContext
 
 @{
     ViewData["Title"] = Model.Title;
@@ -31,6 +33,10 @@
     @if (Model.Locked && !Model.Roles.Contains("Moderator"))
     {
         <div class="centered">Thread Locked</div>
+    }
+    else if (Util.IsBanned(await UserManager.GetUserAsync(User), ForumContext, Context.Request))
+    {
+        <div class="centered">Banned</div>
     }
     else
     {
