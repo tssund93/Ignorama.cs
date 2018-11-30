@@ -50,6 +50,7 @@
             post = post.replace(/\n/g, '<br>');
             return post;
         },
+    },
     template: `
 <div :id="'post' + post.ID" class="col-xs-12 thread" :class="{ seen: post.Seen, highlighted: post.Highlighted }" v-cloak>
     <div class="post-info">
