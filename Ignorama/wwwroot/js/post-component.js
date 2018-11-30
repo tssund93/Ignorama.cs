@@ -65,7 +65,7 @@
                 timeLeft = months + " month" + (months == 1 ? String.Empty : "s");
             }
             else if (days > 7) {
-                var weeks = span.Duration().Days / 7;
+                var weeks = Math.floor(days / 7);
                 timeLeft = weeks + " week" + (weeks == 1 ? String.Empty : "s");
             }
             else if (days > 0) {
@@ -99,7 +99,7 @@
         <span>{{ post.Time | date }}</span>
         <span v-if="post.UserIPBans.length">
             <br />
-            <b><a :href="'/Bans/View/' + post.ID">Banned</a></b> for {{ post.UserIPBans[0].EndTime | readableTimeSpan }}
+            <a :href="'/Bans/View/' + post.ID">(Banned for {{ post.UserIPBans[0].EndTime | readableTimeSpan }})</a>
         </span>
         <br />
         <span v-if="!post.Locked">
