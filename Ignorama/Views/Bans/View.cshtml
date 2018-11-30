@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Ignorama.Models.Ban>
+
+@{
+    ViewData["Title"] = "Banlog";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Posted As
+            </th>
+            <th>
+                Banned By
+            </th>
+            <th>
+                Reason
+            </th>
+            <th>
+                Until
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.Post.User != null)
+                    {
+                        @item.Post.User.UserName
+                    }
+                    else
+                    {
+                        <text>Anonymous</text>
+                    }
+                </td>
+                <td>
+                    @item.Moderator.UserName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reason)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EndTime)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

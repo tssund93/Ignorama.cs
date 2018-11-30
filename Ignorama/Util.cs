@@ -96,6 +96,7 @@ namespace Ignorama
         {
             var usersPosts = Util.GetByUserAndIP(user, context.Posts, request);
             return context.Bans
+                .Include(b => b.Post)
                 .Where(b => usersPosts.Contains(b.Post) &&
                             b.EndTime > DateTime.Now);
         }
