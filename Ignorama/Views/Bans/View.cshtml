@@ -1,7 +1,17 @@
-﻿@model IEnumerable<Ignorama.Models.Ban>
+﻿@model Ignorama.Models.BansViewModel
+@using Ignorama
 
 @{
-    ViewData["Title"] = "Banlog";
+    var username = "";
+    if (Model.Post.User != null)
+    {
+        username = Model.Post.User.UserName;
+    }
+    else
+    {
+        username = "Anonymous";
+    }
+    ViewData["Title"] = username + "'s Banlog";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -26,7 +36,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Bans)
         {
             <tr>
                 <td>
@@ -46,9 +56,35 @@
                     @Html.DisplayFor(modelItem => item.Reason)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.EndTime)
+                    <span class="time">@Html.DisplayFor(modelItem => item.EndTime)</span>
+                    @{
+                        var timeLeft = "";
+                        if (item.EndTime > DateTime.UtcNow)
+                        {
+                            timeLeft = "(" + (item.EndTime - DateTime.UtcNow).ToReadableString() + " from now)";
+                        }
+                    }
+                    @if (timeLeft != "")
+                    {
+                        <br />
+                        @timeLeft
+                    }
+                </td>
+                <td>
+                    @item.Post.Text
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $(".time").each(function () {
+                var date = new Date($(this).html() + " UTC");
+                $(this).text(date.toLocaleString());
+            });
+        });
+    </script>
+}

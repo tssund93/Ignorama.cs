@@ -34,7 +34,7 @@
     {
         <div class="centered">Thread Locked</div>
     }
-    else if (Util.IsBanned(await UserManager.GetUserAsync(User), ForumContext, Context.Request))
+    else if (Util.IsBanned(await UserManager.GetUserAsync(User), Util.GetCurrentIPString(Context.Request), ForumContext))
     {
         <div class="centered">Banned</div>
     }

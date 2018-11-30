@@ -49,11 +49,11 @@
                 @{
                     var slogans = new[]
                     {
-                                                                                                                                "I should've made it blue",
-                                                                                                                                "Ignorance for the masses",
-                                                                                                                                "Made with MS Paint",
-                                                                                                                                "Your hobbies are stupid",
-                                                                                                                            };
+                                                                                                                                        "I should've made it blue",
+                                                                                                                                        "Ignorance for the masses",
+                                                                                                                                        "Made with MS Paint",
+                                                                                                                                        "Your hobbies are stupid",
+                                                                                                                                    };
                     Random rnd = new Random();
                     int r = rnd.Next(slogans.Length);
                     <b class="slogan hidden-xs">@slogans[r]</b>
@@ -92,9 +92,9 @@
         </div>
     </nav>
 
-    @if (Util.IsBanned(await UserManager.GetUserAsync(User), ForumContext, Context.Request))
+    @if (Util.IsBanned(await UserManager.GetUserAsync(User), Util.GetCurrentIPString(Context.Request), ForumContext))
     {
-        var newestBan = Util.GetCurrentBans(await UserManager.GetUserAsync(User), ForumContext, Context.Request)
+        var newestBan = Util.GetCurrentBans(await UserManager.GetUserAsync(User), Util.GetCurrentIPString(Context.Request), ForumContext)
             .OrderByDescending(b => b.EndTime)
             .FirstOrDefault();
 
