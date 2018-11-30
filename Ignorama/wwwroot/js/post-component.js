@@ -49,6 +49,34 @@
 
             post = post.replace(/\n/g, '<br>');
             return post;
+        },
+        readableTimeSpan: function (date) {
+            var diff = new Date(date + "Z") - new Date();
+            var timeLeft = "";
+            var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            var hours = Math.floor(diff / (1000 * 60 * 60));
+            console.log(days);
+            if (days > 365) {
+                var years = Math.floor(days / 365);
+                timeLeft = years + " year" + (years == 1 ? String.Empty : "s");
+            }
+            else if (days > 30) {
+                var months = Math.floor(days / 30);
+                timeLeft = months + " month" + (months == 1 ? String.Empty : "s");
+            }
+            else if (days > 7) {
+                var weeks = span.Duration().Days / 7;
+                timeLeft = weeks + " week" + (weeks == 1 ? String.Empty : "s");
+            }
+            else if (days > 0) {
+                timeLeft = days + " day" + (days == 1 ? String.Empty : "s");
+            }
+            else if (hours > 0) {
+                timeLeft = hours + " hour" + (hours == 1 ? String.Empty : "s");
+            }
+            if (timeLeft === "") timeLeft = "a few minutes";
+
+            return timeLeft;
         }
     },
     template: `
@@ -68,7 +96,11 @@
                 </li>
             </ul>
         </span>
-        <span class="time">{{ post.Time | date }}</span>
+        <span>{{ post.Time | date }}</span>
+        <span v-if="post.UserIPBans.length">
+            <br />
+            <b><a :href="'/Bans/View/' + post.ID">Banned</a></b> for {{ post.UserIPBans[0].EndTime | readableTimeSpan }}
+        </span>
         <br />
         <span v-if="!post.Locked">
             <a href="#" v-on:click.prevent="reply(post, true)">reply</a>
@@ -78,8 +110,12 @@
     </div>
     <br />
     <div v-html="$options.filters.formatPost(post.Text)"></div>
-    <br v-if="post.Bans.length" />
-    <div v-for="ban in post.Bans"><b>(User was banned for this post)</b></div>
+    <br v-if="post.AllBans.length" />
+    <div v-for="ban in post.AllBans">
+        <a :href="'/Bans/View/' + post.ID">
+            <b>(User was banned for this post)</b>
+        </a>
+    </div>
 </div>
 `
 })

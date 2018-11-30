@@ -60,7 +60,9 @@ namespace Ignorama.Controllers
                         post.Text,
                         Locked = true,
                         Seen = false,
-                        Roles = roles
+                        Roles = roles,
+                        AllBans = post.Bans,
+                        UserIPBans = Util.GetCurrentBans(post.User, post.IP, _context),
                     }));
         }
 
@@ -88,7 +90,9 @@ namespace Ignorama.Controllers
                         post.Text,
                         Locked = true,
                         Seen = false,
-                        Roles = roles
+                        Roles = roles,
+                        AllBans = post.Bans,
+                        UserIPBans = Util.GetCurrentBans(post.User, post.IP, _context),
                     }));
         }
     }

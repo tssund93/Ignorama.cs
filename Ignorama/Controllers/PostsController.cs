@@ -27,7 +27,7 @@ namespace Ignorama.Controllers
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
-            if (Util.IsBanned(user, _context, Request))
+            if (Util.IsBanned(user, Util.GetCurrentIPString(Request), _context))
             {
                 return RedirectToAction("Error", "Home");
             }
