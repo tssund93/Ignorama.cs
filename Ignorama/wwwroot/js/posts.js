@@ -3,6 +3,9 @@
     return url.substr(url.lastIndexOf('/') + 1).replace(/#.*$/, '');
 }();
 
+var defaultRefresh = 5000;
+var refreshInterval = defaultRefresh;
+
 var postsVue = new Vue({
     el: 'main',
     data: {
@@ -33,13 +36,28 @@ var postsVue = new Vue({
             var lspID = Math.max(...pagePosts.map(p => p.ID));
             this.follow(threadID, lspID);
         },
+        page: function (val) {
+            var startPost = (val - 1) * this.perPage;
+            var pagePosts = this.posts.slice(startPost, startPost + this.perPage);
+            var lspID = Math.max(...pagePosts.map(p => p.ID));
+            this.follow(threadID, lspID);
+        },
     },
     methods: {
         getPosts: function (threadID, callback) {
             axios.get('/Threads/GetPosts/' + threadID)
                 .then(response => {
-                    this.posts = response.data;
-                    if (callback) callback();
+                    var newPosts = response.data;
+                    newPosts.forEach(function (post) {
+                        if (post.ID <= lastSeenPostID)
+                            post.Seen = true;
+                    });
+                    var areNewPosts = JSON.stringify(this.posts) !== JSON.stringify(newPosts);
+                    if (areNewPosts) {
+                        this.posts = response.data;
+                        refreshInterval = defaultRefresh;
+                    }
+                    if (callback) callback(areNewPosts);
                 });
         },
         follow: function (threadID, lastSeenID) {
@@ -71,29 +89,26 @@ var postsVue = new Vue({
                         post.Highlighted = post.ID == postID ? true : false);
                     this.$scrollTo('#post' + postID);
                 });
-        }
+        },
+        slideOut: function () {
+            $("#quickreply").stop(true).animate({ bottom: - 1 }, 200).attr("class", "slid-out");
+            $("#replyCaret").removeClass('caret-up');
+            return false;
+        },
+        slideIn: function () {
+            $("#quickreply").animate({ bottom: -249 }, 200).delay(200).queue(function (next) { $(this).attr("class", "slid-in"); next(); });
+            $("#replyCaret").addClass('caret-up');
+            return false;
+        },
+        slide: function () {
+            if ($("#quickreply").hasClass("slid-out"))
+                this.slideIn();
+            else
+                this.slideOut();
+            return false;
+        },
     }
 });
-
-function slideOut() {
-    $("#quickreply").stop(true).animate({ bottom: -1 }, 200).attr("class", "slid-out");
-    $("#replyCaret").removeClass('caret-up');
-    return false;
-}
-
-function slideIn() {
-    $("#quickreply").animate({ bottom: -249 }, 200).delay(200).queue(function (next) { $(this).attr("class", "slid-in"); next(); });
-    $("#replyCaret").addClass('caret-up');
-    return false;
-}
-
-function slide() {
-    if ($("#quickreply").hasClass("slid-out"))
-        slideIn();
-    else
-        slideOut();
-    return false;
-}
 
 $('#postform').submit(function (e) {
     e.preventDefault();
@@ -109,15 +124,9 @@ $('#postform').submit(function (e) {
                 $('#postfield').val('');
                 $('input[name=Bump]').prop('checked', false);
                 $('input[name=RevealOP]').prop('checked', false);
-                slide();
+                postsVue.slide();
 
-                postsVue.getPosts(threadID,
-                    () => {
-                        postsVue.page = Math.ceil((postsVue.posts.length + 1) / postsVue.perPage);
-                        setTimeout(function () {
-                            window.scrollTo(0, document.body.scrollHeight);
-                        }, 100);
-                    });
+                postsVue.getPosts(threadID);
             }
         },
         error: function (_, e) {
@@ -126,3 +135,20 @@ $('#postform').submit(function (e) {
         }
     });
 });
+
+function getPostsAndIncreaseInterval() {
+    postsVue.getPosts(threadID, function (areNewPosts) {
+        if (areNewPosts) {
+            refreshInterval = defaultRefresh;
+        }
+        else {
+            refreshInterval *= 2;
+        }
+        console.log("Refreshing thread in " + (refreshInterval / 1000) + " seconds");
+        setTimeout(getPostsAndIncreaseInterval, refreshInterval);
+    });
+}
+
+$(function () {
+    setTimeout(getPostsAndIncreaseInterval, refreshInterval);
+})

@@ -307,7 +307,7 @@ namespace Ignorama.Controllers
                         post.Time,
                         post.Text,
                         Locked = post.Thread.Locked && !roles.Contains("Moderator"),
-                        Seen = post.ID <= lastSeenPostID,
+                        Seen = false,
                         Roles = roles,
                         AllBans = post.Bans,
                         UserBans = Util.GetCurrentBans(post.User, null, _context),
