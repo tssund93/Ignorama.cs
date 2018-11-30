@@ -54,7 +54,7 @@
     template: `
 <div :id="'post' + post.ID" class="col-xs-12 thread" :class="{ seen: post.Seen, highlighted: post.Highlighted }" v-cloak>
     <div class="post-info">
-        <user :user="post.User" :ip="post.IP" :anonymous="post.Anonymous" :detailed-view="post.Roles.includes('Moderator')" :banned="post.UserIPBans.length != 0" :banned-post-id="post.ID"></user>
+        <user :user="post.User" :ip="post.IP" :anonymous="post.Anonymous" :detailed-view="post.Roles.includes('Moderator')" :banned="post.UserBans.length != 0" :ip-banned="post.IPBans.length != 0" :banned-post-id="post.ID"></user>
         <span v-if="post.RevealOP">| OP</span>
         <span v-else-if="post.Bump">| Bump</span>
         <span v-if="post.Roles.includes('Moderator')" class="btn-group thread-dropdown">

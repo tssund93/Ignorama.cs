@@ -62,7 +62,8 @@ namespace Ignorama.Controllers
                         Seen = false,
                         Roles = roles,
                         AllBans = post.Bans,
-                        UserIPBans = Util.GetCurrentBans(post.User, post.IP, _context),
+                        UserBans = Util.GetCurrentBans(post.User, null, _context),
+                        IPBans = Util.GetCurrentBans(null, post.IP, _context),
                     }));
         }
 
@@ -92,7 +93,8 @@ namespace Ignorama.Controllers
                         Seen = false,
                         Roles = roles,
                         AllBans = post.Bans,
-                        UserIPBans = Util.GetCurrentBans(post.User, post.IP, _context),
+                        UserBans = Util.GetCurrentBans(post.User, null, _context),
+                        IPBans = Util.GetCurrentBans(null, post.IP, _context),
                     }));
         }
     }
