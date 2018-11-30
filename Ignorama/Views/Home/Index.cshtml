@@ -5,7 +5,7 @@
 
 <div class="row constrained dropdown">
     <div class="col-xs-12 above-threads">
-        @if (!Util.IsBanned(await UserManager.GetUserAsync(User), ForumContext, Context.Request))
+        @if (!Util.IsBanned(await UserManager.GetUserAsync(User), Util.GetCurrentIPString(Context.Request), ForumContext))
         {
             <a class="btn btn-default btn-sm threads" asp-controller="Threads" asp-action="New">New Thread</a>
         }
@@ -106,7 +106,7 @@
             <br />
             Board: {{ thread.Tag.Name }}
             <br />
-            Replies: {{ thread.PostCount - 1 }} | Last reply: <span class=time>{{ thread.LastPost.Time | date }}</span>
+            Replies: {{ thread.PostCount - 1 }} | Last reply: <span>{{ thread.LastPost.Time | date }}</span>
         </span>
     </div>
 </div>

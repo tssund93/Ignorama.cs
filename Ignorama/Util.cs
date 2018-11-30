@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Ignorama
 {
-    public class Util
+    public static class Util
     {
         static public IList<string> GetRoles(User user, UserManager<User> userManager)
         {
@@ -18,40 +18,45 @@ namespace Ignorama
                 : new string[] { "User" };
         }
 
+        static public string GetCurrentIPString(HttpRequest request)
+        {
+            return request.HttpContext.Connection.RemoteIpAddress.ToString();
+        }
+
         static public IQueryable<T> GetByUserOrIP<T>(
-            User user, DbSet<T> table, HttpRequest request) where T : class, IUserIP
+            User user, string ip, DbSet<T> table) where T : class, IUserIP
         {
             if (user != null)
                 return table.Where(t => t.User == user);
             else
-                return table.Where(t => t.IP == request.HttpContext.Connection.RemoteIpAddress.ToString());
+                return table.Where(t => t.IP == ip);
         }
 
         static public IQueryable<T> GetByUserAndIP<T>(
-            User user, DbSet<T> table, HttpRequest request) where T : class, IUserIP
+            User user, string ip, DbSet<T> table) where T : class, IUserIP
         {
             if (user != null)
                 return table.Where(t => t.User == user ||
-                            t.IP == request.HttpContext.Connection.RemoteIpAddress.ToString());
+                            t.IP == ip);
             else
-                return table.Where(t => t.IP == request.HttpContext.Connection.RemoteIpAddress.ToString());
+                return table.Where(t => t.IP == ip);
         }
 
         static public IQueryable<Tag> GetSelectedTags(User user, ForumContext context, HttpRequest request)
         {
-            return GetByUserOrIP(user, context.SelectedTags, request)
+            return GetByUserOrIP(user, GetCurrentIPString(request), context.SelectedTags)
                 .Where(st => !st.Tag.Deleted && !st.Tag.AlwaysVisible)
                 .Select(st => st.Tag);
         }
 
         static public IQueryable<HiddenThread> GetHiddenThreads(User user, ForumContext context, HttpRequest request)
         {
-            return GetByUserOrIP(user, context.HiddenThreads, request);
+            return GetByUserOrIP(user, GetCurrentIPString(request), context.HiddenThreads);
         }
 
         static public IQueryable<FollowedThread> GetFollowedThreads(User user, ForumContext context, HttpRequest request)
         {
-            return GetByUserOrIP(user, context.FollowedThreads, request)
+            return GetByUserOrIP(user, GetCurrentIPString(request), context.FollowedThreads)
                 .Include(ft => ft.LastSeenPost);
         }
 
@@ -63,14 +68,14 @@ namespace Ignorama
         static public IQueryable<HiddenThread> GetHiddenThreadMatches(
             User user, Thread thread, ForumContext context, HttpRequest request)
         {
-            return GetByUserOrIP(user, context.HiddenThreads, request)
+            return GetByUserOrIP(user, GetCurrentIPString(request), context.HiddenThreads)
                 .Where(ht => ht.Thread == thread);
         }
 
         static public IQueryable<FollowedThread> GetFollowedThreadMatches(
             User user, Thread thread, ForumContext context, HttpRequest request)
         {
-            return GetByUserOrIP(user, context.FollowedThreads, request)
+            return GetByUserOrIP(user, GetCurrentIPString(request), context.FollowedThreads)
                 .Where(ft => ft.Thread == thread)
                 .Include(ft => ft.LastSeenPost);
         }
@@ -78,7 +83,7 @@ namespace Ignorama
         static public IQueryable<SelectedTag> GetSelectedTagMatches(
             User user, Tag tag, ForumContext context, HttpRequest request)
         {
-            return GetByUserOrIP(user, context.SelectedTags, request)
+            return GetByUserOrIP(user, GetCurrentIPString(request), context.SelectedTags)
                 .Where(st => st.Tag == tag);
         }
 
@@ -87,18 +92,50 @@ namespace Ignorama
             return context.Tags.Where(tag => !tag.Deleted);
         }
 
-        static public bool IsBanned(User user, ForumContext context, HttpRequest request)
+        static public bool IsBanned(User user, string ip, ForumContext context)
         {
-            return GetCurrentBans(user, context, request).Count() > 0;
+            return GetCurrentBans(user, ip, context).Count() > 0;
         }
 
-        static public IQueryable<Ban> GetCurrentBans(User user, ForumContext context, HttpRequest request)
+        static public IQueryable<Ban> GetCurrentBans(User user, string ip, ForumContext context)
         {
-            var usersPosts = Util.GetByUserAndIP(user, context.Posts, request);
+            var usersPosts = Util.GetByUserAndIP(user, ip, context.Posts).Select(p => p.ID);
             return context.Bans
                 .Include(b => b.Post)
-                .Where(b => usersPosts.Contains(b.Post) &&
-                            b.EndTime > DateTime.Now);
+                .Where(b => usersPosts.Contains(b.Post.ID) &&
+                            b.EndTime > DateTime.UtcNow)
+                .OrderByDescending(b => b.EndTime);
+        }
+
+        public static string ToReadableString(this TimeSpan span)
+        {
+            var timeLeft = "";
+            if (span.Duration().Days > 365)
+            {
+                var years = span.Duration().Days / 365;
+                timeLeft = string.Format("{0:0} year{1}", years, years == 1 ? String.Empty : "s");
+            }
+            else if (span.Duration().Days > 30)
+            {
+                var months = span.Duration().Days / 30;
+                timeLeft = string.Format("{0:0} month{1}", months, months == 1 ? String.Empty : "s");
+            }
+            else if (span.Duration().Days > 7)
+            {
+                var weeks = span.Duration().Days / 7;
+                timeLeft = string.Format("{0:0} week{1}", weeks, weeks == 1 ? String.Empty : "s");
+            }
+            else if (span.Duration().Days > 0)
+            {
+                timeLeft = string.Format("{0:0} day{1}", span.Days, span.Days == 1 ? String.Empty : "s");
+            }
+            else if (span.Duration().Hours > 0)
+            {
+                timeLeft = string.Format("{0:0} hour{1}", span.Hours, span.Hours == 1 ? String.Empty : "s");
+            }
+            if (string.IsNullOrEmpty(timeLeft)) timeLeft = "a few minutes";
+
+            return timeLeft;
         }
     }
 }

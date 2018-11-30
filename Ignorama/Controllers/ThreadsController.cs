@@ -50,7 +50,7 @@ namespace Ignorama.Controllers
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
-            if (Util.IsBanned(user, _context, Request))
+            if (Util.IsBanned(user, Util.GetCurrentIPString(Request), _context))
             {
                 return RedirectToAction("Error", "Home");
             }
@@ -307,7 +307,8 @@ namespace Ignorama.Controllers
                         Locked = post.Thread.Locked && !roles.Contains("Moderator"),
                         Seen = post.ID <= lastSeenPostID,
                         Roles = roles,
-                        post.Bans,
+                        AllBans = post.Bans,
+                        UserIPBans = Util.GetCurrentBans(post.User, post.IP, _context),
                     }));
         }
 
