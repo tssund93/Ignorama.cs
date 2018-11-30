@@ -30,32 +30,39 @@ namespace Ignorama.Controllers
             return View(new Ban
             {
                 Post = post,
+                EndTime = DateTime.UtcNow,
             });
         }
 
+        [Authorize(Roles = "Moderator")]
         [HttpPost("Bans/New/{postID}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> New(int postID, [Bind("Reason,EndTime")] Ban ban)
         {
-            ban.Post = _context.Posts.Find(postID);
+            ban.Post = _context.Posts.Include(p => p.User).Where(p => p.ID == postID).FirstOrDefault();
             ban.Moderator = await _userManager.GetUserAsync(User);
 
-            _context.Add(ban);
-            await _context.SaveChangesAsync();
-
-            var users = _context.Posts
-                .Where(p => p.IP == ban.Post.IP && p.User != null)
-                .Select(p => p.User)
-                .ToList();
-            foreach (var user in users)
+            if (!String.IsNullOrWhiteSpace(ban.Reason))
             {
-                if (!await _userManager.IsInRoleAsync(user, "Admin"))
+                _context.Add(ban);
+                await _context.SaveChangesAsync();
+
+                var users = _context.Posts
+                    .Where(p => p.IP == ban.Post.IP && p.User != null)
+                    .Select(p => p.User)
+                    .ToList();
+                foreach (var user in users)
                 {
-                    await _userManager.RemoveFromRoleAsync(user, "Moderator");
+                    if (!await _userManager.IsInRoleAsync(user, "Admin"))
+                    {
+                        await _userManager.RemoveFromRoleAsync(user, "Moderator");
+                    }
                 }
+
+                return RedirectToAction("Index", "Home");
             }
 
-            return RedirectToAction("Index", "Home");
+            return View(ban);
         }
 
         [HttpGet("Bans/View/{postID}")]
