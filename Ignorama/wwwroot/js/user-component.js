@@ -1,5 +1,5 @@
 ﻿Vue.component('user', {
-    props: ['user', 'ip', 'anonymous', 'detailedView'],
+    props: ['user', 'ip', 'anonymous', 'detailedView', 'banned', 'bannedPostId'],
     template: `
 <span>
     <span v-if="detailedView">
@@ -15,6 +15,9 @@
     <span v-else>
         <span v-if="anonymous || !user">Anonymous</span>
         <span v-else>{{ user.UserName }}</span>
+    </span>
+    <span v-if="banned">
+        | <a :href="'/Bans/View/' + bannedPostId">Banned</a>
     </span>
 </span>
 `

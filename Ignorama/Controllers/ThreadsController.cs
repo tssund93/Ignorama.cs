@@ -132,6 +132,7 @@ namespace Ignorama.Controllers
                                              .FirstOrDefault()
                             : 0,
                         UserRoles = roles,
+                        UserIPBans = Util.GetCurrentBans(thread.Posts.First().User, thread.Posts.First().IP, _context),
                     });
 
             return new OkObjectResult(threads);
