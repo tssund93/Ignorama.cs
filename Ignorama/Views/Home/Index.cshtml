@@ -1,8 +1,14 @@
-﻿@model IEnumerable<Ignorama.Models.Tag>
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<Ignorama.Models.Tag>
+@inject UserManager<User> UserManager
+@inject ForumContext ForumContext
 
 <div class="row constrained dropdown">
     <div class="col-xs-12 above-threads">
-        <a class="btn btn-default btn-sm threads" asp-controller="Threads" asp-action="New">New Thread</a>
+        @if (!Util.IsBanned(await UserManager.GetUserAsync(User), ForumContext, Context.Request))
+        {
+            <a class="btn btn-default btn-sm threads" asp-controller="Threads" asp-action="New">New Thread</a>
+        }
         <form class="right-dropdown">
             <a class="dropdown-toggle btn btn-default btn-sm" data-toggle=dropdown>
                 Boards <b class=caret></b>
