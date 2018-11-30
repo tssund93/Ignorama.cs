@@ -11,12 +11,14 @@ namespace Ignorama.Models
         public long ID { get; set; }
 
         [Required]
+        [DataType(DataType.Text)]
         public string Reason { get; set; }
 
         [Required]
         public Post Post { get; set; }
 
         [Required]
+        [DataType(DataType.DateTime)]
         public DateTime EndTime { get; set; }
 
         [Required]
