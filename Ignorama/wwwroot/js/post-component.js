@@ -99,7 +99,7 @@
         <span class="time">{{ post.Time | date }}</span>
         <span v-if="post.UserIPBans.length">
             <br />
-            <a :href="'/Bans/View/' + post.ID">(Banned for {{ post.UserIPBans[0].EndTime | readableTimeSpan }})</a>
+            <a :href="'/Bans/View/' + post.ID">(banned for {{ post.UserIPBans[0].EndTime | readableTimeSpan }})</a>
         </span>
         <br />
         <span v-if="!post.Locked && !post.Banned">
