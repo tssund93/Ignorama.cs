@@ -102,7 +102,7 @@
         </a>
         <br>
         <span class="thread-info">
-            <user :user="thread.OP" :ip="thread.FirstPost.IP" :anonymous="thread.FirstPost.Anonymous" :detailed-view="thread.UserRoles.includes('Moderator')" :banned="thread.UserIPBans.length != 0" :banned-post-id="thread.FirstPost.ID"></user>
+            <user :user="thread.OP" :ip="thread.FirstPost.IP" :anonymous="thread.FirstPost.Anonymous" :detailed-view="thread.UserRoles.includes('Moderator')" :banned="thread.UserBans.length != 0" :ip-banned="thread.IPBans.length != 0" :banned-post-id="thread.FirstPost.ID"></user>
             <br />
             Board: {{ thread.Tag.Name }}
             <br />

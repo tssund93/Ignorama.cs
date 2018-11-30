@@ -132,7 +132,8 @@ namespace Ignorama.Controllers
                                              .FirstOrDefault()
                             : 0,
                         UserRoles = roles,
-                        UserIPBans = Util.GetCurrentBans(thread.Posts.First().User, thread.Posts.First().IP, _context),
+                        UserBans = Util.GetCurrentBans(thread.Posts.First().User, null, _context),
+                        IPBans = Util.GetCurrentBans(null, thread.Posts.First().IP, _context),
                     });
 
             return new OkObjectResult(threads);
@@ -309,7 +310,8 @@ namespace Ignorama.Controllers
                         Seen = post.ID <= lastSeenPostID,
                         Roles = roles,
                         AllBans = post.Bans,
-                        UserIPBans = Util.GetCurrentBans(post.User, post.IP, _context),
+                        UserBans = Util.GetCurrentBans(post.User, null, _context),
+                        IPBans = Util.GetCurrentBans(null, post.IP, _context),
                         Banned = Util.IsBanned(user, Util.GetCurrentIPString(Request), _context),
                     }));
         }
