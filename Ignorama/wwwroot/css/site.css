@@ -48,25 +48,23 @@ body {
         color: white;
     }
 
-.navbar-default .navbar-nav > li > a {
+.navbar-default .navbar-nav > li > a, .navbar-default .navbar-nav > li button {
+    outline: none !important;
     border: none !important;
-    color: white;
+    color: white !important;
+    text-decoration: none;
 }
 
-    .navbar-default .navbar-nav > li > a:hover {
+    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li button:hover,
+    .navbar-default .navbar-nav > li > a:active, .navbar-default .navbar-nav > li button:active,
+    .navbar-default .navbar-nav > li > a:visited, .navbar-default .navbar-nav > li button:visited {
         color: white;
         text-decoration: underline;
     }
 
-    .navbar-default .navbar-nav > li > a:active {
-        color: white;
-        text-decoration: underline;
-    }
-
-    .navbar-default .navbar-nav > li > a:visited {
-        color: white;
-        text-decoration: underline;
-    }
+.navbar-btn {
+    padding: 7px 12px 7px;
+}
 
 .slogan {
     color: white;
