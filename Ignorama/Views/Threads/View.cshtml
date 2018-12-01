@@ -23,7 +23,7 @@
     <b-pagination v-if="posts.length > perPage" size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>
 </div>
 
-<posts-list :posts="posts" :page="page" :per-page="perPage" :highlighted-id="highlightedId" :ban-reasons="banReasons"></posts-list>
+<posts-list :posts="posts" :page="page" :per-page="perPage" :highlighted-id="highlightedId"></posts-list>
 
 <div class="row constrained">
     <b-pagination v-if="posts.length > perPage" size="sm" :total-rows="posts.length" v-model="page" :per-page="perPage"></b-pagination>

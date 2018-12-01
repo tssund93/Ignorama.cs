@@ -15,7 +15,6 @@ var postsVue = new Vue({
         page: 1,
         perPage: 20,
         highlightedId: 0,
-        banReasons: [],
     },
     created: function () {
         let uri = window.location.search.substring(1);
@@ -44,10 +43,6 @@ var postsVue = new Vue({
                 }
             }
         });
-        axios.get('/Bans/GetReasons')
-            .then(response => {
-                this.banReasons = response.data;
-            });
     },
     watch: {
         posts: function (val) {
