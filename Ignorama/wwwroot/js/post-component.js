@@ -12,7 +12,7 @@
             else {
                 $("#postfield").val($("#postfield").val() + '[' + (post.User && !post.Anonymous ? post.User.UserName : 'Anonymous') + '|' + post.ID + '] ').focus();
             }
-            postsVue.slideOut();
+            slideOut();
         },
     },
     filters: {
