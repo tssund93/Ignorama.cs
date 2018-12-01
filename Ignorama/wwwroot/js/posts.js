@@ -103,6 +103,7 @@ var postsVue = new Vue({
             }
             else {
                 quickreplyState = $("#quickreply").attr("class");
+                $("#quickreply #postfield").focus();
                 $("#quickreply").attr("class", "expanded");
                 $("#replyLink").html("Reply");
                 $("#replyExpand").html("<span class='expand-icon glyphicon glyphicon-resize-small'></span>");
@@ -115,6 +116,7 @@ var postsVue = new Vue({
 var slideOut = function () {
     $("#quickreply").attr("class", "slid-out");
     $("#replyCaret").removeClass('caret-up');
+    $("#quickreply #postfield").focus();
     return false;
 };
 
