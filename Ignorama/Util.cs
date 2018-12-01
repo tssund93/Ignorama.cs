@@ -109,11 +109,11 @@ namespace Ignorama
                                             t.IP.StartsWith(shortIP))
                 : context.Posts.Where(t => t.IP.StartsWith(shortIP));
 
-            var usersPosts = posts.Select(p => p.ID);
+            var postIDs = posts.Select(p => p.ID);
 
             return context.Bans
                 .Include(b => b.Post)
-                .Where(b => usersPosts.Contains(b.Post.ID) &&
+                .Where(b => postIDs.Contains(b.Post.ID) &&
                             b.EndTime > DateTime.UtcNow)
                 .OrderByDescending(b => b.EndTime);
         }
