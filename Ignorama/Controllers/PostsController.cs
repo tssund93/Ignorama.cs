@@ -87,6 +87,11 @@ namespace Ignorama.Controllers
         [HttpGet("/Posts/View/{postID}")]
         public IActionResult View(int postID)
         {
+            if (_context.Posts.Find(postID) == null)
+            {
+                return new NotFoundResult();
+            }
+
             var threadID = _context.Posts
                 .Where(p => p.ID == postID)
                 .Select(p => p.Thread.ID)
