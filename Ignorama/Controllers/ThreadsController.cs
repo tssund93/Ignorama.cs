@@ -267,11 +267,10 @@ namespace Ignorama.Controllers
                 .Select(t => new ThreadViewModel
                 {
                     Title = t.Title,
-                    IsOP = t.Posts.FirstOrDefault().User.UserName == _userManager.GetUserName(User)
-                        || (t.Posts.FirstOrDefault().User == null
-                            && t.Posts.FirstOrDefault().IP == Request.HttpContext.Connection.RemoteIpAddress.ToString()),
-                    CanBump = !(t.Posts.FirstOrDefault().User.UserName == _userManager.GetUserName(User)
-                        || t.Posts.FirstOrDefault().IP == Request.HttpContext.Connection.RemoteIpAddress.ToString()),
+                    IsOP = Util.IsOP(
+                        t.Posts.FirstOrDefault().User, t.Posts.FirstOrDefault().IP, user, Util.GetCurrentIPString(Request)),
+                    CanBump = Util.CanBump(
+                        t.Posts.FirstOrDefault().User, t.Posts.FirstOrDefault().IP, user, Util.GetCurrentIPString(Request)),
                     LastSeenPostID = followedThreadRows.Any() ? followedThreadRows.FirstOrDefault().LastSeenPost.ID : 0,
                     Locked = t.Locked,
                     User = user,

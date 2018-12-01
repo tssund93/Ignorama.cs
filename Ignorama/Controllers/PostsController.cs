@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,18 @@ namespace Ignorama.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> New(int threadID, IFormCollection collection)
         {
+            var thread = _context.Threads
+                .Include(t => t.Posts)
+                .ThenInclude(p => p.User)
+                .Where(t => t.ID == threadID)
+                .FirstOrDefault();
+
             var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            var canBump = Util.CanBump(
+                thread.Posts.FirstOrDefault().User, thread.Posts.FirstOrDefault().IP, user, Util.GetCurrentIPString(Request));
+            var isOP = Util.IsOP(
+                thread.Posts.FirstOrDefault().User, thread.Posts.FirstOrDefault().IP, user, Util.GetCurrentIPString(Request));
 
             if (Util.IsBanned(user, Util.GetCurrentIPString(Request), _context))
             {
@@ -35,7 +47,6 @@ namespace Ignorama.Controllers
             try
             {
                 var roles = Util.GetRoles(user, _userManager);
-                var thread = _context.Threads.Find(threadID);
                 if (!thread.Locked || roles.Contains("Moderator"))
                 {
                     collection.TryGetValue("Text", out StringValues text);
@@ -52,8 +63,8 @@ namespace Ignorama.Controllers
                         Time = DateTime.UtcNow,
                         Deleted = false,
                         Anonymous = anonymous == "on" ? true : false,
-                        Bump = bump == "on" ? true : false,
-                        RevealOP = revealOP == "on" ? true : false,
+                        Bump = bump == "on" && canBump ? true : false,
+                        RevealOP = revealOP == "on" && isOP ? true : false,
                     };
 
                     await _context.AddAsync(post);
