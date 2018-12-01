@@ -86,15 +86,14 @@ namespace Ignorama.Areas.Identity.Pages.Account
 
                     var ipFollowedThreads = _context.FollowedThreads
                         .Where(thread => thread.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
-                        .Include(thread => thread.Thread)
-                        .Include(thread => thread.LastSeenPost);
+                        .Include(thread => thread.Thread);
                     foreach (FollowedThread followedThread in ipFollowedThreads)
                     {
                         await _context.AddAsync(new FollowedThread
                         {
                             User = loggedInUser,
                             Thread = followedThread.Thread,
-                            LastSeenPost = followedThread.LastSeenPost
+                            LastSeenPostID = followedThread.LastSeenPostID
                         });
                     }
 

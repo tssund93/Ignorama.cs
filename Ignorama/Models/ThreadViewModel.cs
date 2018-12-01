@@ -13,7 +13,7 @@ namespace Ignorama.Models
 
         public bool CanBump { get; set; }
 
-        public int LastSeenPostID { get; set; }
+        public long LastSeenPostID { get; set; }
 
         public bool Locked { get; set; }
 

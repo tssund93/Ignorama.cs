@@ -128,7 +128,7 @@ namespace Ignorama.Controllers
                         Following = followedThreads.Select(ft => ft.Thread).Contains(thread),
                         LastSeenPostID = followedThreads.Where(ft => ft.Thread.ID == thread.ID) != null
                             ? followedThreads.Where(ft => ft.Thread.ID == thread.ID)
-                                             .Select(ft => ft.LastSeenPost.ID)
+                                             .Select(ft => ft.LastSeenPostID)
                                              .FirstOrDefault()
                             : 0,
                         UserRoles = roles,
@@ -192,7 +192,6 @@ namespace Ignorama.Controllers
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var roles = Util.GetRoles(user, _userManager);
             var thread = _context.Threads.Find(t.ThreadID);
-            var lastSeenPost = _context.Posts.Find(t.LastSeenPostID);
 
             if (thread != null)
             {
@@ -207,7 +206,7 @@ namespace Ignorama.Controllers
                         IP = user == null
                             ? Request.HttpContext.Connection.RemoteIpAddress.ToString()
                             : null,
-                        LastSeenPost = lastSeenPost,
+                        LastSeenPostID = t.LastSeenPostID,
                     };
 
                     await _context.AddAsync(followedThread);
@@ -216,10 +215,10 @@ namespace Ignorama.Controllers
                 {
                     foreach (FollowedThread row in followedThreadRows)
                     {
-                        if (row.LastSeenPost.ID < lastSeenPost.ID)
+                        if (row.LastSeenPostID < t.LastSeenPostID)
                         {
                             _context.Update(row);
-                            row.LastSeenPost = lastSeenPost;
+                            row.LastSeenPostID = t.LastSeenPostID;
                         }
                     }
                 }
@@ -271,7 +270,7 @@ namespace Ignorama.Controllers
                         t.Posts.FirstOrDefault().User, t.Posts.FirstOrDefault().IP, user, Util.GetCurrentIPString(Request)),
                     CanBump = Util.CanBump(
                         t.Posts.FirstOrDefault().User, t.Posts.FirstOrDefault().IP, user, Util.GetCurrentIPString(Request)),
-                    LastSeenPostID = followedThreadRows.Any() ? followedThreadRows.FirstOrDefault().LastSeenPost.ID : 0,
+                    LastSeenPostID = followedThreadRows.Any() ? followedThreadRows.FirstOrDefault().LastSeenPostID : 0,
                     Locked = t.Locked,
                     User = user,
                     Roles = roles,
@@ -288,7 +287,7 @@ namespace Ignorama.Controllers
             var roles = Util.GetRoles(user, _userManager);
 
             var lastSeenPostID =
-                Util.GetLastSeenPost(user, _context.Threads.Find(threadID), _context, Request)?.ID ?? 0;
+                Util.GetLastSeenPost(user, _context.Threads.Find(threadID), _context, Request) ?? 0;
 
             return new OkObjectResult(
                 _context.Posts

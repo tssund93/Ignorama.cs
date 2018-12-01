@@ -56,13 +56,12 @@ namespace Ignorama
 
         static public IQueryable<FollowedThread> GetFollowedThreads(User user, ForumContext context, HttpRequest request)
         {
-            return GetByUserOrIP(user, GetCurrentIPString(request), context.FollowedThreads)
-                .Include(ft => ft.LastSeenPost);
+            return GetByUserOrIP(user, GetCurrentIPString(request), context.FollowedThreads);
         }
 
-        static public Post GetLastSeenPost(User user, Thread thread, ForumContext context, HttpRequest request)
+        static public long? GetLastSeenPost(User user, Thread thread, ForumContext context, HttpRequest request)
         {
-            return GetFollowedThreadMatches(user, thread, context, request)?.FirstOrDefault()?.LastSeenPost;
+            return GetFollowedThreadMatches(user, thread, context, request)?.FirstOrDefault()?.LastSeenPostID;
         }
 
         static public IQueryable<HiddenThread> GetHiddenThreadMatches(
@@ -76,8 +75,7 @@ namespace Ignorama
             User user, Thread thread, ForumContext context, HttpRequest request)
         {
             return GetByUserOrIP(user, GetCurrentIPString(request), context.FollowedThreads)
-                .Where(ft => ft.Thread == thread)
-                .Include(ft => ft.LastSeenPost);
+                .Where(ft => ft.Thread == thread);
         }
 
         static public IQueryable<SelectedTag> GetSelectedTagMatches(
