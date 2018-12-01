@@ -27,7 +27,11 @@ namespace Ignorama.Controllers
 
         public IActionResult Index()
         {
-            return View(_context.Tags.OrderBy(tag => tag.Name));
+            return View(new IndexViewModel
+            {
+                Tags = _context.Tags.OrderBy(tag => tag.Name),
+                BanReasons = _context.BanReasons,
+            });
         }
 
         public IActionResult Privacy()
