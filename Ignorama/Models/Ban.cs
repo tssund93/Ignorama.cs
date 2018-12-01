@@ -12,7 +12,7 @@ namespace Ignorama.Models
 
         [Required]
         [DataType(DataType.Text)]
-        public string Reason { get; set; }
+        public string Details { get; set; }
 
         [Required]
         public Post Post { get; set; }
@@ -23,5 +23,7 @@ namespace Ignorama.Models
 
         [Required]
         public User Moderator { get; set; }
+
+        public BanReason Reason { get; set; }
     }
 }
