@@ -1,6 +1,6 @@
 ﻿var threadID = function () {
-    var url = window.location.href.replace(/\/$/, '');
-    return url.substr(url.lastIndexOf('/') + 1).replace(/#.*$/, '');
+    let url = window.location.href.replace(/\/$/, '');
+    return url.substr(url.lastIndexOf('/') + 1).replace(/[#?].*$/, '');
 }();
 
 var defaultRefresh = 5000;
@@ -17,32 +17,44 @@ var postsVue = new Vue({
         highlightedId: 0,
     },
     created: function () {
+        let uri = window.location.search.substring(1);
+        let params = new URLSearchParams(uri);
+        let postID = params.get("post");
+
         this.getPosts(threadID, () => {
-            this.updatePage();
-            var id = parseInt(lastSeenPostID);
-            var newPost = this.posts.find(post =>
-                post.ID > id);
-            if (id) {
+            if (postID) {
                 setTimeout(function () {
-                    if (newPost)
-                        postsVue.$scrollTo('#post' + newPost.ID, 1);
-                    else
-                        window.scrollTo(0, document.body.scrollHeight);
+                    console.log("Jumping to post with ID " + postID)
+                    postsVue.viewPost(postID);
                 }, 100);
+            }
+            else {
+                this.updatePage();
+                let id = parseInt(lastSeenPostID);
+                let newPost = this.posts.find(post =>
+                    post.ID > id);
+                if (id) {
+                    setTimeout(function () {
+                        if (newPost)
+                            postsVue.$scrollTo('#post' + newPost.ID, 1);
+                        else
+                            window.scrollTo(0, document.body.scrollHeight);
+                    }, 100);
+                }
             }
         });
     },
     watch: {
         posts: function (val) {
-            var startPost = (this.page - 1) * this.perPage;
-            var pagePosts = val.slice(startPost, startPost + this.perPage);
-            var lspID = Math.max(...pagePosts.map(p => p.ID));
+            let startPost = (this.page - 1) * this.perPage;
+            let pagePosts = val.slice(startPost, startPost + this.perPage);
+            let lspID = Math.max(...pagePosts.map(p => p.ID));
             this.follow(threadID, lspID);
         },
         page: function (val) {
-            var startPost = (val - 1) * this.perPage;
-            var pagePosts = this.posts.slice(startPost, startPost + this.perPage);
-            var lspID = Math.max(...pagePosts.map(p => p.ID));
+            let startPost = (val - 1) * this.perPage;
+            let pagePosts = this.posts.slice(startPost, startPost + this.perPage);
+            let lspID = Math.max(...pagePosts.map(p => p.ID));
             this.follow(threadID, lspID);
         },
     },
@@ -50,12 +62,12 @@ var postsVue = new Vue({
         getPosts: function (threadID, callback) {
             axios.get('/Threads/GetPosts/' + threadID)
                 .then(response => {
-                    var newPosts = response.data;
+                    let newPosts = response.data;
                     newPosts.forEach(function (post) {
                         if (post.ID <= lastSeenPostID)
                             post.Seen = true;
                     });
-                    var areNewPosts = JSON.stringify(this.posts) !== JSON.stringify(newPosts);
+                    let areNewPosts = JSON.stringify(this.posts) !== JSON.stringify(newPosts);
                     if (areNewPosts) {
                         this.posts = response.data;
                         refreshInterval = defaultRefresh;
@@ -74,17 +86,18 @@ var postsVue = new Vue({
         },
         updatePage: function () {
             if (lastSeenPostID !== '') {
-                var id = parseInt(lastSeenPostID);
-                var newPage = Math.ceil((this.posts.findIndex(post =>
+                let id = parseInt(lastSeenPostID);
+                let newPage = Math.ceil((this.posts.findIndex(post =>
                     post.ID > id) + 1) / this.perPage);
                 this.page = newPage !== 0 ? newPage : Math.ceil(this.posts.length / this.perPage);
             }
         },
         viewPost: function (postID) {
-            var newPage = Math.ceil((this.posts.findIndex(p =>
+            let newPage = Math.ceil((this.posts.findIndex(p =>
                 p.ID > postID)) / this.perPage);
             new Promise(resolve => {
-                this.page = newPage;
+                if (newPage > 0)
+                    this.page = newPage;
                 resolve();
             })
                 .then(() => {

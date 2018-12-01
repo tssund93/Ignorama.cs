@@ -37,7 +37,10 @@ namespace Ignorama.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> New(int postID, [Bind("Reason,EndTime")] Ban ban)
         {
-            ban.Post = _context.Posts.Include(p => p.User).Where(p => p.ID == postID).FirstOrDefault();
+            ban.Post = _context.Posts
+                .Include(p => p.User)
+                .Where(p => p.ID == postID)
+                .FirstOrDefault();
             ban.Moderator = await _userManager.GetUserAsync(User);
 
             if (!String.IsNullOrWhiteSpace(ban.Reason))
@@ -68,6 +71,7 @@ namespace Ignorama.Controllers
         {
             var post = _context.Posts
                 .Include(p => p.User)
+                .Include(p => p.Thread)
                 .Where(p => p.ID == postID)
                 .FirstOrDefault();
 
