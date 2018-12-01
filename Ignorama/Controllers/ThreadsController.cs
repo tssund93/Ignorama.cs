@@ -256,6 +256,11 @@ namespace Ignorama.Controllers
         [HttpGet("/Threads/View/{threadID}")]
         public IActionResult View(int threadID)
         {
+            if (_context.Threads.Find(threadID) == null)
+            {
+                return new NotFoundResult();
+            }
+
             var user = _userManager.GetUserAsync(HttpContext.User).Result;
             var roles = Util.GetRoles(user, _userManager);
             var followedThreadRows =
@@ -283,6 +288,11 @@ namespace Ignorama.Controllers
         [HttpGet("/Threads/GetPosts/{threadID}")]
         public IActionResult GetPosts(int threadID)
         {
+            if (_context.Threads.Find(threadID) == null)
+            {
+                return new NotFoundResult();
+            }
+
             var user = _userManager.GetUserAsync(HttpContext.User).Result;
             var roles = Util.GetRoles(user, _userManager);
 
