@@ -24,7 +24,7 @@
     },
     computed: {
         visibleThreads: function () {
-            var viewThreads = [];
+            let viewThreads = [];
             if (this.view === '')
                 viewThreads = this.threads.filter(thread => !thread.Hidden)
                     .sort((t1, t2) => t2.Stickied - t1.Stickied);
@@ -37,7 +37,7 @@
             else
                 viewThreads = this.threads.filter(thread => !thread.Hidden);
 
-            var searchPattern = new RegExp(".*?" + this.search.replace(/\s+/ig, ".*?") + ".*?", "i");
+            let searchPattern = new RegExp(".*?" + this.search.replace(/\s+/ig, ".*?") + ".*?", "i");
             return viewThreads
                 .filter(thread => {
                     return (!this.selectedTags.length || thread.Tag.AlwaysVisible

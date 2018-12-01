@@ -17,66 +17,56 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Posted As
-            </th>
-            <th>
-                Banned By
-            </th>
-            <th>
-                Reason
-            </th>
-            <th>
-                Until
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Bans)
+<div v-else class="row constrained">
+    @foreach (var item in Model.Bans)
+    {
+    <div class="col-xs-12 thread">
+        Banned by <b>@item.Moderator.UserName</b> while posting as
+        <b>
+            @if (item.Post.User != null && !item.Post.Anonymous)
+            {
+                @item.Post.User.UserName<text>:</text>
+            }
+            else
+            {
+                <text>Anonymous:</text>
+            }
+        </b>
+        <br />
+        <br />
+        @item.Reason
+        <br />
+        <br />
+        This ban
+        @if (item.EndTime > DateTime.UtcNow)
         {
-            <tr>
-                <td>
-                    @if (item.Post.User != null && !item.Post.Anonymous)
-                    {
-                        @item.Post.User.UserName
-                    }
-                    else
-                    {
-                        <text>Anonymous</text>
-                    }
-                </td>
-                <td>
-                    @item.Moderator.UserName
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Reason)
-                </td>
-                <td>
-                    <span class="time">@Html.DisplayFor(modelItem => item.EndTime)</span>
-                    @{
-                        var timeLeft = "";
-                        if (item.EndTime > DateTime.UtcNow)
-                        {
-                            timeLeft = "(" + (item.EndTime - DateTime.UtcNow).ToReadableString() + " from now)";
-                        }
-                    }
-                    @if (timeLeft != "")
-                    {
-                        <br />
-                        @timeLeft
-                    }
-                </td>
-                <td>
-                    @item.Post.Text
-                </td>
-            </tr>
+            <text>expires</text>
         }
-    </tbody>
-</table>
+        else
+        {
+            <text>expired</text>
+        }
+        <b>
+            @{
+                var timeLeft = "";
+                if (item.EndTime > DateTime.UtcNow)
+                {
+                    timeLeft = (item.EndTime - DateTime.UtcNow).ToReadableString() + " from now";
+                }
+            }
+            @if (timeLeft != "")
+            {
+                @timeLeft<text>.</text>
+            }
+            else
+            {
+                <span class="time">@Html.DisplayFor(modelItem => item.EndTime)</span><text>.</text>
+            }
+        </b>
+        Click <a href="/Threads/View/@item.Post.Thread.ID?post=@item.Post.ID">here</a> to view offending post.
+    </div>
+    }
+</div>
 
 @section Scripts {
     <script>
