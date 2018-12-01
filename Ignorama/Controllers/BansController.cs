@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -75,7 +73,7 @@ namespace Ignorama.Controllers
 
             var bans = _context.Bans
                 .Where(b => (b.Post.User != null && post.User != null && b.Post.User.Id == post.User.Id)
-                            || b.Post.IP == post.IP)
+                            || b.Post.IP.StartsWith(Util.ShortenIP(post.IP)))
                 .Include(b => b.Post)
                 .ThenInclude(p => p.User)
                 .Include(b => b.Moderator)

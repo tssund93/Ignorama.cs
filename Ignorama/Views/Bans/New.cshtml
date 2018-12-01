@@ -1,14 +1,16 @@
 ﻿@model Ignorama.Models.Ban
 
 @{
+    var shortIP = Util.ShortenIP(Model.Post.IP);
+
     var username = "";
     if (Model.Post.User != null)
     {
-        username = Model.Post.User.UserName + " (" + Model.Post.IP + ")";
+        username = Model.Post.User.UserName + " (" + shortIP + "*)";
     }
     else
     {
-        username = Model.Post.IP;
+        username = shortIP + "*";
     }
     ViewData["Title"] = "Ban " + username;
     Layout = "~/Views/Shared/_Layout.cshtml";
