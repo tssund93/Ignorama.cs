@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Ignorama
@@ -97,7 +98,23 @@ namespace Ignorama
 
         static public IQueryable<Ban> GetCurrentBans(User user, string ip, ForumContext context)
         {
-            var usersPosts = Util.GetByUserAndIP(user, ip, context.Posts).Select(p => p.ID);
+            string shortIP = null;
+
+            if (ip != null)
+            {
+                Regex ipRegex = new Regex(@"(((.+?\.){3})|((.{4}:){4})).+",
+                    RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                MatchCollection matches = ipRegex.Matches(ip);
+                shortIP = matches.Count > 0 ? matches[0].Groups[1].Value : ip;
+            }
+
+            var posts = user != null
+                ? context.Posts.Where(t => t.User == user ||
+                                            t.IP.StartsWith(shortIP))
+                : context.Posts.Where(t => t.IP.StartsWith(shortIP));
+
+            var usersPosts = posts.Select(p => p.ID);
+
             return context.Bans
                 .Include(b => b.Post)
                 .Where(b => usersPosts.Contains(b.Post.ID) &&
