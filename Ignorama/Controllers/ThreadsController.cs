@@ -296,7 +296,6 @@ namespace Ignorama.Controllers
                     .Select(post => new
                     {
                         post.ID,
-                        Highlighted = false,
                         post.Anonymous,
                         User = post.Anonymous && !roles.Contains("Moderator") ? null : post.User,
                         IP = roles.Contains("Moderator") ? post.IP : null,

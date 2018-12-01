@@ -14,6 +14,7 @@ var postsVue = new Vue({
         posts: [],
         page: 1,
         perPage: 20,
+        highlightedId: 0,
     },
     created: function () {
         this.getPosts(threadID, () => {
@@ -87,8 +88,7 @@ var postsVue = new Vue({
                 resolve();
             })
                 .then(() => {
-                    this.posts.forEach(post =>
-                        post.Highlighted = post.ID == postID ? true : false);
+                    this.highlightedId = postID;
                     this.$scrollTo('#post' + postID);
                 });
         },

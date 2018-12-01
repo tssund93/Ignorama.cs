@@ -1,5 +1,5 @@
 ﻿Vue.component('posts-list', {
-    props: ['posts', 'perPage', 'page'],
+    props: ['posts', 'perPage', 'page', 'highlightedId'],
     computed: {
         visiblePosts: function () {
             var startPost = (this.page - 1) * this.perPage;
@@ -24,7 +24,7 @@
         </div>
     </div>
     <div v-else class="row constrained" v-for="post in visiblePosts">
-        <post :post="post"></post>
+        <post :post="post" :highlighted="post.ID == highlightedId"></post>
     </div>
 </div>
 `
