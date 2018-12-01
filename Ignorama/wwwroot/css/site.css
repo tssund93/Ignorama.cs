@@ -49,10 +49,21 @@ body {
     }
 
 .navbar-default .navbar-nav > li > a {
+    border: none !important;
     color: white;
 }
 
     .navbar-default .navbar-nav > li > a:hover {
+        color: white;
+        text-decoration: underline;
+    }
+
+    .navbar-default .navbar-nav > li > a:active {
+        color: white;
+        text-decoration: underline;
+    }
+
+    .navbar-default .navbar-nav > li > a:visited {
         color: white;
         text-decoration: underline;
     }
@@ -339,9 +350,9 @@ label {
     top: 23px;
 }
 
-    #quickreply #submitbutton {
-        margin-top: 5px;
-    }
+#quickreply #submitbutton {
+    margin-top: 5px;
+}
 
 .above-threads {
     margin-top: 5px;
