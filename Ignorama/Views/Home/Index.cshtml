@@ -92,6 +92,9 @@
                 <li v-if="thread.UserRoles.includes('Moderator')">
                     <a :href="'/Bans/New/' + thread.FirstPost.ID">Ban OP</a>
                 </li>
+                <li v-if="thread.UserRoles.includes('Admin')">
+                    <a v-on:click.prevent="purgeThread(thread.ID)" href="#">Purge Thread</a>
+                </li>
             </ul>
         </div>
         <span v-if="thread.Stickied" class="thread-icon glyphicon glyphicon-bookmark"></span>
