@@ -30,50 +30,56 @@
 </div>
 
 <div class='slid-in' id='quickreply'>
-    @if (Model.Locked && !Model.Roles.Contains("Moderator"))
-    {
-        <div class="centered">Thread Locked</div>
-    }
-    else if (Util.IsBanned(await UserManager.GetUserAsync(User), Util.GetCurrentIPString(Context.Request), ForumContext))
-    {
-        <div class="centered">Banned</div>
-    }
-    else
-    {
-        <div class="centered"><a href='#' v-on:click.prevent='slide'>Reply <span id="replyCaret" class="caret caret-up"></span></a></div>
-    }
-    <form id='postform' asp-controller="Posts" asp-action="New" method='post'>
-        @Html.AntiForgeryToken()
-        <textarea id='postfield' name='Text' rows='7' class='col-xs-12' style='resize:none;' required></textarea>
-        <br />
-        <div>
-            @if (Model.IsOP)
-            {
-                <label>
-                    <input id='RevealOP' name='RevealOP' type='checkbox'>
-                    Reveal OP
-                </label>
-            }
-            @if (Model.CanBump)
-            {
-                <label>
-                    <input name='Bump' type='checkbox'>
-                    Bump!
-                </label>
-            }
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <label>
-                    <input name='Anonymous' type='checkbox' checked>
-                    Post Anonymously
-                </label>
-            }
+    <div id="qr-top">
+        @if (Model.Locked && !Model.Roles.Contains("Moderator"))
+        {
+            <div class="centered">Thread Locked</div>
+        }
+        else if (Util.IsBanned(await UserManager.GetUserAsync(User), Util.GetCurrentIPString(Context.Request), ForumContext))
+        {
+            <div class="centered">Banned</div>
+        }
+        else
+        {
+            <div class="centered" id="replyLink"><a href='#' onclick='event.preventDefault(); slide();'>Reply <span id="replyCaret" class="caret caret-up"></span></a></div>
+        }
+        <a href="#" v-on:click.prevent="expand" id="replyExpand">
+            <span class="expand-icon glyphicon glyphicon-resize-full"></span>
+        </a>
+    </div>
+    <div class="quickreply-content">
+        <form id='postform' asp-controller="Posts" asp-action="New" method='post'>
+            @Html.AntiForgeryToken()
+            <textarea id='postfield' name='Text' class='col-xs-12' required></textarea>
             <div>
-                <input id='submitbutton' class='btn btn-default btn-sm' name="Submit1" type="submit" value="Submit" />
+                @if (Model.IsOP)
+                {
+                    <label>
+                        <input id='RevealOP' name='RevealOP' type='checkbox'>
+                        Reveal OP
+                    </label>
+                }
+                @if (Model.CanBump)
+                {
+                    <label>
+                        <input name='Bump' type='checkbox'>
+                        Bump!
+                    </label>
+                }
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <label>
+                        <input name='Anonymous' type='checkbox' checked>
+                        Post Anonymously
+                    </label>
+                }
+                <div>
+                    <input id='submitbutton' class='btn btn-default btn-sm' name="Submit1" type="submit" value="Submit" />
+                </div>
             </div>
-        </div>
-    </form>
-    <partial name="_UploadForm" />
+        </form>
+        <partial name="_UploadForm" />
+    </div>
 </div>
 
 @section Scripts {
