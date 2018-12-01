@@ -6,6 +6,8 @@
 var defaultRefresh = 5000;
 var refreshInterval = defaultRefresh;
 
+var quickreplyState = 'slid-in';
+
 var postsVue = new Vue({
     el: 'main',
     data: {
@@ -92,11 +94,15 @@ var postsVue = new Vue({
         },
         expand: function () {
             if ($("#quickreply").hasClass("expanded")) {
-                slideOut();
-                $("#replyLink").html("<a href='#' onclick='event.preventDefault(); slide();'>Reply <span id='replyCaret' class='caret caret - up'></span></a>");
+                $("#quickreply").attr("class", quickreplyState);
+                $("#replyLink").html("<a href='#' onclick='event.preventDefault(); slide();'>Reply <span id='replyCaret' class='caret'></span></a>");
                 $("#replyExpand").html("<span class='expand-icon glyphicon glyphicon-resize-full'></span>");
+                if (quickreplyState === "slid-in") {
+                    $("#replyCaret").addClass("caret-up");
+                }
             }
             else {
+                quickreplyState = $("#quickreply").attr("class");
                 $("#quickreply").attr("class", "expanded");
                 $("#replyLink").html("Reply");
                 $("#replyExpand").html("<span class='expand-icon glyphicon glyphicon-resize-small'></span>");
