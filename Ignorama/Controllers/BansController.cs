@@ -114,5 +114,11 @@ namespace Ignorama.Controllers
                 Post = post,
             });
         }
+
+        public IActionResult GetReasons()
+        {
+            return new OkObjectResult(
+                _context.BanReasons);
+        }
     }
 }
