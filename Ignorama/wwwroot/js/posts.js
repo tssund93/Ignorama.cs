@@ -93,6 +93,10 @@ var postsVue = new Vue({
             }
         },
         viewPost: function (postID) {
+            let post = this.posts.find(p => p.ID == postID);
+            if (!post) {
+                window.location.href = "/Posts/View/" + postID;
+            }
             let newPage = Math.ceil((this.posts.findIndex(p =>
                 p.ID > postID)) / this.perPage);
             new Promise(resolve => {
