@@ -33,9 +33,33 @@ namespace Ignorama.Controllers
         }
 
         [Authorize(Roles = "Moderator")]
+        [HttpPost("Bans/New/{postID}/{reasonID}")]
+        public async Task<IActionResult> New(int postID, int reasonID)
+        {
+            var post = _context.Posts
+                .Include(p => p.User)
+                .Where(p => p.ID == postID)
+                .FirstOrDefault();
+
+            var banReason = _context.BanReasons.Find(reasonID);
+            var banHours = banReason.BaseBanHours *
+                Math.Pow(2, Util.GetAllBans(post.User, post.IP, _context).Count());
+
+            if (banHours > int.MaxValue)
+            {
+                banHours = int.MaxValue;
+            }
+
+            return await New(postID, new Ban
+            {
+                Reason = banReason,
+                EndTime = DateTime.UtcNow.AddHours(banHours),
+            });
+        }
+
+        [Authorize(Roles = "Moderator")]
         [HttpPost("Bans/New/{postID}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> New(int postID, [Bind("Reason,EndTime")] Ban ban)
+        public async Task<IActionResult> New(int postID, [Bind("Details,Reason,EndTime")] Ban ban)
         {
             ban.Post = _context.Posts
                 .Include(p => p.User)
@@ -43,7 +67,7 @@ namespace Ignorama.Controllers
                 .FirstOrDefault();
             ban.Moderator = await _userManager.GetUserAsync(User);
 
-            if (!String.IsNullOrWhiteSpace(ban.Details))
+            if (!String.IsNullOrWhiteSpace(ban.Details) || ban.Reason != null)
             {
                 _context.Add(ban);
                 await _context.SaveChangesAsync();
@@ -81,6 +105,7 @@ namespace Ignorama.Controllers
                 .Include(b => b.Post)
                 .ThenInclude(p => p.User)
                 .Include(b => b.Moderator)
+                .Include(b => b.Reason)
                 .OrderByDescending(b => b.EndTime);
 
             return View(new BansViewModel

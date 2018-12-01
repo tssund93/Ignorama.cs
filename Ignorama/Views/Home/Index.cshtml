@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@model IEnumerable<Ignorama.Models.Tag>
+@model Ignorama.Models.IndexViewModel
 @inject UserManager<User> UserManager
 @inject ForumContext ForumContext
 
@@ -89,8 +89,14 @@
                         Lock thread
                     </a>
                 </li>
+                @foreach (var banReason in Model.BanReasons)
+                {
+                    <li v-if="thread.UserRoles.includes('Moderator')">
+                        <a href="#" :onclick="'if (confirm(\'Ban user for @banReason.Text?\')) banUser(' + thread.FirstPost.ID + ', @banReason.ID, event)'">Ban OP for @banReason.Text</a>
+                    </li>
+                }
                 <li v-if="thread.UserRoles.includes('Moderator')">
-                    <a :href="'/Bans/New/' + thread.FirstPost.ID">Ban OP</a>
+                    <a :href="'/Bans/New/' + thread.FirstPost.ID">Ban OP for Custom reason</a>
                 </li>
                 <li v-if="thread.UserRoles.includes('Admin')">
                     <a v-on:click.prevent="purgeThread(thread.ID)" href="#">Purge Thread</a>

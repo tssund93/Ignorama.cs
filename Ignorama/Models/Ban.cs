@@ -10,7 +10,6 @@ namespace Ignorama.Models
     {
         public long ID { get; set; }
 
-        [Required]
         [DataType(DataType.Text)]
         public string Details { get; set; }
 
