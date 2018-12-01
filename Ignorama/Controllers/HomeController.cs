@@ -41,6 +41,18 @@ namespace Ignorama.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [HttpGet("/Home/Error/{code}")]
+        public IActionResult Error(int code)
+        {
+            return View(new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
+                StatusCode = code,
+                StatusReason = Util.GetStatusReason(code),
+            });
+        }
+
         public class ImageUploadModel
         {
             public string FileName { get; set; }

@@ -67,7 +67,7 @@ namespace Ignorama
                 app.UseHsts();
             }
 
-            app.UseStatusCodePages();
+            app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

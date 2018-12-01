@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace Ignorama
@@ -181,6 +182,12 @@ namespace Ignorama
                 return !(OP.UserName == currentUser.UserName
                     || OPIP == currentIP);
             }
+        }
+
+        public static string GetStatusReason(int statusCode)
+        {
+            var key = ((HttpStatusCode)statusCode).ToString();
+            return Regex.Replace(key, "(\\B[A-Z])", " $1");
         }
     }
 }
