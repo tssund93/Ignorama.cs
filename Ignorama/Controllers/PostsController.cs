@@ -87,7 +87,10 @@ namespace Ignorama.Controllers
         [HttpGet("/Posts/View/{postID}")]
         public IActionResult View(int postID)
         {
-            var threadID = _context.Posts.Select(p => p.Thread.ID).FirstOrDefault();
+            var threadID = _context.Posts
+                .Where(p => p.ID == postID)
+                .Select(p => p.Thread.ID)
+                .FirstOrDefault();
             return RedirectPermanent("~/Threads/View/" + threadID + "?post=" + postID);
         }
 
