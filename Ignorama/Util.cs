@@ -160,9 +160,13 @@ namespace Ignorama
 
         public static bool IsOP(User OP, string OPIP, User currentUser, string currentIP)
         {
-            if (OP == null || currentUser == null)
+            if (OP == null)
             {
                 return OPIP == currentIP;
+            }
+            else if (currentUser == null)
+            {
+                return false;
             }
             else
             {
