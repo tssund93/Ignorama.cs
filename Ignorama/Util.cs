@@ -137,5 +137,31 @@ namespace Ignorama
 
             return timeLeft;
         }
+
+        public static bool IsOP(User OP, string OPIP, User currentUser, string currentIP)
+        {
+            if (OP == null || currentUser == null)
+            {
+                return OPIP == currentIP;
+            }
+            else
+            {
+                return OP.UserName == currentUser.UserName
+                        || (OP == null && OPIP == currentIP);
+            }
+        }
+
+        public static bool CanBump(User OP, string OPIP, User currentUser, string currentIP)
+        {
+            if (OP == null || currentUser == null)
+            {
+                return OPIP != currentIP;
+            }
+            else
+            {
+                return !(OP.UserName == currentUser.UserName
+                    || OPIP == currentIP);
+            }
+        }
     }
 }
