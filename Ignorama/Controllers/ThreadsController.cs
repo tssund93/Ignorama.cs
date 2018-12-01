@@ -304,7 +304,9 @@ namespace Ignorama.Controllers
                         post.RevealOP,
                         post.Bump,
                         post.Time,
-                        post.Text,
+                        Text = post.Deleted
+                            ? "[color=darkred][b](This post has been deleted)[/b][/color]"
+                            : post.Text,
                         Locked = post.Thread.Locked && !roles.Contains("Moderator"),
                         Seen = false,
                         Roles = roles,
@@ -312,6 +314,7 @@ namespace Ignorama.Controllers
                         UserBans = Util.GetCurrentBans(post.User, null, _context),
                         IPBans = Util.GetCurrentBans(null, post.IP, _context),
                         Banned = Util.IsBanned(user, Util.GetCurrentIPString(Request), _context),
+                        post.Deleted
                     }));
         }
 

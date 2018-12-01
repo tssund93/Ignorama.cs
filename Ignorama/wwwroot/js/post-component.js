@@ -14,6 +14,26 @@
             }
             slideOut();
         },
+        deletePost: function (postID) {
+            axios.post("/Posts/Delete/" + postID)
+                .then(response => {
+                    console.log("Deleted post " + response.data);
+                    postsVue.getPosts(threadID);
+                })
+                .catch(error => {
+                    console.error("Error deleting post: " + error);
+                });
+        },
+        restorePost: function (postID) {
+            axios.post("/Posts/Restore/" + postID)
+                .then(response => {
+                    console.log("Restored post " + response.data);
+                    postsVue.getPosts(threadID);
+                })
+                .catch(error => {
+                    console.error("Error restoring post: " + error);
+                });
+        },
     },
     filters: {
         formatPost: function (post) {
@@ -65,6 +85,12 @@
             <ul class="dropdown-menu pull-right">
                 <li v-if="post.Roles.includes('Moderator')">
                     <a :href="'/Bans/New/' + post.ID">Ban User</a>
+                </li>
+                <li v-if="post.Roles.includes('Moderator') && !post.Deleted">
+                    <a href="#" v-on:click.prevent="deletePost(post.ID)">Delete Post</a>
+                </li>
+                <li v-else-if="post.Roles.includes('Moderator')">
+                    <a href="#" v-on:click.prevent="restorePost(post.ID)">Restore Post</a>
                 </li>
             </ul>
         </span>

@@ -1,4 +1,5 @@
 ﻿using Ignorama.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -81,6 +82,40 @@ namespace Ignorama.Controllers
             {
                 return new BadRequestObjectResult(collection);
             }
+        }
+
+        [Authorize(Roles = "Moderator")]
+        [HttpPost("/Posts/Delete/{postID}")]
+        public async Task<IActionResult> Delete(int postID)
+        {
+            var post = await _context.Posts.FindAsync(postID);
+
+            if (post != null)
+            {
+                _context.Update(post);
+                post.Deleted = true;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            return new BadRequestResult();
+        }
+
+        [Authorize(Roles = "Moderator")]
+        [HttpPost("/Posts/Restore/{postID}")]
+        public async Task<IActionResult> Restore(int postID)
+        {
+            var post = await _context.Posts.FindAsync(postID);
+
+            if (post != null)
+            {
+                _context.Update(post);
+                post.Deleted = false;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            return new BadRequestResult();
         }
     }
 }
