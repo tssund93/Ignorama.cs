@@ -33,7 +33,7 @@
             else if (this.view === 'following')
                 viewThreads = this.threads.filter(thread => thread.Following && !thread.Hidden)
                     .sort((t1, t2) => new Date(t2.LastPost.Time)
-                                        - new Date(t1.LastPost.Time));
+                        - new Date(t1.LastPost.Time));
             else
                 viewThreads = this.threads.filter(thread => !thread.Hidden);
 
@@ -43,8 +43,8 @@
                     return (!this.selectedTags.length || thread.Tag.AlwaysVisible
                         ? true
                         : this.selectedTags.includes(thread.Tag.ID))
-                      && (searchPattern.test(thread.Title + ' ' + thread.FirstPost.Text));
-                    });
+                        && (searchPattern.test(thread.Title + ' ' + thread.FirstPost.Text));
+                });
         }
     },
     watch: {
@@ -104,6 +104,21 @@
                 .catch(error => {
                     console.error("Error updating selected tag: " + error);
                 });
-        }
+        },
+        purgeThread: function (threadID) {
+            if (confirm("Are you sure you'd like to permanently delete this thread and all related posts?")) {
+                axios.post("/Threads/Purge/" + threadID)
+                    .then(response => {
+                        console.log("Purged thread " + response.data);
+                        axios.get('/Threads/GetThreads')
+                            .then(response => {
+                                this.threads = response.data;
+                            });
+                    })
+                    .catch(error => {
+                        console.error("Error purging thread: " + error);
+                    });
+            }
+        },
     }
 });

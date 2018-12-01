@@ -350,5 +350,21 @@ namespace Ignorama.Controllers
 
             return new BadRequestResult();
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("/Threads/Purge/{threadID}")]
+        public async Task<IActionResult> Purge(int threadID)
+        {
+            var thread = await _context.Threads.FindAsync(threadID);
+
+            if (thread != null)
+            {
+                _context.Remove(thread);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+
+            return new BadRequestResult();
+        }
     }
 }
