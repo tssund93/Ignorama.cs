@@ -165,6 +165,8 @@ $('#postform').submit(function (e) {
                 $('#postfield').val('');
                 $('input[name=Bump]').prop('checked', false);
                 $('input[name=RevealOP]').prop('checked', false);
+                if ($('#quickreply').hasClass('expanded'))
+                    postsVue.expand();
                 slideIn();
 
                 postsVue.getPosts(threadID);
