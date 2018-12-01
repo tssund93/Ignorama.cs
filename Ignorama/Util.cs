@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Ignorama
 {
@@ -102,10 +101,7 @@ namespace Ignorama
 
             if (ip != null)
             {
-                Regex ipRegex = new Regex(@"(((.+?\.){3})|((.{4}:){4})).+",
-                    RegexOptions.Compiled | RegexOptions.IgnoreCase);
-                MatchCollection matches = ipRegex.Matches(ip);
-                shortIP = matches.Count > 0 ? matches[0].Groups[1].Value : ip;
+                shortIP = ShortenIP(ip);
             }
 
             var posts = user != null
@@ -120,6 +116,14 @@ namespace Ignorama
                 .Where(b => usersPosts.Contains(b.Post.ID) &&
                             b.EndTime > DateTime.UtcNow)
                 .OrderByDescending(b => b.EndTime);
+        }
+
+        public static string ShortenIP(string ip)
+        {
+            Regex ipRegex = new Regex(@"(((.+?\.){3})|((.{4}:){4})).+",
+                RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            MatchCollection matches = ipRegex.Matches(ip);
+            return matches.Count > 0 ? matches[0].Groups[1].Value : ip;
         }
 
         public static string ToReadableString(this TimeSpan span)
