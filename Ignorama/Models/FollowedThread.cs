@@ -17,6 +17,6 @@ namespace Ignorama.Models
 
         public string IP { get; set; }
 
-        public Post LastSeenPost { get; set; }
+        public long LastSeenPostID { get; set; }
     }
 }

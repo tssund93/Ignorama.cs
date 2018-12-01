@@ -34,6 +34,18 @@
                     console.error("Error restoring post: " + error);
                 });
         },
+        purgePost: function (postID) {
+            if (confirm("Are you sure you'd like to permanently delete this post?")) {
+                axios.post("/Posts/Purge/" + postID)
+                    .then(response => {
+                        console.log("Purged post " + response.data);
+                        postsVue.getPosts(threadID);
+                    })
+                    .catch(error => {
+                        console.error("Error purging post: " + error);
+                    });
+            }
+        },
     },
     filters: {
         formatPost: function (post) {
@@ -91,6 +103,9 @@
                 </li>
                 <li v-else-if="post.Roles.includes('Moderator')">
                     <a href="#" v-on:click.prevent="restorePost(post.ID)">Restore Post</a>
+                </li>
+                <li v-if="post.Roles.includes('Admin')">
+                    <a href="#" v-on:click.prevent="purgePost(post.ID)">Purge Post</a>
                 </li>
             </ul>
         </span>
