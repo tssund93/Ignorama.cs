@@ -22,51 +22,58 @@
 <div v-else class="row constrained">
     @foreach (var item in Model.Bans)
     {
-    <div class="col-xs-12 thread">
-        Banned by <b>@item.Moderator.UserName</b> while posting as
-        <b>
-            @if (item.Post.User != null && !item.Post.Anonymous)
-            {
-                @item.Post.User.UserName<text>:</text>
-            }
-            else
-            {
-                <text>Anonymous:</text>
-            }
-        </b>
-        <br />
-        <br />
-        @item.Reason
-        <br />
-        <br />
-        This ban
-        @if (item.EndTime > DateTime.UtcNow)
-        {
-            <text>expires</text>
-        }
-        else
-        {
-            <text>expired</text>
-        }
-        <b>
-            @{
-                var timeLeft = "";
-                if (item.EndTime > DateTime.UtcNow)
+        <div class="col-xs-12 thread">
+            Banned by <b>@item.Moderator.UserName</b> while posting as
+            <b>
+                @if (item.Post.User != null && !item.Post.Anonymous)
                 {
-                    timeLeft = (item.EndTime - DateTime.UtcNow).ToReadableString() + " from now";
+                    @item.Post.User.UserName<text>:</text>
                 }
-            }
-            @if (timeLeft != "")
+                else
+                {
+                    <text>Anonymous:</text>
+                }
+            </b>
+            <br />
+            <br />
+            @if (item.Reason != null)
             {
-                @timeLeft<text>.</text>
+                @item.Reason.Text
             }
             else
             {
-                <span class="time">@Html.DisplayFor(modelItem => item.EndTime)</span><text>.</text>
+                @item.Details
             }
-        </b>
-        Click <a href="/Posts/View/@item.Post.ID">here</a> to view offending post.
-    </div>
+            <br />
+            <br />
+            This ban
+            @if (item.EndTime > DateTime.UtcNow)
+            {
+                <text>expires</text>
+            }
+            else
+            {
+                <text>expired</text>
+            }
+            <b>
+                @{
+                    var timeLeft = "";
+                    if (item.EndTime > DateTime.UtcNow)
+                    {
+                        timeLeft = (item.EndTime - DateTime.UtcNow).ToReadableString() + " from now";
+                    }
+                }
+                @if (timeLeft != "")
+                {
+                    @timeLeft<text>.</text>
+                }
+                else
+                {
+                    <span class="time">@Html.DisplayFor(modelItem => item.EndTime)</span><text>.</text>
+                }
+            </b>
+            Click <a href="/Posts/View/@item.Post.ID">here</a> to view offending post.
+        </div>
     }
 </div>
 

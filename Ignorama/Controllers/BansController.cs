@@ -43,7 +43,7 @@ namespace Ignorama.Controllers
                 .FirstOrDefault();
             ban.Moderator = await _userManager.GetUserAsync(User);
 
-            if (!String.IsNullOrWhiteSpace(ban.Reason))
+            if (!String.IsNullOrWhiteSpace(ban.Details))
             {
                 _context.Add(ban);
                 await _context.SaveChangesAsync();
