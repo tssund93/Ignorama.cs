@@ -49,20 +49,21 @@
                 @{
                     var slogans = new[]
                     {
-                                                                                                                                        "I should've made it blue",
-                                                                                                                                        "Ignorance for the masses",
-                                                                                                                                        "Made with MS Paint",
-                                                                                                                                        "Your hobbies are stupid",
-                                                                                                                                    };
+                                        "I should've made it blue",
+                                        "Ignorance for the masses",
+                                        "Made with MS Paint",
+                                        "Your hobbies are stupid",
+                                    };
                     Random rnd = new Random();
                     int r = rnd.Next(slogans.Length);
                     <b class="slogan hidden-xs">@slogans[r]</b>
                 }
             </div>
             <div class="collapse navbar-collapse" id="navbar">
-                @if (SignInManager.IsSignedIn(User))
-                {
-                    <ul class="nav navbar-nav navbar-right">
+
+                <ul class="nav navbar-nav navbar-right">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
                         <li>
                             <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Context.Request.Path" method="post">
                                 <button type="submit" class="btn btn-link navbar-btn navbar-link">
@@ -70,12 +71,9 @@
                                 </button>
                             </form>
                         </li>
-                    </ul>
-                    <div class="loggedInAs">Logged in as @UserManager.GetUserName(User)</div>
-                }
-                else
-                {
-                    <ul class="nav navbar-nav navbar-right">
+                    }
+                    else
+                    {
                         <li>
                             <a class=header-link asp-area="Identity" asp-page="/Account/Register">
                                 Sign up
@@ -86,7 +84,17 @@
                                 Log in
                             </a>
                         </li>
-                    </ul>
+                    }
+                    <li class="nav-item">
+                        <a target="_blank" href="https://github.com/tssund93/Ignorama.cs">
+                            <i class="fab fa-github hidden-xs"></i>
+                            <span class="visible-xs">Github</span>
+                        </a>
+                    </li>
+                </ul>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <div class="loggedInAs">Logged in as @UserManager.GetUserName(User)</div>
                 }
             </div>
         </div>
@@ -126,6 +134,7 @@
         <script src="~/lib/bootstrap-vue.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue-scrollto"></script>
         <script src="~/lib/axios.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     </environment>
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
@@ -146,6 +155,7 @@
         <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue-scrollto"></script>
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     </environment>
 
     @RenderSection("Scripts", required: false)
