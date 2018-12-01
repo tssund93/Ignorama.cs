@@ -84,6 +84,13 @@ namespace Ignorama.Controllers
             }
         }
 
+        [HttpGet("/Posts/View/{postID}")]
+        public IActionResult View(int postID)
+        {
+            var threadID = _context.Posts.Select(p => p.Thread.ID).FirstOrDefault();
+            return RedirectPermanent("~/Threads/View/" + threadID + "?post=" + postID);
+        }
+
         [Authorize(Roles = "Moderator")]
         [HttpPost("/Posts/Delete/{postID}")]
         public async Task<IActionResult> Delete(int postID)
