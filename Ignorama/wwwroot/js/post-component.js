@@ -1,5 +1,5 @@
 ﻿Vue.component('post', {
-    props: ['post', 'highlighted'],
+    props: ['post', 'highlighted', 'banReasons'],
     mixins: [dateMixin],
     methods: {
         reply: function (post, quote) {
@@ -95,8 +95,11 @@
                 </span>
             </a>
             <ul class="dropdown-menu pull-right">
+                <li v-if="post.Roles.includes('Moderator')" v-for="reason in banReasons">
+                    <a href="#" :onclick="'if (confirm(\\'Ban user for ' + reason.Text + '?\\')) banUser(' + post.ID + ', ' + reason.ID + ', event)'">Ban User for {{ reason.Text }}</a>
+                </li>
                 <li v-if="post.Roles.includes('Moderator')">
-                    <a :href="'/Bans/New/' + post.ID">Ban User</a>
+                    <a :href="'/Bans/New/' + post.ID">Ban User for Custom reason</a>
                 </li>
                 <li v-if="post.Roles.includes('Moderator') && !post.Deleted">
                     <a href="#" v-on:click.prevent="deletePost(post.ID)">Delete Post</a>
