@@ -90,25 +90,41 @@ var postsVue = new Vue({
                     this.$scrollTo('#post' + postID);
                 });
         },
-        slideOut: function () {
-            $("#quickreply").stop(true).animate({ bottom: - 1 }, 200).attr("class", "slid-out");
-            $("#replyCaret").removeClass('caret-up');
-            return false;
-        },
-        slideIn: function () {
-            $("#quickreply").animate({ bottom: -249 }, 200).delay(200).queue(function (next) { $(this).attr("class", "slid-in"); next(); });
-            $("#replyCaret").addClass('caret-up');
-            return false;
-        },
-        slide: function () {
-            if ($("#quickreply").hasClass("slid-out"))
-                this.slideIn();
-            else
-                this.slideOut();
+        expand: function () {
+            if ($("#quickreply").hasClass("expanded")) {
+                slideOut();
+                $("#replyLink").html("<a href='#' onclick='event.preventDefault(); slide();'>Reply <span id='replyCaret' class='caret caret - up'></span></a>");
+                $("#replyExpand").html("<span class='expand-icon glyphicon glyphicon-resize-full'></span>");
+            }
+            else {
+                $("#quickreply").attr("class", "expanded");
+                $("#replyLink").html("Reply");
+                $("#replyExpand").html("<span class='expand-icon glyphicon glyphicon-resize-small'></span>");
+            }
             return false;
         },
     }
 });
+
+var slideOut = function () {
+    $("#quickreply").attr("class", "slid-out");
+    $("#replyCaret").removeClass('caret-up');
+    return false;
+};
+
+var slideIn = function () {
+    $("#quickreply").attr("class", "slid-in");
+    $("#replyCaret").addClass('caret-up');
+    return false;
+};
+
+var slide = function () {
+    if ($("#quickreply").hasClass("slid-out"))
+        slideIn();
+    else
+        slideOut();
+    return false;
+};
 
 $('#postform').submit(function (e) {
     e.preventDefault();
@@ -124,7 +140,7 @@ $('#postform').submit(function (e) {
                 $('#postfield').val('');
                 $('input[name=Bump]').prop('checked', false);
                 $('input[name=RevealOP]').prop('checked', false);
-                postsVue.slide();
+                slideIn();
 
                 postsVue.getPosts(threadID);
             }

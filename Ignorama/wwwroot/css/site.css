@@ -292,6 +292,51 @@ label {
     background-color: #dadada;
 }
 
+    #quickreply #postform {
+        height: 85%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+    }
+
+    #quickreply #postfield {
+        resize: none;
+        box-sizing: border-box;
+        height: 100%;
+    }
+
+    #quickreply.expanded {
+        position: fixed;
+        bottom: -1px;
+        height: auto;
+        width: auto;
+        top: 20px;
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+    }
+
+    #quickreply.slid-out {
+        bottom: -1px;
+    }
+
+    #quickreply.slid-in {
+        bottom: -249px;
+    }
+
+.expand-icon {
+    float: right;
+    margin-top: -18px;
+}
+
+.quickreply-content {
+    position: absolute;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    top: 23px;
+}
+
     #quickreply #submitbutton {
         margin-top: 5px;
     }
