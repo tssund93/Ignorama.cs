@@ -307,13 +307,15 @@ label {
 
     #quickreply.expanded {
         position: fixed;
-        bottom: -1px;
         height: auto;
         width: auto;
         top: 20px;
         left: 20px;
         right: 20px;
         bottom: 20px;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     #quickreply.slid-out {
