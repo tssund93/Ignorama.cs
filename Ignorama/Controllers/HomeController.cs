@@ -98,5 +98,11 @@ namespace Ignorama.Controllers
                 ContentType = "text/html",
             };
         }
+
+        [HttpGet("/Rules")]
+        public IActionResult Rules()
+        {
+            return View(_context.BanReasons);
+        }
     }
 }
