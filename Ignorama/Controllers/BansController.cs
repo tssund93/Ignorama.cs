@@ -33,7 +33,7 @@ namespace Ignorama.Controllers
         }
 
         [Authorize(Roles = "Moderator")]
-        [HttpPost("Bans/New/{postID}/{reasonID}")]
+        [HttpPost("/Bans/New/{postID}/{reasonID}")]
         public async Task<IActionResult> New(int postID, int reasonID)
         {
             var post = _context.Posts
@@ -58,7 +58,7 @@ namespace Ignorama.Controllers
         }
 
         [Authorize(Roles = "Moderator")]
-        [HttpPost("Bans/New/{postID}")]
+        [HttpPost("/Bans/New/{postID}")]
         public async Task<IActionResult> New(int postID, [Bind("Details,Reason,EndTime")] Ban ban)
         {
             ban.Post = _context.Posts
@@ -90,7 +90,7 @@ namespace Ignorama.Controllers
             return View(ban);
         }
 
-        [HttpGet("Bans/View/{postID}")]
+        [HttpGet("/Bans/View/{postID}")]
         public IActionResult View(int postID)
         {
             var post = _context.Posts
@@ -119,6 +119,33 @@ namespace Ignorama.Controllers
         {
             return new OkObjectResult(
                 _context.BanReasons);
+        }
+
+        [HttpGet("/Rules")]
+        public IActionResult Rules()
+        {
+            return View(_context.BanReasons);
+        }
+
+        [HttpPost("/Reports/New/{postID}/{reasonID}")]
+        public async Task<IActionResult> Report(int postID, int reasonID)
+        {
+            var report = new Report
+            {
+                Post = _context.Posts
+                    .Include(p => p.User)
+                    .Where(p => p.ID == postID)
+                    .FirstOrDefault(),
+                User = await _userManager.GetUserAsync(User),
+                IP = Util.GetCurrentIPString(Request),
+                Reason = await _context.BanReasons.FindAsync(reasonID),
+                Active = true,
+            };
+
+            _context.Add(report);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

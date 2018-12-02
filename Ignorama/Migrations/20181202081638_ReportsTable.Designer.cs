@@ -4,14 +4,16 @@ using Ignorama.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ignorama.Migrations
 {
     [DbContext(typeof(ForumContext))]
-    partial class ForumContextModelSnapshot : ModelSnapshot
+    [Migration("20181202081638_ReportsTable")]
+    partial class ReportsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,13 +167,11 @@ namespace Ignorama.Migrations
 
                     b.Property<bool>("Active");
 
-                    b.Property<string>("IP");
-
                     b.Property<int>("PostID");
 
                     b.Property<int>("ReasonID");
 
-                    b.Property<long?>("UserId");
+                    b.Property<long>("UserId");
 
                     b.HasKey("ID");
 
@@ -486,7 +486,8 @@ namespace Ignorama.Migrations
 
                     b.HasOne("Ignorama.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Ignorama.Models.SelectedTag", b =>
