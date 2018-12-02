@@ -103,6 +103,7 @@ namespace Ignorama.Controllers
                     await container.CreateIfNotExistsAsync();
 
                     var blob = container.GetBlockBlobReference(upload.FileName);
+                    blob.Properties.ContentType = upload.File.ContentType;
                     await blob.UploadFromStreamAsync(upload.File.OpenReadStream());
 
                     return new ContentResult
