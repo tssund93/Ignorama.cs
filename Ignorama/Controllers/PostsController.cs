@@ -8,7 +8,9 @@ using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using TylerRhodes.Akismet;
 
 namespace Ignorama.Controllers
 {
@@ -40,47 +42,76 @@ namespace Ignorama.Controllers
             var isOP = Util.IsOP(
                 thread.Posts.FirstOrDefault().User, thread.Posts.FirstOrDefault().IP, user, Util.GetCurrentIPString(Request));
 
+            collection.TryGetValue("Text", out StringValues text);
+
             if (Util.IsBanned(user, Util.GetCurrentIPString(Request), _context))
             {
                 return RedirectToAction("Error", "Home");
             }
+            var client = new HttpClient();
+            var akismet = new AkismetClient("https://ignorama.azurewebsites.net/", Util.AkismetKey, client);
 
-            try
+            var akismetComment = new AkismetComment()
             {
-                var roles = Util.GetRoles(user, _userManager);
-                if (!thread.Locked || roles.Contains("Moderator"))
-                {
-                    collection.TryGetValue("Text", out StringValues text);
-                    collection.TryGetValue("Anonymous", out StringValues anonymous);
-                    collection.TryGetValue("Bump", out StringValues bump);
-                    collection.TryGetValue("RevealOP", out StringValues revealOP);
+                Blog = "https://ignorama.azurewebsites.net/",
+                UserIp = Util.GetCurrentIPString(Request),
+                UserAgent = Request.Headers["User-Agent"].ToString(),
+                Referrer = Request.Headers["Referer"].ToString(),
+                Permalink = "https://ignorama.azurewebsites.net/Threads/View/" + threadID.ToString(),
+                CommentType = "reply",
+                Author = user?.UserName,
+                AuthorEmail = null,
+                AuthorUrl = null,
+                Content = text,
+            };
 
-                    var post = new Post
+            var isSpam = await akismet.IsCommentSpam(akismetComment);
+
+            if (!isSpam)
+            {
+                try
+                {
+                    var roles = Util.GetRoles(user, _userManager);
+                    if (!thread.Locked || roles.Contains("Moderator"))
                     {
-                        Thread = thread,
-                        User = user,
-                        IP = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
-                        Text = text,
-                        Time = DateTime.UtcNow,
-                        Deleted = false,
-                        Anonymous = anonymous == "on" ? true : false,
-                        Bump = bump == "on" && canBump ? true : false,
-                        RevealOP = revealOP == "on" && isOP ? true : false,
-                    };
+                        collection.TryGetValue("Anonymous", out StringValues anonymous);
+                        collection.TryGetValue("Bump", out StringValues bump);
+                        collection.TryGetValue("RevealOP", out StringValues revealOP);
 
-                    await _context.AddAsync(post);
-                    await _context.SaveChangesAsync();
+                        var post = new Post
+                        {
+                            Thread = thread,
+                            User = user,
+                            IP = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
+                            Text = text,
+                            Time = DateTime.UtcNow,
+                            Deleted = false,
+                            Anonymous = anonymous == "on" ? true : false,
+                            Bump = bump == "on" && canBump ? true : false,
+                            RevealOP = revealOP == "on" && isOP ? true : false,
+                        };
 
-                    return new OkObjectResult(collection);
+                        await _context.AddAsync(post);
+                        await _context.SaveChangesAsync();
+
+                        return new OkObjectResult(collection);
+                    }
+                    else
+                    {
+                        return new JsonResult(new { error = "Cannot post reply: thread locked." });
+                    }
                 }
-                else
+                catch
                 {
-                    return new JsonResult(new { error = "Cannot post reply: thread locked." });
+                    return new BadRequestObjectResult(collection);
                 }
             }
-            catch
+            else
             {
-                return new BadRequestObjectResult(collection);
+                return new JsonResult(new
+                {
+                    error = "Cannot post reply: Spam detected.  If this was in error, please contact the administrator."
+                });
             }
         }
 

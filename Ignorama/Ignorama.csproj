@@ -44,6 +44,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AkismetClient\TylerRhodes.Akismet\TylerRhodes.Akismet.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Update="Views\History\ByIP.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

@@ -8,8 +8,10 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TylerRhodes.Akismet;
 
 namespace Ignorama.Controllers
 {
@@ -57,41 +59,67 @@ namespace Ignorama.Controllers
 
             if (ModelState.IsValid)
             {
-                var thread = new Thread
+                var client = new HttpClient();
+                var akismet = new AkismetClient("https://ignorama.azurewebsites.net/", Util.AkismetKey, client);
+
+                var akismetComment = new AkismetComment()
                 {
-                    Title = model.Title,
-                    Stickied = false,
-                    Locked = false,
-                    Deleted = false,
-                    Tag = _context.Tags
-                        .Include(tag => tag.WriteRole)
-                        .Where(tag => tag.ID == model.TagID)
-                        .FirstOrDefault()
+                    Blog = "https://ignorama.azurewebsites.net/",
+                    UserIp = Util.GetCurrentIPString(Request),
+                    UserAgent = Request.Headers["User-Agent"].ToString(),
+                    Referrer = Request.Headers["Referer"].ToString(),
+                    Permalink = "https://ignorama.azurewebsites.net/",
+                    CommentType = "forum-post",
+                    Author = user?.UserName,
+                    AuthorEmail = null,
+                    AuthorUrl = null,
+                    Content = model.Text,
                 };
 
-                if (!Util.GetRoles(user, _userManager).Contains(thread.Tag.WriteRole.Name))
+                var isSpam = await akismet.IsCommentSpam(akismetComment);
+
+                if (!isSpam)
                 {
-                    return RedirectToAction("Error", "Home");
+                    var thread = new Thread
+                    {
+                        Title = model.Title,
+                        Stickied = false,
+                        Locked = false,
+                        Deleted = false,
+                        Tag = _context.Tags
+                            .Include(tag => tag.WriteRole)
+                            .Where(tag => tag.ID == model.TagID)
+                            .FirstOrDefault()
+                    };
+
+                    if (!Util.GetRoles(user, _userManager).Contains(thread.Tag.WriteRole.Name))
+                    {
+                        return RedirectToAction("Error", "Home");
+                    }
+
+                    var post = new Post
+                    {
+                        Thread = thread,
+                        User = user,
+                        Text = model.Text,
+                        Time = DateTime.UtcNow,
+                        Deleted = false,
+                        Bump = true,
+                        RevealOP = true,
+                        Anonymous = model.Anonymous,
+                        IP = Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                    };
+
+                    _context.Threads.Add(thread);
+                    _context.Posts.Add(post);
+                    await _context.SaveChangesAsync();
+
+                    return RedirectToAction("View", "Threads", new { threadID = thread.ID });
                 }
-
-                var post = new Post
+                else
                 {
-                    Thread = thread,
-                    User = user,
-                    Text = model.Text,
-                    Time = DateTime.UtcNow,
-                    Deleted = false,
-                    Bump = true,
-                    RevealOP = true,
-                    Anonymous = model.Anonymous,
-                    IP = Request.HttpContext.Connection.RemoteIpAddress.ToString()
-                };
-
-                _context.Threads.Add(thread);
-                _context.Posts.Add(post);
-                await _context.SaveChangesAsync();
-
-                return RedirectToAction("View", "Threads", new { threadID = thread.ID });
+                    return RedirectToAction("Spam", "Home");
+                }
             }
 
             return RedirectToAction();

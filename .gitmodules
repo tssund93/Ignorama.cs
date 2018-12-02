@@ -1,0 +1,3 @@
+[submodule "AkismetClient"]
+	path = AkismetClient
+	url = https://github.com/tylerlrhodes/AkismetClient

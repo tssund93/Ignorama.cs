@@ -12,6 +12,8 @@ namespace Ignorama
 {
     public static class Util
     {
+        static public string AkismetKey = "d5c6e4ac6f30";
+
         static public IList<string> GetRoles(User user, UserManager<User> userManager)
         {
             return user != null

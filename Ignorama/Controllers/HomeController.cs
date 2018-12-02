@@ -98,5 +98,10 @@ namespace Ignorama.Controllers
                 ContentType = "text/html",
             };
         }
+
+        public IActionResult Spam()
+        {
+            return View();
+        }
     }
 }
