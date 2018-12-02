@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Ignorama.Models.Report>
+
+@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Reports</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Reported By
+            </th>
+            <th>
+                Report Reason
+            </th>
+            <th>
+                Reported Post
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.User != null)
+                    {
+                        @item.User.UserName
+                    }
+                    else
+                    {
+                        @item.IP
+                    }
+                </td>
+                <td>
+                    @item.Reason.Text
+                </td>
+                <td>
+                    <a href="/Posts/View/@item.Post.ID" target="_blank">(view in context)</a>
+                    <br />
+                    @item.Post.Text
+                </td>
+                <td>
+                    <a href="#" onclick="if (confirm('Ban user for: @item.Reason.Text?')) banUser(@item.Post.ID, @item.Reason.ID, event, window.location.reload.bind(window.location));">Ban</a> |
+                    <a asp-controller="Reports" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
