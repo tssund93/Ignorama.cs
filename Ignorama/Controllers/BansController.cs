@@ -70,6 +70,15 @@ namespace Ignorama.Controllers
             if (!String.IsNullOrWhiteSpace(ban.Details) || ban.Reason != null)
             {
                 _context.Add(ban);
+
+                var reports = _context.Reports.Where(r => r.Post.ID == postID);
+
+                foreach (var report in reports)
+                {
+                    _context.Update(report);
+                    report.Active = false;
+                }
+
                 await _context.SaveChangesAsync();
 
                 var users = _context.Posts
@@ -146,6 +155,29 @@ namespace Ignorama.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize(Roles = "Moderator")]
+        [HttpGet("/Reports")]
+        public IActionResult Reports()
+        {
+            return View(_context.Reports
+                .Where(r => r.Active)
+                .Include(r => r.User)
+                .Include(r => r.Post)
+                .Include(r => r.Reason));
+        }
+
+        [Authorize(Roles = "Moderator")]
+        [HttpGet("/Reports/Delete/{reportID}")]
+        public async Task<IActionResult> DeleteReport(long reportID)
+        {
+            var report = await _context.Reports.FindAsync(reportID);
+            _context.Update(report);
+            report.Active = false;
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Reports", "Bans");
         }
     }
 }
