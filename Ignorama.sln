@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ignorama", "Ignorama\Ignorama.csproj", "{CEAE8EEA-DFCB-4BF7-A4FF-C284677B5D41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ignorama", "Ignorama\Ignorama.csproj", "{CEAE8EEA-DFCB-4BF7-A4FF-C284677B5D41}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TylerRhodes.Akismet", "AkismetClient\TylerRhodes.Akismet\TylerRhodes.Akismet.csproj", "{CEAA161D-1179-4C8F-AC85-30B359E5110D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CEAE8EEA-DFCB-4BF7-A4FF-C284677B5D41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEAE8EEA-DFCB-4BF7-A4FF-C284677B5D41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEAE8EEA-DFCB-4BF7-A4FF-C284677B5D41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEAA161D-1179-4C8F-AC85-30B359E5110D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEAA161D-1179-4C8F-AC85-30B359E5110D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEAA161D-1179-4C8F-AC85-30B359E5110D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEAA161D-1179-4C8F-AC85-30B359E5110D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
