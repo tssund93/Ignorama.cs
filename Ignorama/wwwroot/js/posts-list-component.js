@@ -1,5 +1,10 @@
 ﻿Vue.component('posts-list', {
     props: ['posts', 'perPage', 'page', 'highlightedId'],
+    data: function () {
+        return {
+            banReasons: [],
+        }
+    },
     computed: {
         visiblePosts: function () {
             var startPost = (this.page - 1) * this.perPage;
@@ -10,6 +15,12 @@
         page: function () {
             window.scrollTo(0, 0);
         }
+    },
+    created: function () {
+        axios.get('/Bans/GetReasons')
+            .then(response => {
+                this.banReasons = response.data;
+            });
     },
     template: `
 <div>
@@ -24,7 +35,7 @@
         </div>
     </div>
     <div v-else class="row constrained" v-for="post in visiblePosts">
-        <post :post="post" :highlighted="post.ID == highlightedId"></post>
+        <post :post="post" :highlighted="post.ID == highlightedId" :ban-reasons="banReasons"></post>
     </div>
 </div>
 `
