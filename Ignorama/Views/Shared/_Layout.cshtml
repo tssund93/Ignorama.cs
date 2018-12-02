@@ -51,11 +51,11 @@
                 @{
                     var slogans = new[]
                     {
-                                        "I should've made it blue",
-                                        "Ignorance for the masses",
-                                        "Made with MS Paint",
-                                        "Your hobbies are stupid",
-                                    };
+                                                "I should've made it blue",
+                                                "Ignorance for the masses",
+                                                "Made with MS Paint",
+                                                "Your hobbies are stupid",
+                                            };
                     Random rnd = new Random();
                     int r = rnd.Next(slogans.Length);
                     <b class="slogan hidden-xs">@slogans[r]</b>
@@ -75,19 +75,19 @@
                         </li>
                         @if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Moderator"))
                         {
-                        <li class="nav-item">
-                            @{
-                                var reportCount = ForumContext.Reports.Where(r => r.Active).Count();
-                                if (reportCount > 0)
-                                {
-                                    <a href="/Reports"><b>Reports (@reportCount)</b></a>
+                            <li class="nav-item">
+                                @{
+                                    var reportCount = ForumContext.Reports.Where(rep => rep.Active).Count();
+                                    if (reportCount > 0)
+                                    {
+                                        <a href="/Reports"><b>Reports (@reportCount)</b></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="/Reports">Reports</a>
+                                    }
                                 }
-                                else
-                                {
-                                    <a href="/Reports">Reports</a>
-                                }
-                            }
-                        </li>
+                            </li>
                         }
                     }
                     else
