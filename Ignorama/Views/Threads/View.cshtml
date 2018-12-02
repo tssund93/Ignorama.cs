@@ -42,10 +42,10 @@
         else
         {
             <div class="centered" id="replyLink"><a href='#' onclick='event.preventDefault(); slide();'>Reply <span id="replyCaret" class="caret caret-up"></span></a></div>
+            <a href="#" v-on:click.prevent="expand" id="replyExpand">
+                <span class="expand-icon glyphicon glyphicon-resize-full"></span>
+            </a>
         }
-        <a href="#" v-on:click.prevent="expand" id="replyExpand">
-            <span class="expand-icon glyphicon glyphicon-resize-full"></span>
-        </a>
     </div>
     <div class="quickreply-content">
         <form id='postform' asp-controller="Posts" asp-action="New" method='post'>

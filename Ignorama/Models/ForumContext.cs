@@ -22,5 +22,6 @@ namespace Ignorama.Models
         public DbSet<FollowedThread> FollowedThreads { get; set; }
         public DbSet<SelectedTag> SelectedTags { get; set; }
         public DbSet<Ban> Bans { get; set; }
+        public DbSet<BanReason> BanReasons { get; set; }
     }
 }

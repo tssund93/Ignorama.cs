@@ -98,6 +98,13 @@ namespace Ignorama
 
         static public IQueryable<Ban> GetCurrentBans(User user, string ip, ForumContext context)
         {
+            return GetAllBans(user, ip, context)
+                .Where(b => b.EndTime > DateTime.UtcNow)
+                .OrderByDescending(b => b.EndTime);
+        }
+
+        static public IQueryable<Ban> GetAllBans(User user, string ip, ForumContext context)
+        {
             string shortIP = null;
 
             if (ip != null)
@@ -114,8 +121,7 @@ namespace Ignorama
 
             return context.Bans
                 .Include(b => b.Post)
-                .Where(b => postIDs.Contains(b.Post.ID) &&
-                            b.EndTime > DateTime.UtcNow)
+                .Where(b => postIDs.Contains(b.Post.ID))
                 .OrderByDescending(b => b.EndTime);
         }
 
@@ -130,19 +136,20 @@ namespace Ignorama
         public static string ToReadableString(this TimeSpan span)
         {
             var timeLeft = "";
-            if (span.Duration().Days > 365)
+
+            if (span.Duration().Days >= 365)
             {
-                var years = span.Duration().Days / 365;
+                var years = Math.Round(span.Duration().Days / 365.0);
                 timeLeft = string.Format("{0:0} year{1}", years, years == 1 ? String.Empty : "s");
             }
-            else if (span.Duration().Days > 30)
+            else if (span.Duration().Days >= 30)
             {
-                var months = span.Duration().Days / 30;
+                var months = Math.Round(span.Duration().Days / 30.0);
                 timeLeft = string.Format("{0:0} month{1}", months, months == 1 ? String.Empty : "s");
             }
-            else if (span.Duration().Days > 7)
+            else if (span.Duration().Days >= 7)
             {
-                var weeks = span.Duration().Days / 7;
+                var weeks = Math.Round(span.Duration().Days / 7.0);
                 timeLeft = string.Format("{0:0} week{1}", weeks, weeks == 1 ? String.Empty : "s");
             }
             else if (span.Duration().Days > 0)

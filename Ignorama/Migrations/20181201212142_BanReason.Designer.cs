@@ -4,14 +4,16 @@ using Ignorama.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Ignorama.Migrations
 {
     [DbContext(typeof(ForumContext))]
-    partial class ForumContextModelSnapshot : ModelSnapshot
+    [Migration("20181201212142_BanReason")]
+    partial class BanReason
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,7 +27,8 @@ namespace Ignorama.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Details");
+                    b.Property<string>("Details")
+                        .IsRequired();
 
                     b.Property<DateTime>("EndTime");
 
@@ -60,7 +63,7 @@ namespace Ignorama.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("BanReasons");
+                    b.ToTable("BanReason");
                 });
 
             modelBuilder.Entity("Ignorama.Models.FollowedThread", b =>
