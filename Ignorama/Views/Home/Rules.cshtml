@@ -1,0 +1,21 @@
+﻿@model IEnumerable<Ignorama.Models.BanReason>
+
+@{
+    ViewData["Title"] = "Rules";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row constrained">
+    <h2>Rules</h2>
+</div>
+
+<div class="row constrained">
+    <ol>
+        @foreach (var rule in Model)
+        {
+            <li>
+                @rule.RuleDescription
+            </li>
+        }
+    </ol>
+</div>
