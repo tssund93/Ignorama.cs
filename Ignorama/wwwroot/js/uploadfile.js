@@ -21,10 +21,11 @@ $(document).ready(function () {
             var uploadingtext = postcontents + " Uploading file";
             var uploadinterval = setInterval(function () {
                 var error = document.getElementById("uploadframe").contentWindow.error;
+                var fileUri = document.getElementById("uploadframe").contentWindow.fileUri;
                 if (typeof error !== 'undefined' || count > timeout) {
                     if (count > timeout) {
                         document.getElementById('postfield').value = postcontents;
-                        alert("Upload timed out.  Your file is probably too big. (Max: 10 MB)");
+                        alert("Upload timed out.");
                         document.getElementById("submitbutton").disabled = false;
                     }
                     document.getElementById('postfield').value = postcontents;
@@ -45,12 +46,10 @@ $(document).ready(function () {
                     temp = $('#filename').val().split(".");
                     extension = temp[temp.length - 1];
                     if (extension === 'webm') {
-                        document.getElementById('postfield').value += "[webm]" +
-                            window.location.origin + '/uploads/' + $('#filename').val() + "[/webm]";
+                        document.getElementById('postfield').value += "[webm]" + fileUri + "[/webm]";
                     }
                     else {
-                        document.getElementById('postfield').value += "[img]" +
-                            window.location.origin + '/uploads/' + $('#filename').val() + "[/img]";
+                        document.getElementById('postfield').value += "[img]" + fileUri + "[/img]";
                     }
                     var input = $("#postfield");
                     var len = input.val().length;
@@ -60,6 +59,7 @@ $(document).ready(function () {
                 }
                 else if (error !== 'none' && typeof error !== 'undefined') {
                     alert(error);
+                    $('input[name="File"]').val('');
                     document.getElementById("submitbutton").disabled = false;
                 }
                 count++;

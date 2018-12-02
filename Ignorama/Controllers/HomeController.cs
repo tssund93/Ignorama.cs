@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,13 +18,16 @@ namespace Ignorama.Controllers
     {
         private readonly ForumContext _context;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IConfiguration _configuration;
 
         public HomeController(
             ForumContext context,
-            IHostingEnvironment hostingEnvironment)
+            IHostingEnvironment hostingEnvironment,
+            IConfiguration configuration)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            _configuration = configuration;
         }
 
         public IActionResult Index()
@@ -67,6 +72,7 @@ namespace Ignorama.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadFile(ImageUploadModel upload)
         {
+            var maxFileMB = 10;
             var allowedTypes = new[] {
                 "image/gif", "image/jpeg", "image/jpg", "image/pjpeg", "image/x-png", "image/png", "video/webm"
             };
@@ -74,22 +80,43 @@ namespace Ignorama.Controllers
             {
                 ".gif", ".jpeg", ".jpg", ".png", ".webm"
             };
+
+            if (upload.File.Length > maxFileMB * 1000000)
+            {
+                return new ContentResult
+                {
+                    Content = "<script>error = 'Could not upload file: File must be smaller than "
+                        + maxFileMB + " MB.';</script>",
+                    ContentType = "text/html",
+                };
+            }
+
             var ext = Path.GetExtension(upload.FileName);
             if (upload.File.Length > 0 &&
                 allowedTypes.Contains(upload.File.ContentType.ToLower()) &&
                 allowedExts.Contains(ext.ToLower()))
             {
-                using (var stream = new FileStream(
-                    Path.Combine(_hostingEnvironment.WebRootPath, "uploads/", upload.FileName), FileMode.Create))
+                if (CloudStorageAccount.TryParse(_configuration.GetConnectionString("UploadsStorageAccount"), out CloudStorageAccount storageAccount))
                 {
-                    await upload.File.CopyToAsync(stream);
+                    var client = storageAccount.CreateCloudBlobClient();
+                    var container = client.GetContainerReference("fileupload");
+                    await container.CreateIfNotExistsAsync();
+
+                    var blob = container.GetBlockBlobReference(upload.FileName);
+                    await blob.UploadFromStreamAsync(upload.File.OpenReadStream());
 
                     return new ContentResult
                     {
-                        Content = "<script>error = 'none';</script>",
+                        Content = "<script>error = 'none'; fileUri = '" + blob.Uri + "';</script>",
                         ContentType = "text/html",
                     };
                 }
+
+                return new ContentResult
+                {
+                    Content = "<script>error = 'Could not upload file: Failed to upload to Azure Storage';</script>",
+                    ContentType = "text/html",
+                };
             }
 
             return new ContentResult
