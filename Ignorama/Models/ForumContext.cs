@@ -23,5 +23,6 @@ namespace Ignorama.Models
         public DbSet<SelectedTag> SelectedTags { get; set; }
         public DbSet<Ban> Bans { get; set; }
         public DbSet<BanReason> BanReasons { get; set; }
+        public DbSet<Report> Reports { get; set; }
     }
 }

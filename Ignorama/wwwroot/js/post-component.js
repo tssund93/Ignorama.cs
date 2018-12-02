@@ -89,14 +89,17 @@
         <user :user="post.User" :ip="post.IP" :anonymous="post.Anonymous" :detailed-view="post.Roles.includes('Moderator')" :banned="post.UserBans.length != 0" :ip-banned="post.IPBans.length != 0" :banned-post-id="post.ID"></user>
         <span v-if="post.RevealOP">| OP</span>
         <span v-else-if="post.Bump">| Bump</span>
-        <span v-if="post.Roles.includes('Moderator')" class="btn-group thread-dropdown">
+        <span class="btn-group thread-dropdown">
             <a class="btn btn-default btn-xs dropdown-toggle" data-toggle=dropdown>
                 <span class=caret>
                 </span>
             </a>
             <ul class="dropdown-menu pull-right">
+                <li v-if="!post.Roles.includes('Moderator')" v-for="reason in banReasons">
+                    <a href="#" :onclick="'if (confirm(\\'Report user for: ' + reason.Text + '?\\')) reportUser(' + post.ID + ', ' + reason.ID + ', event)'">Report user for: {{ reason.Text }}</a>
+                </li>
                 <li v-if="post.Roles.includes('Moderator')" v-for="reason in banReasons">
-                    <a href="#" :onclick="'if (confirm(\\'Ban user for ' + reason.Text + '?\\')) banUser(' + post.ID + ', ' + reason.ID + ', event)'">Ban User for {{ reason.Text }}</a>
+                    <a href="#" :onclick="'if (confirm(\\'Ban user for: ' + reason.Text + '?\\')) banUser(' + post.ID + ', ' + reason.ID + ', event)'">Ban user for: {{ reason.Text }}</a>
                 </li>
                 <li v-if="post.Roles.includes('Moderator')">
                     <a :href="'/Bans/New/' + post.ID">Ban User for Custom reason</a>
