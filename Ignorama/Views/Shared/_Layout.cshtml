@@ -73,6 +73,22 @@
                                 </button>
                             </form>
                         </li>
+                        @if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "Moderator"))
+                        {
+                        <li class="nav-item">
+                            @{
+                                var reportCount = ForumContext.Reports.Where(r => r.Active).Count();
+                                if (reportCount > 0)
+                                {
+                                    <a href="/Reports"><b>Reports (@reportCount)</b></a>
+                                }
+                                else
+                                {
+                                    <a href="/Reports">Reports</a>
+                                }
+                            }
+                        </li>
+                        }
                     }
                     else
                     {
