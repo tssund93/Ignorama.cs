@@ -20,6 +20,7 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="TylerRhodes.Akismet" Version="1.0.0-alpha" />
     <PackageReference Include="WindowsAzure.Storage" Version="9.3.3" />
   </ItemGroup>
 
@@ -42,10 +43,6 @@
     <None Include="wwwroot\js\user-component.js" />
     <None Include="wwwroot\js\user-history.js" />
     <None Include="wwwroot\js\user-history.min.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\AkismetClient\TylerRhodes.Akismet\TylerRhodes.Akismet.csproj" />
   </ItemGroup>
 
   <ItemGroup>
