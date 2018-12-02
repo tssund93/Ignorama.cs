@@ -92,7 +92,10 @@
                 @foreach (var banReason in Model.BanReasons)
                 {
                     <li v-if="thread.UserRoles.includes('Moderator')">
-                        <a href="#" :onclick="'if (confirm(\'Ban user for @banReason.Text?\')) banUser(' + thread.FirstPost.ID + ', @banReason.ID, event)'">Ban OP for @banReason.Text</a>
+                        <a href="#" :onclick="'if (confirm(\'Ban user for: @banReason.Text?\')) banUser(' + thread.FirstPost.ID + ', @banReason.ID, event)'">Ban OP for: @banReason.Text</a>
+                    </li>
+                    <li v-else>
+                        <a href="#" :onclick="'if (confirm(\'Report user for: @banReason.Text?\')) reportUser(' + thread.FirstPost.ID + ', @banReason.ID, event)'">Report OP for: @banReason.Text</a>
                     </li>
                 }
                 <li v-if="thread.UserRoles.includes('Moderator')">

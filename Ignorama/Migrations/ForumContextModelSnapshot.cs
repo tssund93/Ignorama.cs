@@ -157,6 +157,31 @@ namespace Ignorama.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("Ignorama.Models.Report", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Active");
+
+                    b.Property<int>("PostID");
+
+                    b.Property<int>("ReasonID");
+
+                    b.Property<long>("UserId");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PostID");
+
+                    b.HasIndex("ReasonID");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reports");
+                });
+
             modelBuilder.Entity("Ignorama.Models.SelectedTag", b =>
                 {
                     b.Property<long>("ID")
@@ -443,6 +468,24 @@ namespace Ignorama.Migrations
                     b.HasOne("Ignorama.Models.User", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Ignorama.Models.Report", b =>
+                {
+                    b.HasOne("Ignorama.Models.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ignorama.Models.BanReason", "Reason")
+                        .WithMany()
+                        .HasForeignKey("ReasonID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ignorama.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Ignorama.Models.SelectedTag", b =>
