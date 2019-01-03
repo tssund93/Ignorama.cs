@@ -11,7 +11,14 @@ namespace Ignorama.Models
     public class ForumContext : IdentityDbContext<User, IdentityRole<long>, long>
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.UseNpgsql("Host=localhost;Database=ignorama;Username=travis;Password=password");
+        {
+            var host = Environment.GetEnvironmentVariable("DB_HOST");
+            var port = Environment.GetEnvironmentVariable("DB_PORT");
+            var database = Environment.GetEnvironmentVariable("DB_NAME");
+            var username = Environment.GetEnvironmentVariable("DB_USER");
+            var password = Environment.GetEnvironmentVariable("DB_PASS");
+            optionsBuilder.UseNpgsql($"Host={host};Port={port};Database={database};Username={username};Password={password}");
+        }
 
         public DbSet<Thread> Threads { get; set; }
         public DbSet<Post> Posts { get; set; }
