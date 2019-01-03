@@ -17,7 +17,7 @@ namespace Ignorama.Models
             var database = Environment.GetEnvironmentVariable("DB_NAME");
             var username = Environment.GetEnvironmentVariable("DB_USER");
             var password = Environment.GetEnvironmentVariable("DB_PASS");
-            optionsBuilder.UseNpgsql($"Host={host};Port={port};Database={database};Username={username};Password={password}");
+            optionsBuilder.UseNpgsql($"Host={host};Port={port};Database={database};Username={username};Password={password};sslmode=Prefer;Trust Server Certificate=true");
         }
 
         public DbSet<Thread> Threads { get; set; }
