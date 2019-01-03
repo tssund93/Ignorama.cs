@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 
 namespace Ignorama.Migrations
 {
@@ -7,6 +8,16 @@ namespace Ignorama.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.InsertData(
+                "AspNetRoles",
+                new string[] { "Name", "NormalizedName", "ConcurrencyStamp" },
+                new object[,]
+                {
+                    { "Admin", "ADMIN", Guid.NewGuid().ToString() },
+                    { "Moderator", "MODERATOR", Guid.NewGuid().ToString() },
+                    { "User", "USER", Guid.NewGuid().ToString() },
+                });
+
             migrationBuilder.Sql("INSERT INTO \"Tags\" (\"Name\", \"Deleted\", \"WriteRoleId\", \"ReadRoleId\", \"AlwaysVisible\") " +
                 "VALUES ('Technology', false, (SELECT \"Id\" FROM \"AspNetRoles\" WHERE \"NormalizedName\" = 'USER'), (SELECT \"Id\" FROM \"AspNetRoles\" WHERE \"NormalizedName\" = 'USER'), false)");
             migrationBuilder.Sql("INSERT INTO \"Tags\" (\"Name\", \"Deleted\", \"WriteRoleId\", \"ReadRoleId\", \"AlwaysVisible\") " +
@@ -45,6 +56,11 @@ namespace Ignorama.Migrations
                 "Tags",
                 "Name",
                 new object[] { "Technology", "Anime & Manga", "Video Games", "Music", "Off-Topic", "Announcements" });
+
+            migrationBuilder.DeleteData(
+                "AspNetRoles",
+                "Name",
+                new object[] { "Admin", "Moderator", "User" });
 
             migrationBuilder.DeleteData(
                 "BanReasons",
