@@ -1,10 +1,11 @@
-﻿using Ignorama.Models;
+﻿using Amazon;
+using Amazon.S3;
+using Amazon.S3.Transfer;
+using Ignorama.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Configuration;
-using Microsoft.WindowsAzure.Storage;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -72,6 +73,11 @@ namespace Ignorama.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadFile(ImageUploadModel upload)
         {
+            var s3Client = new AmazonS3Client(
+                Environment.GetEnvironmentVariable("S3_ACCESS_KEY_ID"),
+                Environment.GetEnvironmentVariable("S3_SECRET_ACCESS_KEY"),
+                RegionEndpoint.USEast2);
+            var bucket = "ignorama";
             var maxFileMB = 10;
             var allowedTypes = new[] {
                 "image/gif", "image/jpeg", "image/jpg", "image/pjpeg", "image/x-png", "image/png", "video/webm"
@@ -91,33 +97,40 @@ namespace Ignorama.Controllers
                 };
             }
 
-            var ext = Path.GetExtension(upload.FileName);
+            var path = upload.FileName;
+            var ext = Path.GetExtension(path);
+
             if (upload.File.Length > 0 &&
                 allowedTypes.Contains(upload.File.ContentType.ToLower()) &&
                 allowedExts.Contains(ext.ToLower()))
             {
-                if (CloudStorageAccount.TryParse(_configuration.GetConnectionString("UploadsStorageAccount"), out CloudStorageAccount storageAccount))
+                try
                 {
-                    var client = storageAccount.CreateCloudBlobClient();
-                    var container = client.GetContainerReference("fileupload");
-                    await container.CreateIfNotExistsAsync();
-
-                    var blob = container.GetBlockBlobReference(upload.FileName);
-                    blob.Properties.ContentType = upload.File.ContentType;
-                    await blob.UploadFromStreamAsync(upload.File.OpenReadStream());
+                    var fileTransferUtility = new TransferUtility(s3Client);
+                    await fileTransferUtility.UploadAsync(upload.File.OpenReadStream(), bucket, path);
 
                     return new ContentResult
                     {
-                        Content = "<script>error = 'none'; fileUri = '" + blob.Uri + "';</script>",
+                        Content = $"<script>error = 'none'; fileUri = 'https://{bucket}.s3.amazonaws.com/{path}';</script>",
                         ContentType = "text/html",
                     };
                 }
-
-                return new ContentResult
+                catch (AmazonS3Exception e)
                 {
-                    Content = "<script>error = 'Could not upload file: Failed to upload to Azure Storage';</script>",
-                    ContentType = "text/html",
-                };
+                    return new ContentResult
+                    {
+                        Content = $"<script>error = 'Error encountered on server. Message:\"{e.Message}\" when writing an object';</script>",
+                        ContentType = "text/html",
+                    };
+                }
+                catch (Exception e)
+                {
+                    return new ContentResult
+                    {
+                        Content = $"<script>error = 'Unknown encountered on server. Message:\"{e.Message}\" when writing an object';</script>",
+                        ContentType = "text/html",
+                    };
+                }
             }
 
             return new ContentResult

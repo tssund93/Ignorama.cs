@@ -12,11 +12,6 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "DB_USER": "travis",
-        "DB_NAME": "ignorama",
-        "DB_PORT": "5432",
-        "DB_PASS": "password",
-        "DB_HOST": "localhost",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
