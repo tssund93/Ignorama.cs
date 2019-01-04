@@ -12,19 +12,21 @@ namespace Ignorama.Models
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            var uri = new Uri("postgres://travis:password@localhost:5432/ignorama");
+
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
             {
-                optionsBuilder.UseNpgsql($"Host=localhost;Port=5432;Database=ignorama;Username=travis;Password=password");
+                uri = new Uri(Environment.GetEnvironmentVariable("DATABASE_URL"));
             }
-            else
-            {
-                var host = Environment.GetEnvironmentVariable("DB_HOST");
-                var port = Environment.GetEnvironmentVariable("DB_PORT");
-                var database = Environment.GetEnvironmentVariable("DB_NAME");
-                var username = Environment.GetEnvironmentVariable("DB_USER");
-                var password = Environment.GetEnvironmentVariable("DB_PASS");
-                optionsBuilder.UseNpgsql($"Host={host};Port={port};Database={database};Username={username};Password={password};sslmode=Prefer;Trust Server Certificate=true");
-            }
+
+            var host = uri.Host;
+            var port = uri.Port;
+            var database = uri.Segments[1];
+            var userPass = uri.UserInfo.Split(':');
+            var username = userPass[0];
+            var password = userPass[1];
+
+            optionsBuilder.UseNpgsql($"Host={host};Port={port};Database={database};Username={username};Password={password};sslmode=Prefer;Trust Server Certificate=true");
         }
 
         public DbSet<Thread> Threads { get; set; }
