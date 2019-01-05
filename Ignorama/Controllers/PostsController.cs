@@ -82,7 +82,7 @@ namespace Ignorama.Controllers
                         {
                             Thread = thread,
                             User = user,
-                            IP = Request.HttpContext.Connection.RemoteIpAddress.ToString(),
+                            IP = Util.GetCurrentIPString(Request),
                             Text = text,
                             Time = DateTime.UtcNow,
                             Deleted = false,

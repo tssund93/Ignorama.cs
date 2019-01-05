@@ -85,7 +85,7 @@ namespace Ignorama.Areas.Identity.Pages.Account
                     await _userManager.AddToRoleAsync(user, "User");
 
                     var ipFollowedThreads = _context.FollowedThreads
-                        .Where(thread => thread.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
+                        .Where(thread => thread.IP == Util.GetCurrentIPString(Request))
                         .Include(thread => thread.Thread);
                     foreach (FollowedThread followedThread in ipFollowedThreads)
                     {
@@ -98,7 +98,7 @@ namespace Ignorama.Areas.Identity.Pages.Account
                     }
 
                     var ipHiddenThreads = _context.HiddenThreads
-                        .Where(thread => thread.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
+                        .Where(thread => thread.IP == Util.GetCurrentIPString(Request))
                         .Include(thread => thread.Thread);
                     foreach (HiddenThread hiddenThread in ipHiddenThreads)
                     {
@@ -110,7 +110,7 @@ namespace Ignorama.Areas.Identity.Pages.Account
                     }
 
                     var ipSelectedTags = _context.SelectedTags
-                        .Where(tag => tag.IP == Request.HttpContext.Connection.RemoteIpAddress.ToString())
+                        .Where(tag => tag.IP == Util.GetCurrentIPString(Request))
                         .Include(tag => tag.Tag);
                     foreach (SelectedTag selectedTag in ipSelectedTags)
                     {

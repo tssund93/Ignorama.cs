@@ -107,7 +107,7 @@ namespace Ignorama.Controllers
                         Bump = true,
                         RevealOP = true,
                         Anonymous = model.Anonymous,
-                        IP = Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                        IP = Util.GetCurrentIPString(Request)
                     };
 
                     _context.Threads.Add(thread);
@@ -190,7 +190,7 @@ namespace Ignorama.Controllers
                         Thread = thread,
                         User = user,
                         IP = user == null
-                            ? Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                            ? Util.GetCurrentIPString(Request)
                             : null
                     };
 
@@ -232,7 +232,7 @@ namespace Ignorama.Controllers
                         Thread = thread,
                         User = user,
                         IP = user == null
-                            ? Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                            ? Util.GetCurrentIPString(Request)
                             : null,
                         LastSeenPostID = t.LastSeenPostID,
                     };

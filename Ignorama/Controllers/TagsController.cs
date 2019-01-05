@@ -59,7 +59,7 @@ namespace Ignorama.Controllers
                         Tag = tag,
                         User = user,
                         IP = user == null
-                            ? Request.HttpContext.Connection.RemoteIpAddress.ToString()
+                            ? Util.GetCurrentIPString(Request)
                             : null
                     };
 
