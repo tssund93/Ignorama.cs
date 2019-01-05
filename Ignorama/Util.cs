@@ -23,8 +23,12 @@ namespace Ignorama
 
         static public string GetCurrentIPString(HttpRequest request)
         {
-            var ip = request.Headers["X-Forwarded-For"].LastOrDefault();
-            return ip ?? request.HttpContext.Connection.RemoteIpAddress.ToString();
+            var ip = request.HttpContext.Connection.RemoteIpAddress.ToString();
+            if (Environment.GetEnvironmentVariable("HOSTING") == "heroku")
+            {
+                ip = request.Headers["X-Forwarded-For"].LastOrDefault();
+            }
+            return ip;
         }
 
         static public IQueryable<T> GetByUserOrIP<T>(
