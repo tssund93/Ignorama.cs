@@ -66,6 +66,9 @@
             </a>
             <ul class="dropdown-menu pull-right">
                 <li>
+                    <a href="#" :onclick="'setClipboard(window.location.origin + \'/Threads/View/' + thread.ID + '\', event)'">Copy link to thread</a>
+                </li>
+                <li>
                     <a v-if="thread.Hidden" href="#" v-on:click.prevent="toggleHidden(thread)">
                         Unhide thread
                     </a>

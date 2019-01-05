@@ -95,6 +95,9 @@
                 </span>
             </a>
             <ul class="dropdown-menu pull-right">
+                <li>
+                    <a href="#" :onclick="'setClipboard(window.location.origin + \\'/Posts/View/' + post.ID + '\\', event)'">Copy link to post</a>
+                </li>
                 <li v-if="!post.Roles.includes('Moderator')" v-for="reason in banReasons">
                     <a href="#" :onclick="'if (confirm(\\'Report user for: ' + reason.Text + '?\\')) reportUser(' + post.ID + ', ' + reason.ID + ', event)'">Report user for: {{ reason.Text }}</a>
                 </li>
