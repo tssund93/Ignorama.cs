@@ -23,7 +23,7 @@ namespace Ignorama
 
         static public string GetCurrentIPString(HttpRequest request)
         {
-            return request.HttpContext.Connection.LocalIpAddress.ToString();
+            return request.HttpContext.Connection.RemoteIpAddress.ToString();
         }
 
         static public IQueryable<T> GetByUserOrIP<T>(
