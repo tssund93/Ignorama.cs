@@ -1,5 +1,9 @@
-﻿using Ignorama.Models;
+﻿using Amazon;
+using Amazon.S3;
+using AspNetCore.DataProtection.Aws.S3;
+using Ignorama.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -10,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -51,6 +56,24 @@ namespace Ignorama
                 .AddEntityFrameworkNpgsql()
                 .AddDbContext<ForumContext>()
                 .BuildServiceProvider();
+
+            var s3 = new AmazonS3Client(
+                Environment.GetEnvironmentVariable("S3_ACCESS_KEY_ID"),
+                Environment.GetEnvironmentVariable("S3_SECRET_ACCESS_KEY"),
+                RegionEndpoint.USEast2);
+
+            services.TryAddSingleton<IAmazonS3>(s3);
+
+            services
+                .AddDataProtection()
+                .PersistKeysToAwsS3(s3, new S3XmlRepositoryConfig("ignorama")
+                {
+                    KeyPrefix = "keys/",
+                    ClientSideCompression = true,
+                    ValidateETag = false,
+                    ValidateMd5Metadata = true,
+                    ServerSideEncryptionMethod = ServerSideEncryptionMethod.AES256,
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

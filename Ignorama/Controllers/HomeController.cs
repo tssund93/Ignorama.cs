@@ -20,15 +20,18 @@ namespace Ignorama.Controllers
         private readonly ForumContext _context;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IConfiguration _configuration;
+        private readonly IAmazonS3 _s3Client;
 
         public HomeController(
             ForumContext context,
             IHostingEnvironment hostingEnvironment,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IAmazonS3 s3Client)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _configuration = configuration;
+            _s3Client = s3Client;
         }
 
         public IActionResult Index()
@@ -73,10 +76,6 @@ namespace Ignorama.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UploadFile(ImageUploadModel upload)
         {
-            var s3Client = new AmazonS3Client(
-                Environment.GetEnvironmentVariable("S3_ACCESS_KEY_ID"),
-                Environment.GetEnvironmentVariable("S3_SECRET_ACCESS_KEY"),
-                RegionEndpoint.USEast2);
             var bucket = "ignorama";
             var maxFileMB = 10;
             var allowedTypes = new[] {
@@ -97,7 +96,7 @@ namespace Ignorama.Controllers
                 };
             }
 
-            var path = upload.FileName;
+            var path = "uploads/" + upload.FileName;
             var ext = Path.GetExtension(path);
 
             if (upload.File.Length > 0 &&
@@ -106,7 +105,7 @@ namespace Ignorama.Controllers
             {
                 try
                 {
-                    var fileTransferUtility = new TransferUtility(s3Client);
+                    var fileTransferUtility = new TransferUtility(_s3Client);
                     await fileTransferUtility.UploadAsync(upload.File.OpenReadStream(), bucket, path);
 
                     return new ContentResult
