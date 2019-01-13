@@ -96,12 +96,12 @@ namespace Ignorama.Controllers
                 };
             }
 
-            var path = "uploads/" + upload.FileName;
-            var ext = Path.GetExtension(path);
+            var ext = Path.GetExtension(upload.File.FileName).ToLower();
+            var path = "uploads/" + System.Guid.NewGuid().ToString().Replace("-", string.Empty) + ext;
 
             if (upload.File.Length > 0 &&
                 allowedTypes.Contains(upload.File.ContentType.ToLower()) &&
-                allowedExts.Contains(ext.ToLower()))
+                allowedExts.Contains(ext))
             {
                 try
                 {
