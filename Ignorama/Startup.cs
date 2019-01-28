@@ -100,19 +100,6 @@ namespace Ignorama
 
             app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
 
-            app.UseHttpsRedirection();
-            app.Use(async (context, next) =>
-            {
-                if (context.Request.IsHttps || context.Request.Headers["x-forwarded-proto"] == "https")
-                {
-                    await next();
-                }
-                else
-                {
-                    var withHttps = Uri.UriSchemeHttps + Uri.SchemeDelimiter + context.Request.Host + context.Request.Path;
-                    context.Response.Redirect(withHttps);
-                }
-            });
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
@@ -121,10 +108,6 @@ namespace Ignorama
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor |
                                    ForwardedHeaders.XForwardedProto
             });
-
-            var options = new RewriteOptions();
-            RewriteOptionsExtensions.AddRedirectToWwwPermanent(options);
-            app.UseRewriter(options);
 
             app.UseAuthentication();
 
